@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<book xmlns='http://docbook.org/ns/docbook' version="5.0" xml:lang="en">
-<title>Using Docbook to generate ePub books and Kindle too</title>
+<book 
+	xmlns='http://docbook.org/ns/docbook' 
+	xmlns:xlink='http://www.w3.org/1999/xlink'
+	version="5.0" xml:lang="en">
+<title>Using From Docbook to ePub and Kindle too</title>
 <info>
 	<author>
 		<personname>
@@ -10,25 +13,87 @@
 	</info>
 <preface>
 <title>Publishing for everyone</title>
+<subtitle>Trying to get down to a definition of publishing</subtitle>
 
-<para>Publishing is no longer the province of big publishers or all that crazy people who dream of writing a book and find out that the only way to get published is to do it themselves. Well, we all can publish our work with tools like Docbook,  formats like ePub and publishers like Amazon.</para>
+<para>Publishing is no longer the province of big publishers or that crazy people who dream of writing a book and find out that the only way to get published is to do it themselves. Well, we all can publish our work with tools like Docbook,  formats like ePub and publishers like Amazon.</para>
 
-<para></para>
+<para>We all have something to publish. We all have something to tell the world.</para>
+
+<para>I chose to publish my content using Docbook because of it's flexibility. While we're talking only about ePub and Kindle publishing, Docbook can generate a variety of other formats using the same tools that we are using to generate our ePub content. You can learn more about Docbook and the associated XSLT style sheets at <link xlink:href="http://www.docbook.org/">http://www.docbook.org/</link>.</para>
+
+<para>This e-book seeks to answer three questions that, to me, are essential to a successful publishing endeavor:</para>
+
+<itemizedlist>
+	<listitem>Why should I publish my own content?</listitem>
+	<listitem>Why should I use Docbook to do it?</listitem>
+	<listitem>How do I create my ebook using this tools?</listitem>
+</itemizedlist>
+
+<para>In answering these questions my hope is that you will create new content and give it to the world. I'm sure we'll all be much better for it</para>
 </preface>
+
 <chapter>
-<title>A Chapter</title>
+<title>Why should I create an ebook? Why with Docbook?</title>
+<para>Again, We all have something to say to the world. And ebooks make it easier than ever to have the world as your audience. </para>
+<sect1>
+<title>Why Docbook?</title>
+	<para>Content is required in chapters too.</para>
+</sect1>
+</chapter>
+
+<chapter>
+<title>Creating your Docbook content</title>
+<para>Content is required in chapters too.</para>
+<programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;book 
+	xmlns='http://docbook.org/ns/docbook' 
+	xmlns:xlink='http://www.w3.org/1999/xlink'
+	version="5.0" xml:lang="en"&gt;
+&lt;title&gt;Using From Docbook to ePub and Kindle too&lt;/title&gt;
+&lt;info&gt;
+	&lt;author&gt;
+		&lt;personname&gt;
+			&lt;firstname&gt;Carlos&lt;/firstname&gt;&lt;surname&gt;Araya&lt;/surname&gt;
+		&lt;/personname&gt;
+	&lt;/author&gt;
+	&lt;/info&gt;
+&lt;chapter&gt;
+&lt;title&gt;Required Title&lt;/title&gt;
+
+&lt;para&gt;Required paragraph.&lt;/para&gt;
+
+&lt;/chapter&gt;
+</programlisting>
+</chapter>
+
+<chapter>
+<title>Converting the XML into different formats</title>
+	<para>something interesting goes here</para>
+
+<sect1>
+	<title>Converting to ePub 2</title>
+	<para>Content is required in chapters too.</para>
+</sect1>
+
+<sect1>
+<title>Making an ePub3 ebook </title>
+	<para>Content is required in chapters too.</para>
+</sect1>
+
+<sect1>
+<title>Let's not forget the Kindle</title>
+	<para>Content is required in chapters too.</para>
+</sect1>
+</chapter>
+
+<chapter>
+<title>Customizing the generated HTML</title>
 	<para>Content is required in chapters too.</para>
 </chapter>
 
 <chapter>
-<title>A Chapter</title>
-	<para>Content is required in chapters too.</para>
-</chapter>
-
-
-<appendix>
-	<title>The Ant build file</title>
-<screen>
+	<title>Automating the process</title>
+<programlisting>
 &lt;project name="epub" default="epub3" basedir="."&gt;
 &lt;description&gt;
 	Apache ant build file for Docbook based ebooks
@@ -41,7 +106,6 @@
 &lt;!-- Put the name of the binaries that you're using that are not stock on OS X--&gt;
 &lt;property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/&gt;
 &lt;property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/&gt;
-
 
 &lt;target name="epub2"&gt;
 	&lt;description&gt;
@@ -135,21 +199,31 @@
 	&lt;/exec&gt;
 &lt;/target&gt;
 &lt;/project&gt;
-</screen>
-</appendix>
+</programlisting>
+</chapter>
+
+<chapter>
+<title>Pubishing your content</title>
+
+<para>This is where we talk about publishing your content yourself, publishing to Amazon and, maybe, to the iBooks store</para>
+</chapter>
 
 <bibliography>
 <title>References</title>
 
 <bibliomixed>
-	<bibliomset relation='article'>Walsh, Norman.
- 		<title role='article'>Introduction to Cascading Style Sheets</title>.
+	<bibliomset relation='book'>Sayton, Robert.
+ 		<title role='book'>Introduction to Cascading Style Sheets</title>.
 	</bibliomset>
 	<bibliomset relation='journal'>
 		<title>The World Wide Web Journal</title>
 		<volumenum>2</volumenum><issuenum>1</issuenum>.
 		<publishername>O'Reilly &amp; Associates, Inc.</publishername> and The World Wide Web Consortium. Winter, 1996</bibliomset>.
 	</bibliomixed>
-
 </bibliography>
+
+<colophon>
+<para>Draft versions of the first edition of this book were produced with the DocBook DSSSL Stylesheets. Final production was performed with Troff.</para>
+<para>XSLT and XSL were used to produce the second edition.</para>
+</colophon>
 </book>
