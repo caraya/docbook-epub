@@ -8,6 +8,8 @@ Apache ant build file for Docbook based ebooks
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 <!-- Change the value of src_file to the name of your ebook file without extension-->
 <property name="src_file" value="docbook-howto"/>
+<!-- Configure the path to the docbook stylesheets-->
+<property name="docbook_path" value="/usr/local/docbook/1.0/xslt/"/>
 
 <!-- Put the name of the binaries that you're using that are not stock on OS X-->
 <property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
@@ -23,7 +25,7 @@ Apache ant build file for Docbook based ebooks
 <antcall target="validate-xml"/>
 <!-- Run the stylesheet conversion -->
 <exec executable="xsltproc">
-	<arg line="/usr/local/docbook/1.0/xslt/epub/docbook.xsl ${src_file}.xml"/>
+	<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
 </exec>
 <!-- Create mimetype file, required per epub spec -->
 <antcall target="make-mime"/>
@@ -46,7 +48,7 @@ Apache ant build file for Docbook based ebooks
 <antcall target="validate-xml"/>
 <!-- Run the xslt transformation... we should be able to use the XSLT ant task but xsltproc is faster -->
 <exec executable="xsltproc">
-	<arg line="--stringparam base.dir OEBPS/ /usr/local/docbook/1.0/xslt/epub3/chunk.xsl ${src_file}.xml"/>
+	<arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/chunk.xsl ${src_file}.xml"/>
 </exec>
 <!-- zips the fils for the epub -->
 <antcall target="epub-zip"/>
