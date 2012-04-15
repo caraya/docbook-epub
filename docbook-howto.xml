@@ -3,7 +3,7 @@
 	xmlns='http://docbook.org/ns/docbook' 
 	xmlns:xlink='http://www.w3.org/1999/xlink'
 	version="5.0" xml:lang="en">
-<title>Using From Docbook to ePub and Kindle too</title>
+<title>Ebooks: From Docbook to ePub and Kindle too</title>
 <info>
 	<author>
 		<personname>
@@ -38,7 +38,7 @@
 
 <para>Take bloggers for example. We can leverage our blog as a development platform for written content with multiple drafts and selectively, based on the feedback received from readers, can use the best content as part of our book or books. We have not only authored the content of the book months or years in advance but we have also built a community of people who are vested in the content we author.</para>
 
-<para>We can also engage the community as co-authors of our content. With proper clearance </para>
+<para>We can also engage the community as co-authors of our content. With proper clearance we can edit the users' comments into the narrative that we initially wrote on our blog and weave a fuller narrative about our content. We can further refine the content by making the result of our collaboration available to the community and further edit the book</para>
 
 <sect1>
 <title>Why Docbook?</title>
@@ -151,7 +151,7 @@
 &lt;/if&gt;
 &lt;/target&gt;</programlisting>
 
-<para>to:</para>
+<para>to this:</para>
 
 <programlisting>&lt;target name="epub-clean"&gt;
 &lt;description&gt;
@@ -167,6 +167,8 @@
 &lt;delete verbose="true" file="${src_file}.epub"/&gt;
 &lt;/then&gt;
 &lt;/target&gt;</programlisting>
+
+<para>Notice how we've removed the if, available, then and else tags on the epub-clean tag.</para>
 </sect1>
 
 <sect1>
