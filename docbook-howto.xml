@@ -148,7 +148,7 @@
 &lt;/then&gt;
 &lt;/target&gt;</programlisting>
 
-<programlisting><para>The code for the build file goes here</para></programlisting>
+<programlisting>The code for the build file goes here</programlisting>
 </chapter>
 
 <chapter>
