@@ -48,7 +48,7 @@ Apache ant build file for Docbook based ebooks
 <antcall target="validate-xml"/>
 <!-- Run the xslt transformation... we should be able to use the XSLT ant task but xsltproc is faster -->
 <exec executable="xsltproc">
-	<arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/chunk.xsl ${src_file}.xml"/>
+	<arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/carlos-chunk.xsl ${src_file}.xml"/>
 </exec>
 <!-- zips the fils for the epub -->
 <antcall target="epub-zip"/>
