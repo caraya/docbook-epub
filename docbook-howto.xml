@@ -38,12 +38,17 @@
 
 <para>Take bloggers for example. We can leverage our blog as a development platform for written content with multiple drafts and selectively, based on the feedback received from readers, can use the best content as part of our book or books. We have not only authored the content of the book months or years in advance but we have also built a community of people who are vested in the content we author.</para>
 
-<para>We can also engage the community as co-authors of our content. With proper clearance we can edit the users' comments into the narrative that we initially wrote on our blog and weave a fuller narrative about our content. We can further refine the content by making the result of our collaboration available to the community and further edit the book thus it becoming a living document that evolves according to what the community sees as new. </para>
+<para>We can also engage the community as co-authors of our content. With proper clearance we can edit the users' comments into the narrative that we initially wrote on our blog and weave a fuller narrative about our content. We can further refine the content by making the result of our collaboration available to the community and further edit the book thus it becoming a living document that evolves according to what the community sees as new or interesting. </para>
 
+<para>I don't know about you but I've always dreamed of writing the great big novel. Now it's within our reach. We don't have to worry about getting it published... we can do it ourselves! and not only that, but we can do it as often as we want to. </para>
+
+<para>We can use tools such as <link xlink:href="https://github.com">Github</link> to maintain our collaboration. With tools like this we are no longer limited to manual updates; all collaborators can stay up to date with what everything else is doing by downloading the content of the book and updating periodically. If there is disagreement it can be hammered out as the book is being written and read by everyone rather than at the end of the process when changes are costlier and people are invested in the book as is.<footnote><para>The XML source for this book along with all the ancillary files (Ant build files and others) are available on Github at <link xlink:hrf="https://github.com/caraya/docbook-epub">https://github.com/caraya/docbook-epub</link></para></footnote></para>
 <sect1>
 <title>Why Docbook?</title>
-	<para>Content is required in chapters too.</para>
 
+<para>Over the years <link xlink:href="http://docbook.org/">Docbook</link> has proved to be a very versatile vocabulary for book authoring. I've written training manuals and converted them to PDF, HTML and even Microsoft Help. Epub (both version 2 and 3) are another tool added to the arsenal.</para>
+
+<para>In addition to the standard itself there are a set of XSLT style sheets that power the transformation process. These stylesheets are available from the <link xlink:href="http://sourceforge.net/projects/docbook/">Docbook Sourceforge Project</link> page.</para>
 <sect2>
 	<title>Is Docbook the only alternative for creating ebooks?</title>
 	
@@ -175,6 +180,7 @@
 	<title>The final build file</title>
 
 <para>After adding the if task the complete build file looks like this:</para>
+
 <programlisting>&lt;project name="epub" default="epub3" basedir="."&gt;
 &lt;description&gt;
 Apache ant build file for Docbook based ebooks
