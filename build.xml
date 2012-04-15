@@ -4,6 +4,8 @@
 </description>
 <!-- Created by Carlos Araya as part of his eBook research -->
 
+<!-- Required for the IF Task -->
+<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 <!-- Change the value of src_file to the name of your ebook file without extension-->
 <property name="src_file" value="docbook-howto"/>
 
@@ -11,11 +13,12 @@
 <property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
 <property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
 
-
 <target name="epub2">
 	<description>
 		Convert the XML file into epub2 using a snapshot of the stylesheets
 	</description>
+	<!-- Remove prior versions of the content we're generating -->
+	<antcall target="epub-clean"/>
 	<!-- Validate XML -->
 	<antcall target="validate-xml"/>
 	<!-- Run the stylesheet conversion -->
@@ -37,10 +40,11 @@
 		Convert the XML file into epub3 using a snapshot of the stylesheets. 
 		We do it with snapshot because epub3 support is still experimental
 	</description>
+	<!-- Remove prior versions of the content we're generating -->
+	<antcall target="epub-clean"/>
 	<!-- Validate XML -->
 	<antcall target="validate-xml"/>
-	<!-- Run the xslt transformation... theoretically we should be able to use the XSLT ant task but
-	     xsltproc is faster
+	<!-- Run the xslt transformation... we should be able to use the XSLT ant task xsltproc is faster
 	-->
 	<exec executable="xsltproc">
 		<arg line="--stringparam base.dir OEBPS/ /usr/local/docbook/1.0/xslt/epub3/chunk.xsl ${src_file}.xml"/>
@@ -96,14 +100,31 @@
 	<description>
 		Cleans up leftover epub stuff
 	</description>
-	<delete verbose="true">
-		<fileset dir="OEBPS" includes="*"/>
-		<fileset dir="META-INF" includes="*"/>
-	</delete>
-	<delete verbose="true" file="mimetype"/>
-	<delete verbose="true" dir="META-INF"/>
-	<delete verbose="true" dir="OEBPS"/>
-	<delete verbose="true" file="${src_file}.epub"/>
+	<if>
+		<!-- 
+		If OEBPS exists we assume the other files and directories do as well
+		since Docbook would never create only OEBPS
+		
+		The if tasks uses ant-contrib available from sourceforge.net. 
+		See the section on Automating the process for more information and about what 
+		changes to make if you don't want to use the task
+		-->
+		<available file="OEBPS" type="dir" />
+		<then>
+			<echo message="Directory exist... deleting" />
+			<delete verbose="true">
+				<fileset dir="OEBPS" includes="*"/>
+				<fileset dir="META-INF" includes="*"/>
+			</delete>
+			<delete verbose="true" file="mimetype"/>
+			<delete verbose="true" dir="META-INF"/>
+			<delete verbose="true" dir="OEBPS"/>
+			<delete verbose="true" file="${src_file}.epub"/>
+		</then>
+		<else>
+			<echo message="Directory DOES NOT exist... skipping" />
+		</else>
+	</if>
 </target>
 
 <!-- We call xmllint to make sure that the XML validates-->
