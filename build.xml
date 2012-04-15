@@ -44,8 +44,7 @@ Apache ant build file for Docbook based ebooks
 <antcall target="epub-clean"/>
 <!-- Validate XML -->
 <antcall target="validate-xml"/>
-<!-- Run the xslt transformation... we should be able to use the XSLT ant task xsltproc is faster
--->
+<!-- Run the xslt transformation... we should be able to use the XSLT ant task but xsltproc is faster -->
 <exec executable="xsltproc">
 	<arg line="--stringparam base.dir OEBPS/ /usr/local/docbook/1.0/xslt/epub3/chunk.xsl ${src_file}.xml"/>
 </exec>
@@ -56,7 +55,7 @@ Apache ant build file for Docbook based ebooks
 </target>
 
 
-<!-- Utility targets called from elsewhere epub2 and epub3 targets-->
+<!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
 <target name="make-mime">
 <!-- Creates mimetype file as required by epub spec-->
 <echo file="mimetype">application/epub+zip</echo>
@@ -91,15 +90,16 @@ Apache ant build file for Docbook based ebooks
 <description>
 	Cleans up leftover epub stuff
 </description>
+<!-- 
+If OEBPS exists we assume the other files and directories do as well
+since Docbook would never create only OEBPS
+
+we use the if task from ant-contrib available from sourceforge.net. 
+
+See the section on Automating the process for more information and about what 
+changes to make if you don't want to use the task
+-->
 <if>
-	<!-- 
-	If OEBPS exists we assume the other files and directories do as well
-	since Docbook would never create only OEBPS
-	
-	The if tasks uses ant-contrib available from sourceforge.net. 
-	See the section on Automating the process for more information and about what 
-	changes to make if you don't want to use the task
-	-->
 	<available file="OEBPS" type="dir" />
 	<then>
 		<echo message="Directory exist... deleting" />
@@ -113,7 +113,7 @@ Apache ant build file for Docbook based ebooks
 		<delete verbose="true" file="${src_file}.epub"/>
 	</then>
 	<else>
-		<echo message="Directory DOES NOT exist... skipping" />
+		<echo message="Directory DOES NOT exist... Nothing to delete" />
 	</else>
 </if>
 </target>
