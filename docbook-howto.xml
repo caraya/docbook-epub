@@ -94,7 +94,16 @@
 <chapter>
 	<title>Automating the process</title>
 
-<para>Because I'm paranoid and I like to build my book over and over I found out a problem. If I accidentally delete any of the directories that Docbook creates for me, the build process will fail. However, removing the existing files and directories is essential to ensure that only the latest version of our generated files makes it into the ebook.</para>
+<sect1>
+	<title>Apache Ant and making things easier on yourself</title>
+	
+	<para>I love Apache Ant</para>
+</sect1>
+
+<sect1>
+	<title>One little addition or substractions</title>
+
+	<para>Because I'm paranoid and I like to build my book over and over I found out a problem. If I accidentally delete any of the directories that Docbook creates for me, the build process will fail. However, removing the existing files and directories is essential to ensure that only the latest version of our generated files makes it into the ebook.</para>
 
 <para>I decided to use the If ant task from the Ant Contrib Project. Download links and instructions for installing the additional tasks and configuring your build file to use them see <link xlink:href="http://ant-contrib.sourceforge.net/">http://ant-contrib.sourceforge.net/</link>.</para>
 
@@ -147,8 +156,14 @@
 &lt;delete verbose="true" file="${src_file}.epub"/&gt;
 &lt;/then&gt;
 &lt;/target&gt;</programlisting>
+</sect1>
 
-<programlisting>The code for the build file goes here</programlisting>
+<sect1>
+	<title>The final build file</title>
+
+<para>After adding the if task the code looks like this:</para>
+	<programlisting>The code for the build file goes here</programlisting>
+</sect1>
 </chapter>
 
 <chapter>
