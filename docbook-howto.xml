@@ -93,117 +93,143 @@
 
 <chapter>
 	<title>Automating the process</title>
-<programlisting>
-&lt;project name="epub" default="epub3" basedir="."&gt;
-&lt;description&gt;
-	Apache ant build file for Docbook based ebooks
-&lt;/description&gt;
-&lt;!-- Created by Carlos Araya as part of his eBook research --&gt;
 
-&lt;!-- Change the value of src_file to the name of your ebook file without extension--&gt;
-&lt;property name="src_file" value="docbook-howto"/&gt;
+<para>Because I'm paranoid and I like to build my book over and over I found out a problem. If I accidentally delete any of the directories that Docbook creates for me, the build process will fail. However, removing the existing files and directories is essential to ensure that only the latest version of our generated files makes it into the ebook.</para>
+	
+<para>I decided to use the If ant task from the Ant Contrib Project. Download links and instructions for installing the additional tasks and configuring your build file to use them see <link xlink:href="http://ant-contrib.sourceforge.net/">http://ant-contrib.sourceforge.net/</link>.</para>
 
-&lt;!-- Put the name of the binaries that you're using that are not stock on OS X--&gt;
-&lt;property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/&gt;
-&lt;property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/&gt;
+<para></para>
+<programlisting><project name="epub" default="epub3" basedir=".">
+<description>
+Apache ant build file for Docbook based ebooks
+</description>
+<!-- Created by Carlos Araya as part of his eBook research -->
 
-&lt;target name="epub2"&gt;
-	&lt;description&gt;
-		Convert the XML file into epub2 using a snapshot of the stylesheets
-	&lt;/description&gt;
-	&lt;!-- Validate XML --&gt;
-	&lt;antcall target="validate-xml"/&gt;
-	&lt;!-- Run the stylesheet conversion --&gt;
-	&lt;exec executable="xsltproc"&gt;
-		&lt;arg line="/usr/local/docbook/1.0/xslt/epub/docbook.xsl ${src_file}.xml"/&gt;
-	&lt;/exec&gt;
-	&lt;!-- Create mimetype file, required per epub spec --&gt;
-	&lt;antcall target="make-mime"/&gt;
-	&lt;!-- zips the fills for the epub --&gt;
-	&lt;antcall target="epub-zip"/&gt;
-	&lt;!-- Runs epubcheck on the epub file --&gt;
-	&lt;antcall target="epub-check"/&gt;
-	&lt;!-- Creates a Kindle version of the book --&gt;
-	&lt;antcall target="make-kindle"/&gt;
-&lt;/target&gt;
+<!-- Required for the IF Task -->
+<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+<!-- Change the value of src_file to the name of your ebook file without extension-->
+<property name="src_file" value="docbook-howto"/>
 
-&lt;target name="epub3"&gt;
-	&lt;description&gt;
-		Convert the XML file into epub3 using a snapshot of the stylesheets. 
-		We do it with snapshot because epub3 support is still experimental
-	&lt;/description&gt;
-	&lt;!-- Validate XML --&gt;
-	&lt;antcall target="validate-xml"/&gt;
-	&lt;!-- Run the xslt transformation... theoretically we should be able to use the XSLT ant task but
-	     xsltproc is faster
-	--&gt;
-	&lt;exec executable="xsltproc"&gt;
-		&lt;arg line="--stringparam base.dir OEBPS/ /usr/local/docbook/1.0/xslt/epub3/chunk.xsl ${src_file}.xml"/&gt;
-	&lt;/exec&gt;
-	&lt;!-- zips the fils for the epub --&gt;
-	&lt;antcall target="epub-zip"/&gt;
-	&lt;!-- Runs epubcheck on the epub file --&gt;
-	&lt;antcall target="epub-check"/&gt;
-&lt;/target&gt;
+<!-- Put the name of the binaries that you're using that are not stock on OS X-->
+<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
+<property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
+
+<target name="epub2">
+<description>
+	Convert the XML file into epub2 using a snapshot of the stylesheets
+</description>
+<!-- Remove prior versions of the content we're generating -->
+<antcall target="epub-clean"/>
+<!-- Validate XML -->
+<antcall target="validate-xml"/>
+<!-- Run the stylesheet conversion -->
+<exec executable="xsltproc">
+	<arg line="/usr/local/docbook/1.0/xslt/epub/docbook.xsl ${src_file}.xml"/>
+</exec>
+<!-- Create mimetype file, required per epub spec -->
+<antcall target="make-mime"/>
+<!-- zips the fills for the epub -->
+<antcall target="epub-zip"/>
+<!-- Runs epubcheck on the epub file -->
+<antcall target="epub-check"/>
+<!-- Creates a Kindle version of the book -->
+<antcall target="make-kindle"/>
+</target>
+
+<target name="epub3">
+<description>
+	Convert the XML file into epub3 using a snapshot of the stylesheets. 
+	We do it with snapshot because epub3 support is still experimental
+</description>
+<!-- Remove prior versions of the content we're generating -->
+<antcall target="epub-clean"/>
+<!-- Validate XML -->
+<antcall target="validate-xml"/>
+<!-- Run the xslt transformation... we should be able to use the XSLT ant task xsltproc is faster
+-->
+<exec executable="xsltproc">
+	<arg line="--stringparam base.dir OEBPS/ /usr/local/docbook/1.0/xslt/epub3/chunk.xsl ${src_file}.xml"/>
+</exec>
+<!-- zips the fils for the epub -->
+<antcall target="epub-zip"/>
+<!-- Runs epubcheck on the epub file -->
+<antcall target="epub-check"/>
+</target>
 
 
-&lt;!-- Utility targets called from elsewhere epub2 and epub3 targets--&gt;
-&lt;target name="make-mime"&gt;
-	&lt;!-- Creates mimetype file as required by epub spec--&gt;
-	&lt;echo file="mimetype"&gt;application/epub+zip&lt;/echo&gt;
-&lt;/target&gt;
+<!-- Utility targets called from elsewhere epub2 and epub3 targets-->
+<target name="make-mime">
+<!-- Creates mimetype file as required by epub spec-->
+<echo file="mimetype">application/epub+zip</echo>
+</target>
 
-&lt;target name="make-kindle"&gt;
-	&lt;exec executable="${kindlegen_bin}"&gt;
-		&lt;arg line="${src_file}.epub"/&gt;
-	&lt;/exec&gt;
-&lt;/target&gt;
+<target name="make-kindle">
+<exec executable="${kindlegen_bin}">
+	<arg line="${src_file}.epub"/>
+</exec>
+</target>
 
-&lt;target name="epub-zip"&gt;
-&lt;!-- We use exec zip because I can't figure out if the builtin zip task conforms to what ePub expects --&gt;
-&lt;!-- Zip the mimetype first without compression as required--&gt;
-&lt;exec executable="zip"&gt;
-	&lt;arg line="-X0 ${src_file}.epub mimetype"/&gt;
-&lt;/exec&gt;
-&lt;!-- Then zip the other files into the zip/epub archive --&gt;
-&lt;exec executable="zip"&gt;
-	&lt;arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/&gt;
-&lt;/exec&gt;
-&lt;/target&gt;
+<target name="epub-zip">
+<!-- We use exec zip because I can't figure out if the builtin zip task conforms to what ePub expects -->
+<!-- Zip the mimetype first without compression as required-->
+<exec executable="zip">
+<arg line="-X0 ${src_file}.epub mimetype"/>
+</exec>
+<!-- Then zip the other files into the zip/epub archive -->
+<exec executable="zip">
+<arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/>
+</exec>
+</target>
 
-&lt;target name="epub-check"&gt;
-	&lt;java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m"&gt;
-		&lt;arg value="${src_file}.epub"/&gt;
-	&lt;/java&gt;
-&lt;/target&gt;
+<target name="epub-check">
+<java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m">
+	<arg value="${src_file}.epub"/>
+</java>
+</target>
 
-&lt;!-- Cleans up leftover epub stuff--&gt;
-&lt;target name="epub-clean"&gt;
-	&lt;description&gt;
-		Cleans up leftover epub stuff
-	&lt;/description&gt;
-	&lt;delete verbose="true"&gt;
-		&lt;fileset dir="OEBPS" includes="*"/&gt;
-		&lt;fileset dir="META-INF" includes="*"/&gt;
-	&lt;/delete&gt;
-	&lt;delete verbose="true" file="mimetype"/&gt;
-	&lt;delete verbose="true" dir="META-INF"/&gt;
-	&lt;delete verbose="true" dir="OEBPS"/&gt;
-	&lt;delete verbose="true" file="${src_file}.epub"/&gt;
-&lt;/target&gt;
+<!-- Cleans up leftover epub stuff-->
+<target name="epub-clean">
+<description>
+	Cleans up leftover epub stuff
+</description>
+<if>
+	<!-- 
+	If OEBPS exists we assume the other files and directories do as well
+	since Docbook would never create only OEBPS
 
-&lt;!-- We call xmllint to make sure that the XML validates--&gt;
-&lt;target name="validate-xml"&gt;
-	&lt;exec executable="xmllint"&gt;
-		&lt;arg line="-noent -noout ${src_file}.xml"/&gt;
-	&lt;/exec&gt;
-&lt;/target&gt;
-&lt;/project&gt;
-</programlisting>
+	The if tasks uses ant-contrib available from sourceforge.net. 
+	See the section on Automating the process for more information and about what 
+	changes to make if you don't want to use the task
+	-->
+	<available file="OEBPS" type="dir" />
+	<then>
+		<echo message="Directory exist... deleting" />
+		<delete verbose="true">
+			<fileset dir="OEBPS" includes="*"/>
+			<fileset dir="META-INF" includes="*"/>
+		</delete>
+		<delete verbose="true" file="mimetype"/>
+		<delete verbose="true" dir="META-INF"/>
+		<delete verbose="true" dir="OEBPS"/>
+		<delete verbose="true" file="${src_file}.epub"/>
+	</then>
+	<else>
+		<echo message="Directory DOES NOT exist... skipping" />
+	</else>
+</if>
+</target>
+
+<!-- We call xmllint to make sure that the XML validates-->
+<target name="validate-xml">
+<exec executable="xmllint">
+	<arg line="-noent -noout ${src_file}.xml"/>
+</exec>
+</target>
+</project></programlisting>
 </chapter>
 
 <chapter>
-<title>Pubishing your content</title>
+<title>Publishing your content</title>
 
 <para>This is where we talk about publishing your content yourself, publishing to Amazon and, maybe, to the iBooks store</para>
 </chapter>
@@ -222,8 +248,10 @@
 	</bibliomixed>
 </bibliography>
 
+<!--
 <colophon>
 <para>Draft versions of the first edition of this book were produced with the DocBook DSSSL Stylesheets. Final production was performed with Troff.</para>
 <para>XSLT and XSL were used to produce the second edition.</para>
 </colophon>
+-->
 </book>
