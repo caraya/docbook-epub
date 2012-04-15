@@ -95,137 +95,60 @@
 	<title>Automating the process</title>
 
 <para>Because I'm paranoid and I like to build my book over and over I found out a problem. If I accidentally delete any of the directories that Docbook creates for me, the build process will fail. However, removing the existing files and directories is essential to ensure that only the latest version of our generated files makes it into the ebook.</para>
-	
+
 <para>I decided to use the If ant task from the Ant Contrib Project. Download links and instructions for installing the additional tasks and configuring your build file to use them see <link xlink:href="http://ant-contrib.sourceforge.net/">http://ant-contrib.sourceforge.net/</link>.</para>
 
-<para></para>
-<programlisting><project name="epub" default="epub3" basedir=".">
-<description>
-Apache ant build file for Docbook based ebooks
-</description>
-<!-- Created by Carlos Araya as part of his eBook research -->
+<para>The <emphasis>if</emphasis> task acts as a conditional if. It allows a task to branch out based in a condition, in our case if a directory exists. If it does then go ahead and delete everything (Docbook will never create the directory we're using for the condition alone); if it doesn't exist then print a message and do nothing.</para>
 
-<!-- Required for the IF Task -->
-<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-<!-- Change the value of src_file to the name of your ebook file without extension-->
-<property name="src_file" value="docbook-howto"/>
+<para>if you do not want to use the if task for whatever reason you will have to make the following changes:</para>
 
-<!-- Put the name of the binaries that you're using that are not stock on OS X-->
-<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
-<property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
+<para>Remove <emphasis>&lt;taskdef resource="net/sf/antcontrib/antcontrib.properties"/&gt;</emphasis> from your build file.</para>
 
-<target name="epub2">
-<description>
-	Convert the XML file into epub2 using a snapshot of the stylesheets
-</description>
-<!-- Remove prior versions of the content we're generating -->
-<antcall target="epub-clean"/>
-<!-- Validate XML -->
-<antcall target="validate-xml"/>
-<!-- Run the stylesheet conversion -->
-<exec executable="xsltproc">
-	<arg line="/usr/local/docbook/1.0/xslt/epub/docbook.xsl ${src_file}.xml"/>
-</exec>
-<!-- Create mimetype file, required per epub spec -->
-<antcall target="make-mime"/>
-<!-- zips the fills for the epub -->
-<antcall target="epub-zip"/>
-<!-- Runs epubcheck on the epub file -->
-<antcall target="epub-check"/>
-<!-- Creates a Kindle version of the book -->
-<antcall target="make-kindle"/>
-</target>
+<para>Remove <emphasis>&lt;antcall target="epub-clean"/&gt;</emphasis> from bot the epub and epub3 targets. This call will cause the build to fail if any of the files or directories are missing. You will have to run this task manually before building the book.</para>
 
-<target name="epub3">
-<description>
-	Convert the XML file into epub3 using a snapshot of the stylesheets. 
-	We do it with snapshot because epub3 support is still experimental
-</description>
-<!-- Remove prior versions of the content we're generating -->
-<antcall target="epub-clean"/>
-<!-- Validate XML -->
-<antcall target="validate-xml"/>
-<!-- Run the xslt transformation... we should be able to use the XSLT ant task xsltproc is faster
--->
-<exec executable="xsltproc">
-	<arg line="--stringparam base.dir OEBPS/ /usr/local/docbook/1.0/xslt/epub3/chunk.xsl ${src_file}.xml"/>
-</exec>
-<!-- zips the fils for the epub -->
-<antcall target="epub-zip"/>
-<!-- Runs epubcheck on the epub file -->
-<antcall target="epub-check"/>
-</target>
+<para>Change the epub-clean target from this:</para>
 
-
-<!-- Utility targets called from elsewhere epub2 and epub3 targets-->
-<target name="make-mime">
-<!-- Creates mimetype file as required by epub spec-->
-<echo file="mimetype">application/epub+zip</echo>
-</target>
-
-<target name="make-kindle">
-<exec executable="${kindlegen_bin}">
-	<arg line="${src_file}.epub"/>
-</exec>
-</target>
-
-<target name="epub-zip">
-<!-- We use exec zip because I can't figure out if the builtin zip task conforms to what ePub expects -->
-<!-- Zip the mimetype first without compression as required-->
-<exec executable="zip">
-<arg line="-X0 ${src_file}.epub mimetype"/>
-</exec>
-<!-- Then zip the other files into the zip/epub archive -->
-<exec executable="zip">
-<arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/>
-</exec>
-</target>
-
-<target name="epub-check">
-<java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m">
-	<arg value="${src_file}.epub"/>
-</java>
-</target>
-
-<!-- Cleans up leftover epub stuff-->
-<target name="epub-clean">
-<description>
+<programlisting>&lt;target name="epub-clean"&gt;
+&lt;description&gt;
 	Cleans up leftover epub stuff
-</description>
-<if>
-	<!-- 
-	If OEBPS exists we assume the other files and directories do as well
-	since Docbook would never create only OEBPS
+&lt;/description&gt;
+&lt;if&gt;
+	&lt;available file="OEBPS" type="dir" /&gt;
+	&lt;then&gt;
+		&lt;echo message="Directory exist... deleting" /&gt;
+		&lt;delete verbose="true"&gt;
+			&lt;fileset dir="OEBPS" includes="*"/&gt;
+			&lt;fileset dir="META-INF" includes="*"/&gt;
+		&lt;/delete&gt;
+		&lt;delete verbose="true" file="mimetype"/&gt;
+		&lt;delete verbose="true" dir="META-INF"/&gt;
+		&lt;delete verbose="true" dir="OEBPS"/&gt;
+		&lt;delete verbose="true" file="${src_file}.epub"/&gt;
+	&lt;/then&gt;
+	&lt;else&gt;
+		&lt;echo message="Directory DOES NOT exist... Nothing to delete" /&gt;
+	&lt;/else&gt;
+&lt;/if&gt;
+&lt;/target&gt;</programlisting>
 
-	The if tasks uses ant-contrib available from sourceforge.net. 
-	See the section on Automating the process for more information and about what 
-	changes to make if you don't want to use the task
-	-->
-	<available file="OEBPS" type="dir" />
-	<then>
-		<echo message="Directory exist... deleting" />
-		<delete verbose="true">
-			<fileset dir="OEBPS" includes="*"/>
-			<fileset dir="META-INF" includes="*"/>
-		</delete>
-		<delete verbose="true" file="mimetype"/>
-		<delete verbose="true" dir="META-INF"/>
-		<delete verbose="true" dir="OEBPS"/>
-		<delete verbose="true" file="${src_file}.epub"/>
-	</then>
-	<else>
-		<echo message="Directory DOES NOT exist... skipping" />
-	</else>
-</if>
-</target>
+<para>to:</para>
 
-<!-- We call xmllint to make sure that the XML validates-->
-<target name="validate-xml">
-<exec executable="xmllint">
-	<arg line="-noent -noout ${src_file}.xml"/>
-</exec>
-</target>
-</project></programlisting>
+<programlisting>&lt;target name="epub-clean"&gt;
+&lt;description&gt;
+	Cleans up leftover epub stuff
+&lt;/description&gt;
+&lt;delete verbose="true"&gt;
+	&lt;fileset dir="OEBPS" includes="*"/&gt;
+	&lt;fileset dir="META-INF" includes="*"/&gt;
+&lt;/delete&gt;
+&lt;delete verbose="true" file="mimetype"/&gt;
+&lt;delete verbose="true" dir="META-INF"/&gt;
+&lt;delete verbose="true" dir="OEBPS"/&gt;
+&lt;delete verbose="true" file="${src_file}.epub"/&gt;
+&lt;/then&gt;
+&lt;/target&gt;</programlisting>
+
+<programlisting><para>The code for the build file goes here</para></programlisting>
 </chapter>
 
 <chapter>
