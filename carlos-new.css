@@ -2,23 +2,25 @@
 File:			carlos-new.css
 Description:	Custom styles for docbook
 Author			Carlos Araya
-
-Fonts from typekit
-font-family: burnaby-stencil,sans-serif; // goofy font
-font-family: ff-tisa-web-pro,serif; // headers
-font-family: inconsolata,sans-serif; // body
-font-family: minerva-modern,"sans serif"; // title
-
 */
-html {
-	font-family: inconsolata,sans-serif;
-/*	font-size: 62.5%;*/
+
+/* @fontface declarations to locally stored fonts */
+@font-face {
+    font-family: GraublauWeb;
+    src: url(GraublauWeb.otf) format(truetype);
+}
+
+/* Rest of the CSS declarations */
+body {
+	font-family:GraublauWeb, Verdana, Arial, Helvetica, sans-serif;
+	font-size: 62.5%;
 }
 
 
 h1, h2, h3, h4 {
-	font-family: minerva-modern,"sans serif"; 
-	color: #00a;
+	font-family:GraublauWeb, Verdana, Arial, Helvetica, sans-serif;
+	color: #cc0000;
+	font-weight: bold;
 }
 
 pre.programlisting {
