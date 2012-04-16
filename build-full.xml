@@ -138,10 +138,6 @@
 </target>
 
 <target name="epub3">
-<description>
-	Convert the XML file into epub3 using a snapshot of the stylesheets. 
-	We do it with snapshot because epub3 support is still experimental
-</description>
 <!-- Remove prior versions of the content we're generating -->
 <antcall target="epub-clean"/>
 <!-- Validate XML -->
@@ -158,13 +154,18 @@
 <antcall target="epub-check"/>
 </target>
 
-
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
 <target name="copy-resources">
 	<check if the type directory is available -->
 	<if>
+		<!-- Check if the type directory is available-->
 		<available file="type" type="dir" />
 		<then>
+			<!-- If it is then do this:
+			
+				1. Make the OEBPS type directory
+				2. copy all fonts except those starting with Calluna 
+			       to the OEBPS/type directoryexcept those that start with Calluna-->
 			<echo message="Directory exist... copying font files" />
 			<mkdir dir="OEBPS/type"/>
 			 <copy todir="OEBPS/type">
@@ -174,6 +175,7 @@
 			  </copy>
 		</then>
 		<else>
+			<!-- There are no fonts... tough luck buddy -->
 			<echo message="There are no fonts available" />
 		</else>
 	</if>	
@@ -225,8 +227,13 @@
 </target>
 
 <target name="copy-videos">
-	<copy file="video/do-lectures.mp4" tofile="OEBPS/video/do-lectures.mp4"/>
-	<copy file="video/do-lectures.png" tofile="OEBPS/video/do-lectures.png"/>
+	<copy todir="OEBPS/video">
+		<fileset dir="type/">
+			<include name="*.mp4"/>
+			<include name="*.png"/>
+			<include name="*.jpg"/>
+		</fileset>
+	</copy>
 </target>
 
 <target name="all-clean">
