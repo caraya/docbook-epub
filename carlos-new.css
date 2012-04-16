@@ -7,7 +7,7 @@ Author			Carlos Araya
 /* @fontface declarations to locally stored fonts */
 @font-face {
     font-family: GraublauWeb;
-    src: url(GraublauWeb.otf) format(truetype);
+    src: url(type/GraublauWeb.otf) format(truetype);
 }
 
 /* Rest of the CSS declarations */
@@ -17,7 +17,7 @@ body {
 }
 
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5, h6 {
 	font-family:GraublauWeb, Verdana, Arial, Helvetica, sans-serif;
 	color: #cc0000;
 	font-weight: bold;
