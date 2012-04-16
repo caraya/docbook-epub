@@ -9,11 +9,17 @@
 <!-- Change the value of src_file to the name of your ebook file without extension-->
 <property name="src_file" value="docbook-howto"/>
 
-<!-- Put the name of the binaries that you're using that are not stock on OS X-->
+<!-- 
+	Change the properties below to the full path of the respective tools on your system. 
+	
+	This should work on Windows, Mac and Linux since Ant is crossplatform... I hope :-)
+-->
 <property name="saxon_bin" value="/usr/local/java/saxon.jar"/>
 <property name="fop_bin" value="/usr/local/java/fop/build/fop.jar"/>
 <property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
 <property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
+<property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
+<property name="xmllint_bin" value="/usr/bin/xmllint"/>
 
 <!-- set global properties for this build -->
 <property name="dest"  location="ebook-content"/> 
@@ -22,16 +28,29 @@
 <property name="images"  location="${dest}/images"/> 
 
 <target name="init">
-	<!-- Create the destination directory and appropriate sub directories-->
-	<echo>Creating directory</echo>
-	<mkdir dir="${dest}"/>
-	<echo>Creating CSS directory</echo>
-	<mkdir dir="${css}"/>
-	<echo>Creating JS directory</echo>
-	<mkdir dir="${js}"/>
-	<echo>Creating image directory</echo>
-	<mkdir dir="${images}"/>
-	<!-- Copy CSS, JS and any images into their directories -->
+	<!-- 
+		Create the destination directory and appropriate sub directories
+		if they don't exist already
+	-->
+	<if>
+		<available file="${dest}" type="dir" />
+		<then>
+			<echo message="Directory ${dest} exist... skiping" />
+		</then>
+		<else>
+			<echo>Creating directory</echo>
+			<mkdir dir="${dest}"/>
+			<echo>Creating CSS directory</echo>
+			<mkdir dir="${css}"/>
+			<echo>Creating JS directory</echo>
+			<mkdir dir="${js}"/>
+			<echo>Creating image directory</echo>
+			<mkdir dir="${images}"/>
+		</else>
+	</if>
+	<!-- 
+		Copy CSS, JS and any images into their directories 
+	-->
 	<copy todir="${css}">
 		<fileset dir="." casesensitive="yes">
 		  <include name="*.css"/>
@@ -52,11 +71,8 @@
 </target>
 
 <target name="docbook-single" depends="init">
-	<description>
-		Convert to a single HTML 4 using version 2.0 of stylesheet
-		we do this to make sure that the file validates as docbook
-	</description>
-
+	<echo>validate XML before converting to Docbook</echo>
+	<antcall target="validate-xml"/>
 	<echo>Generating HTML Single File using Saxon and XSLT2.0</echo>
 	<echo>Saxon 9 or another XSLT2 processor must be used</echo>
 	<java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
@@ -64,6 +80,7 @@
 		<arg value="-xsl:/usr/local/docbook/2.0/release/2.0.3/xslt/base/html/docbook.xsl"/>
 		<arg value="-o:${src_file}-2.html"/>
 	</java>
+	<echo>Moving files to ${dest}</echo>
 	<copy todir="${dest}">
 		<fileset dir="." casesensitive="yes">
 		  <include name="*.html"/>
@@ -72,13 +89,11 @@
 </target>
 
 <target name="docbook-chunks">
-	<description>
-		Convert to chunks using version 1.76 of stylesheet 
-	</description>
 	<echo>Generating HTML Chunks</echo>
-	<exec executable="xsltproc">
-		<arg line="/usr/local/docbook/1.7/xhtml/chunk.xsl ${src_file}.xml"/>
+	<exec executable="${xsltproc_bin}">
+		<arg line="/usr/local/docbook/1.0/xslt/xhtml/chunk.xsl ${src_file}.xml"/>
   	</exec>
+	<echo>Moving html files to ${dest}</echo>
 	<copy todir="${dest}">
 		<fileset dir="." casesensitive="yes">
 		  <include name="*.html"/>
@@ -87,11 +102,9 @@
 </target>
 
 <target name="docbook-fo">
-	<description>
-		Convert to FO using version 1.76 of stylesheet
-	</description>
-	<exec executable="xsltproc">
-		<arg line="-o ${src_file}.fo /usr/local/docbook/1.7/xhtml/docbook.xsl ${src_file}.xml"/>
+	<echo>Creating FO file</echo>
+	<exec executable="${xsltproc_bin}">
+		<arg line="-o ${src_file}.fo /usr/local/docbook/1.0/xslt/fo/docbook.xsl ${src_file}.xml"/>
   	</exec>
 </target>
 
@@ -103,110 +116,133 @@
 </target>
 
 <target name="epub2">
-	<description>
-		Convert the XML file into epub2 using a snapshot of the stylesheets
-	</description>
 	<!-- Run the stylesheets first -->
-	<exec executable="xsltproc">
+	<echo>Creating HTML files for ebook</echo>
+	<exec executable="${xsltproc_bin}">
 		<arg line="/usr/local/docbook/1.0/xslt/epub/docbook.xsl ${src_file}.xml"/>
 	</exec>
 	<!-- Create mimetype file, required per epub spec -->
+	<echo>Creating mimetype file</echo>
 	<antcall target="make-mime"/>
 	<!-- zips the fils for the epub -->
+	<echo>Zipping files</echo>
 	<antcall target="epub-zip"/>
 	<!-- Runs epubcheck on the epub file -->
+	<echo>Checking result with epubcheck</echo>
 	<antcall target="epub-check"/>
 	<!-- Creates a Kindlegen -->
+	<echo>Creating Kindle .mobi version of book</echo>
 	<antcall target="make-kindle"/>
 </target>
 
 <target name="epub3">
-	<description>
-		Convert the XML file into epub3 using a snapshot of the stylesheets. 
-		We do it with snapshot because epub3 support is still experimental
-	</description>
-	<exec executable="xsltproc">
+	<echo>Cleaning up prior epub content</echo>
+	<antcall target="epub-clean"/>
+	<echo>Creating HTML files for ebook</echo>
+	<exec executable="${xsltproc_bin}">
 		<arg line="--stringparam base.dir OEBPS/ /usr/local/docbook/1.0/xslt/epub3/chunk.xsl ${src_file}.xml"/>
 	</exec>
 	<!-- copy video resources into OEBPS/video -->
-	<copy file="video/do-lectures.mp4" tofile="OEBPS/video/do-lectures.mp4"/>
-	<copy file="video/do-lectures.png" tofile="OEBPS/video/do-lectures.png"/>
+	<echo>Copying videos... this may take a while</echo>
+	<antcall target="copy-videos"/>
 	<!-- zips the fils for the epub -->
+	<echo>Zipping files</echo>
 	<antcall target="epub-zip"/>
 	<!-- Runs epubcheck on the epub file -->
+	<echo>Checking the resuls</echo>
 	<antcall target="epub-check"/>
+	<echo>Resulting file available: ${src_file}.epub</echo>
 </target>
 
 
 <!-- Utility targets called from elsewhere epub2 and epub3 targets-->
+<target name="copy-videos">
+	<copy file="video/do-lectures.mp4" tofile="OEBPS/video/do-lectures.mp4"/>
+	<copy file="video/do-lectures.png" tofile="OEBPS/video/do-lectures.png"/>
+</target>
+
 <target name="make-mime">
-	<!-- Creates mimetype file as required by epub spec-->
+	<!-- 
+		Creates mimetype file as required by epub spec
+		Used by epub2 2 target. EPub3 generates its own
+	-->
 	<echo file="mimetype">application/epub+zip</echo>
 </target>
 
 <target name="make-kindle">
+	<!-- 
+		Uses Kindlegen from Amazon to generate MOBI version of epub2
+	-->
 	<exec executable="${kindlegen_bin}">
 		<arg line="${src_file}.epub"/>
 	</exec>
 </target>
 
 <target name="epub-zip">
-<!-- We use exec zip because I can't figure out if the builtin zip task conforms to what ePub expects -->
-<!-- Zip the mimetype first without compression as required-->
+	<!-- 
+		We use exec zip because I can't figure out if Ant's builtin zip 
+		task conforms to what ePub expects 
+	-->
+	<!-- 
+		Zip the mimetype first without compression as required
+	-->
 <exec executable="zip">
 	<arg line="-X0 ${src_file}.epub mimetype"/>
 </exec>
-<!-- Then zip the other files into the zip/epub archive -->
+	<!-- 
+		Then zip the other files into the zip/epub archive 
+	-->
 <exec executable="zip">
 	<arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/>
 </exec>
 </target>
 
 <target name="epub-check">
+	<!-- 
+		Runs epubcheck on the resulting epub (either version)
+	-->
 	<java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m">
 		<arg value="${src_file}.epub"/>
 	</java>
 </target>
 
-<!-- Calls all the cleanup targets-->
 <target name="all-clean">
+	<!-- 
+		Calls all the cleanup targets
+	-->
 	<antcall target="html-clean"/>
 	<antcall target="fo-clean"/>
 	<antcall target="epub-clean"/>
 	<echo>Done deleting files!</echo>
 </target>
 
-<!-- Cleans up HTML leftovers -->
 <target name="html-clean">
-	<description>
-		Cleans up HTML destination directory 
-	</description>
+	<!-- 
+		Cleans up HTML leftovers 
+	-->
 	<delete verbose="true">
 		<fileset dir="." includes="*.html"/>
 	</delete>
 	<delete dir="${dest}"/>
 </target>
 
-<!-- Removes the .fo file leftover from creating the PDF version-->
 <target name="fo-clean">
-	<description>
-		Cleans up fo file left after PDF conversion
-	</description>
+	<!-- 
+		Removes the .fo file leftover from creating the PDF version
+	-->
 	<delete file="${src_file}.fo"/> 
 </target>
 
-<!-- Cleans up leftover epub stuff-->
 <target name="epub-clean">
-	<description>
-		Cleans up leftover epub stuff
-	</description>
 	<!-- 
-	If OEBPS exists we assume the other files and directories do as well
-	since Docbook would never create only OEBPS
+		Cleans up leftover epub stuff
+
+		If OEBPS exists we assume the other files and directories do as well
+		since Docbook would never create only OEBPS
 	
-	The if tasks uses ant-contrib. See the section on Automating the process
-	for more information and about what changes to make if you don't want to use 
-	the task
+		The if tasks uses ant-contrib. See http://rivendellweb.net/
+		about what changes to make if you don't want to use 
+		the task
 	-->
 	<if>
 		<available file="OEBPS" type="dir" />
@@ -227,9 +263,11 @@
 	</if>
 </target>
 
-<!-- We call xmllint to make sure that the XML validates-->
 <target name="validate-xml">
-	<exec executable="xmllint">
+	<!-- 
+		We call xmllint to make sure that the XML validates
+	-->
+	<exec executable="${xmllint_bin}">
 		<arg line="-noent -noout ${src_file}.xml"/>
 	</exec>
 </target>
