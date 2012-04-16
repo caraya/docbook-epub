@@ -60,7 +60,7 @@
 <chapter>
 <title>Creating your Docbook content</title>
 <para>Content is required in chapters too.</para>
-<programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<programlisting><?db-font-size 75% ?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;book 
 	xmlns='http://docbook.org/ns/docbook' 
 	xmlns:xlink='http://www.w3.org/1999/xlink'
