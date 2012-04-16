@@ -55,8 +55,11 @@
 <sect2>
 	<title>Is Docbook the only alternative for creating ebooks?</title>
 	
-	<para>No, it isn't. There are several tools we can use to create eBooks</para>
-</sect2>
+	<para>No, it isn't. There are several tools we can use to create eBooks. I will only mention the tools and, where appropriate, where you can get a copy.</para>
+
+<para><emphasis role="bold">Apple Pages</emphasis> (part of the Apple office suite along with Keynote and Numbers). It is a fairly robust word processor that has the ability to export the content of the book directly into ePub. It is Macintosh-only but I think it's worth the Investment.</para>
+
+<para><emphasis role="bold">Sigil</emphasis> is available through their Google Code project (<link xlink:href="http://code.google.com/p/sigil/">http://code.google.com/p/sigil/</link>). </para></sect2>
 </sect1>
 </chapter>
 
