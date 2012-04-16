@@ -43,16 +43,19 @@
 <para>I don't know about you but I've always dreamed of writing the great big novel. Now it's within our reach. We don't have to worry about getting it published... we can do it ourselves! and not only that, but we can do it as often as we want to. </para>
 
 <para>We can use tools such as <link xlink:href="https://github.com">Github</link> to maintain our collaboration. With tools like this we are no longer limited to manual updates; all collaborators can stay up to date with what everything else is doing by downloading the content of the book and updating periodically. If there is disagreement it can be hammered out as the book is being written and read by everyone rather than at the end of the process when changes are costlier and people are invested in the book as is.<footnote><para>The XML source for this book along with all the ancillary files (Ant build files and others) are available on Github at <link xlink:hrf="https://github.com/caraya/docbook-epub">https://github.com/caraya/docbook-epub</link></para></footnote></para>
+
 <sect1>
 <title>Why Docbook?</title>
 
 <para>Over the years <link xlink:href="http://docbook.org/">Docbook</link> has proved to be a very versatile vocabulary for book authoring. I've written training manuals and converted them to PDF, HTML and even Microsoft Help. Epub (both version 2 and 3) are another tool added to the arsenal.</para>
 
-<para>In addition to the standard itself there are a set of XSLT style sheets that power the transformation process. These stylesheets are available from the <link xlink:href="http://sourceforge.net/projects/docbook/">Docbook Sourceforge Project</link> page.</para>
+<para>In addition to the standard itself there are a set of XSLT style sheets that power the transformation process. These stylesheets are available from the <link xlink:href="http://sourceforge.net/projects/docbook/">Docbook Sourceforge Project</link> page. You can see the variety of formats available to convert your content into.</para>
+
+<para>But perhaps the aspect I found out most attractive about Docbook is its community. It is self-supporting and it has evolved along with Docbook and its associated style sheets. It is welcoming and you get quick and accurate answers to your questions (always an important consideration when working with open source software)</para>
 <sect2>
 	<title>Is Docbook the only alternative for creating ebooks?</title>
 	
-	<para>No, it isn't.</para>
+	<para>No, it isn't. There are several tools we can use to create eBooks</para>
 </sect2>
 </sect1>
 </chapter>
@@ -60,7 +63,7 @@
 <chapter>
 <title>Creating your Docbook content</title>
 <para>Content is required in chapters too.</para>
-<programlisting><?db-font-size 75% ?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;book 
 	xmlns='http://docbook.org/ns/docbook' 
 	xmlns:xlink='http://www.w3.org/1999/xlink'
@@ -69,7 +72,8 @@
 &lt;info&gt;
 	&lt;author&gt;
 		&lt;personname&gt;
-			&lt;firstname&gt;Carlos&lt;/firstname&gt;&lt;surname&gt;Araya&lt;/surname&gt;
+			&lt;firstname&gt;Carlos&lt;/firstname&gt;
+			&lt;surname&gt;Araya&lt;/surname&gt;
 		&lt;/personname&gt;
 	&lt;/author&gt;
 	&lt;/info&gt;
@@ -158,7 +162,7 @@
 
 <para>to this:</para>
 
-<programlisting>&lt;target name="epub-clean"&gt;
+<programlisting><?db-font-size 75% ?>&lt;target name="epub-clean"&gt;
 &lt;description&gt;
 	Cleans up leftover epub stuff
 &lt;/description&gt;
@@ -181,7 +185,7 @@
 
 <para>After adding the if task the complete build file looks like this:</para>
 
-<programlisting>&lt;project name="epub" default="epub3" basedir="."&gt;
+<programlisting><?db-font-size 75% ?>&lt;project name="epub" default="epub3" basedir="."&gt;
 &lt;description&gt;
 Apache ant build file for Docbook based ebooks
 &lt;/description&gt;
