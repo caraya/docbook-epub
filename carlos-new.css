@@ -12,15 +12,12 @@ font-family: minerva-modern,"sans serif"; // title
 */
 html {
 	font-family: inconsolata,sans-serif;
-	font-size: 62.5%;
+/*	font-size: 62.5%;*/
 }
 
 
 h1, h2, h3, h4 {
 	font-family: minerva-modern,"sans serif"; 
-}
-
-h1 {
 	color: #00a;
 }
 
