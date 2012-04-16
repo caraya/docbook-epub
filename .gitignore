@@ -5,3 +5,8 @@ OEBPS
 META-INF
 *.epub
 mimetype
+#ignore fonts. Don't want to get in trouble
+*.eot
+*.svg
+*. otf
+*.woff
