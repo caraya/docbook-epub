@@ -8,15 +8,17 @@ Apache ant build file for Docbook based ebooks
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 <!-- Change the value of src_file to the name of your ebook file without extension-->
 <property name="src_file" value="docbook-howto"/>
-<!-- Change the value of css_file to the name of your stylesheet-->
+<!-- Change the value of css_file to the name of your stylesheet with extension-->
 <property name="css_file" value="carlos-new.css"/>
 
 <!-- Configure the path to the docbook stylesheets-->
 <property name="docbook_path" value="/usr/local/docbook/1.0/xslt/"/>
 
-<!-- Put the name of the binaries that you're using that are not stock on OS X-->
+<!-- Change path to the binaries we use so they match your system -->
 <property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
 <property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
+<property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
+<property name="xmllint_bin" value="/usr/bin/xmllint"/>
 
 <target name="epub2">
 <description>
@@ -27,7 +29,7 @@ Apache ant build file for Docbook based ebooks
 <!-- Validate XML -->
 <antcall target="validate-xml"/>
 <!-- Run the stylesheet conversion -->
-<exec executable="xsltproc">
+<exec executable="${xsltproc_bin}">
 	<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
 </exec>
 <!-- Create mimetype file, required per epub spec -->
@@ -50,7 +52,7 @@ Apache ant build file for Docbook based ebooks
 <!-- Validate XML -->
 <antcall target="validate-xml"/>
 <!-- Run the xslt transformation... we should be able to use the XSLT ant task but xsltproc is faster -->
-<exec executable="xsltproc">
+<exec executable="${xsltproc_bin}">
 	<arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/carlos-chunk.xsl ${src_file}.xml"/>
 </exec>
 <!-- Copy css stylesheet -->
@@ -131,7 +133,7 @@ changes to make if you don't want to use the task
 
 <!-- We call xmllint to make sure that the XML validates-->
 <target name="validate-xml">
-<exec executable="xmllint">
+<exec executable="${xmllint_bin}">
 	<arg line="-noent -noout ${src_file}.xml"/>
 </exec>
 </target>
