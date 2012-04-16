@@ -8,6 +8,9 @@ Apache ant build file for Docbook based ebooks
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 <!-- Change the value of src_file to the name of your ebook file without extension-->
 <property name="src_file" value="docbook-howto"/>
+<!-- Change the value of css_file to the name of your stylesheet-->
+<property name="css_file" value="carlos-new.css"/>
+
 <!-- Configure the path to the docbook stylesheets-->
 <property name="docbook_path" value="/usr/local/docbook/1.0/xslt/"/>
 
@@ -50,6 +53,8 @@ Apache ant build file for Docbook based ebooks
 <exec executable="xsltproc">
 	<arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/carlos-chunk.xsl ${src_file}.xml"/>
 </exec>
+<!-- Copy css stylesheet -->
+<antcall target="copy-css"/>
 <!-- zips the fils for the epub -->
 <antcall target="epub-zip"/>
 <!-- Runs epubcheck on the epub file -->
@@ -58,6 +63,10 @@ Apache ant build file for Docbook based ebooks
 
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
+<target name="copy-css">
+	<copy file="${css_file}" tofile="OEBPS/${css_file}"/>
+</target>
+
 <target name="make-mime">
 <!-- Creates mimetype file as required by epub spec-->
 <echo file="mimetype">application/epub+zip</echo>
