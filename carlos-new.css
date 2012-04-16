@@ -20,3 +20,11 @@ h1, h2, h3, h4 {
 	font-family: minerva-modern,"sans serif"; 
 }
 
+h1 {
+	color: #00a;
+}
+
+pre.programlisting {
+  background-color: #FFFF99 ;
+  border: 1px solid #006600 ;
+}
