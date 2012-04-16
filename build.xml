@@ -56,7 +56,7 @@ Apache ant build file for Docbook based ebooks
 	<arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/carlos-chunk.xsl ${src_file}.xml"/>
 </exec>
 <!-- Copy css stylesheet -->
-<antcall target="copy-css"/>
+<antcall target="copy-resources"/>
 <!-- zips the fils for the epub -->
 <antcall target="epub-zip"/>
 <!-- Runs epubcheck on the epub file -->
@@ -65,8 +65,31 @@ Apache ant build file for Docbook based ebooks
 
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
-<target name="copy-css">
-	<copy file="${css_file}" tofile="OEBPS/${css_file}"/>
+<target name="copy-resources">
+	<if>
+		<available file="type" type="dir" />
+		<then>
+			<echo message="Directory exist... copying font files" />
+			<mkdir dir="OEBPS/type"/>
+			 <copy todir="OEBPS/type">
+			    <fileset dir="type/">
+			      <exclude name="Calluna*.*"/>
+			    </fileset>
+			  </copy>
+		</then>
+		<else>
+			<echo message="There are no fonts available" />
+		</else>
+	</if>	
+	<if>
+		<available file="${css_file}" type="file" />
+		<then>
+			<copy file="${css_file}" tofile="OEBPS/${css_file}"/>
+		</then>
+		<else>
+			<echo>No file ${css_file} available!</echo>
+		</else>
+	</if>
 </target>
 
 <target name="make-mime">
