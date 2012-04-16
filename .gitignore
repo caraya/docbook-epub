@@ -8,6 +8,6 @@ mimetype
 #ignore fonts. Don't want to get in trouble
 *.eot
 *.svg
-*. otf
+*.otf
 *.woff
 *.ttf
