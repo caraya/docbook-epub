@@ -12,7 +12,7 @@ Apache ant build file for Docbook based ebooks
 <property name="css_file" value="carlos-new.css"/>
 
 <!-- Configure the path to the docbook stylesheets we asked ant to download-->
-<property name="docbook_path" value="docbook/xslt/"/>
+<property name="docbook_path" value="docbook/"/>
 
 <!-- Change path to the binaries we use so they match your system -->
 <property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
@@ -74,7 +74,7 @@ Apache ant build file for Docbook based ebooks
 			  </copy>
 		</then>
 		<else>
-			<echo message="There are no fonts available. Not a fatal error so we'll continue"/>
+			<fail message="There are no fonts available. EPub will not validate so terminating"/>
 		</else>
 	</if>	
 	<if>
