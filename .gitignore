@@ -11,3 +11,5 @@ mimetype
 *.otf
 *.woff
 *.ttf
+# Ignore Docbook Snapshot
+docbook/*
