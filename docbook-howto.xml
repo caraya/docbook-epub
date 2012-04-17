@@ -67,9 +67,7 @@
 
 <para><emphasis role="bold">Sigil</emphasis> is available through their Google Code project (<link xlink:href="http://code.google.com/p/sigil/">http://code.google.com/p/sigil/</link>). Sigil  is very similar to Adobe Dreamweaver, used to create web content.  It is flexible and it has most of the tools that make valid ebooks, such as metadata editor and tools for making chapters.</para>
 
-<para><emphasis role="bold">Adobe InDesign</emphasis> is a very powerful publishing tool. It now allows you to export your publication directly to ePub.</para>
-
-<para>Don't expect your InDesign document to translate 100% into ePub. With all the capabilities of InDesign that is impossible.  </para>
+<para><emphasis role="bold">Adobe InDesign</emphasis> is a very powerful publishing tool. It now allows you to export your publication directly to ePub. Don't expect your InDesign document to translate 100% into ePub. With all the capabilities of InDesign that is impossible. What it is possible is to use your InDesign expertise to tailor your publication to Docbook and then do the conversion.</para>
 </sect2>
 </sect1>
 </chapter>
@@ -77,7 +75,7 @@
 <chapter>
 <title>Creating your Docbook content</title>
 <para>Content is required in chapters too.</para>
-<programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<programlisting><?db-font-size 75% ?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;book 
 	xmlns='http://docbook.org/ns/docbook' 
 	xmlns:xlink='http://www.w3.org/1999/xlink'
@@ -162,7 +160,7 @@
 
 <para>Change the epub-clean target from this:</para>
 
-<programlisting>&lt;target name="epub-clean"&gt;
+<programlisting><?db-font-size 75% ?>&lt;target name="epub-clean"&gt;
 &lt;description&gt;
 	Cleans up leftover epub stuff
 &lt;/description&gt;
@@ -210,7 +208,7 @@
 
 <para>After adding the if task the complete build file looks like this:</para>
 
-<programlisting><?db-font-size 75% ?>&lt;project name="epub" default="epub3" basedir="."&gt;
+<programlisting><?db-font-size 65% ?>&lt;project name="epub" default="epub3" basedir="."&gt;
 &lt;description&gt;
 Apache ant build file for Docbook based ebooks
 &lt;/description&gt;
@@ -228,9 +226,8 @@ Apache ant build file for Docbook based ebooks
 &lt;property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/&gt;
 
 &lt;target name="epub2"&gt;
-&lt;description&gt;
-	Convert the XML file into epub2 using a snapshot of the stylesheets
-&lt;/description&gt;
+&lt;!-- Downlod the docbook snapshot. Comment out the line below if working offline --&gt;
+&lt;antcall target="get-docbook"/&gt;
 &lt;!-- Remove prior versions of the content we're generating --&gt;
 &lt;antcall target="epub-clean"/&gt;
 &lt;!-- Validate XML --&gt;
@@ -250,10 +247,8 @@ Apache ant build file for Docbook based ebooks
 &lt;/target&gt;
 
 &lt;target name="epub3"&gt;
-&lt;description&gt;
-	Convert the XML file into epub3 using a snapshot of the stylesheets. 
-	We do it with snapshot because epub3 support is still experimental
-&lt;/description&gt;
+&lt;!-- Downlod the docbook snapshot. Comment out the line below if working offline --&gt;
+&lt;antcall target="get-docbook"/&gt;
 &lt;!-- Remove prior versions of the content we're generating --&gt;
 &lt;antcall target="epub-clean"/&gt;
 &lt;!-- Validate XML --&gt;
@@ -329,6 +324,23 @@ Apache ant build file for Docbook based ebooks
 	&lt;arg line="-noent -noout ${src_file}.xml"/&gt;
 &lt;/exec&gt;
 &lt;/target&gt;
+
+&lt;!-- Download the docbook snapshot. Ignore this target if you're working offline --&gt;
+&lt;target name="get-docbook"&gt;
+	&lt;mkdir dir="docbook"/&gt;
+	&lt;get 
+		src="http://snapshots.docbook.org/docbook-xsl-ns-snapshot.zip" 
+		dest="docbook.zip"  
+		verbose="true" 
+		usetimestamp="true"/&gt;
+	&lt;unzip src="docbook.zip" dest="."/&gt;
+	&lt;move todir="docbook"&gt;
+	    &lt;fileset dir="docbook-xsl-ns-snapshot/"&gt;
+	      &lt;include name="**/*"/&gt;
+	    &lt;/fileset&gt;
+	&lt;/move&gt;
+&lt;/target&gt;
+
 &lt;/project&gt;</programlisting>
 </sect1>
 </chapter>
