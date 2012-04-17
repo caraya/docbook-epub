@@ -6,22 +6,10 @@
 
 <xsl:param name="html.stylesheet" select="'carlos-new.css'"/> 
 <xsl:param name="admon.graphics" select="1"/>
-<xsl:attribute-set name="monospace.verbatim.properties">
-	<xsl:attribute name="font-size">
-		<xsl:choose>
-			<xsl:when test="processing-instruction('db-font-size')">
-				<xsl:value-of select="processing-instruction('db-font-size')"/>
-			</xsl:when>
-			<xsl:otherwise>inherit</xsl:otherwise>
-		</xsl:choose>
-	</xsl:attribute>
-	<xsl:attribute name="wrap-option">wrap</xsl:attribute>
-	<xsl:attribute name="hyphenation-character">\</xsl:attribute>
-</xsl:attribute-set>
 
 <xsl:template name="user.manifest.items">
-	<item id="font1" href="DejaVuSansMono.ttf" media-type="font/truetype"/>
-	<item id="font2" href="GraublauWeb.otf" media-type="font/opentype"/>
-	<item id="font3" href="GraublauWebBold.otf" media-type="font/opentype"/>
+	<item id="font1" href="type/DejaVuSansMono.ttf" media-type="font/truetype"/>
+	<item id="font2" href="type/GraublauWeb.otf" media-type="font/opentype"/>
+	<item id="font3" href="type/GraublauWebBold.otf" media-type="font/opentype"/>
 </xsl:template>
 </xsl:stylesheet>
