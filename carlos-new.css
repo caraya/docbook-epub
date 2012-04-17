@@ -18,13 +18,13 @@ Author			Carlos Araya
 
 /* Rest of the CSS declarations */
 body { 
-	font-family:GraublauWeb, Verdana, Arial, Helvetica, sans-serif;
+	font-family:GraublauWeb, sans-serif;
 	font-size: 62.5%;
 }
 
 
 h1, h2, h3, h4, h5, h6 {
-	font-family:GraublauWebBold, GraublauWeb, Verdana, Arial, Helvetica, sans-serif;
+	font-family:GraublauWebBold, GraublauWeb, sans-serif;
 	color: #cc0000;
 }
 
