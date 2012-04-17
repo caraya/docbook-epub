@@ -18,4 +18,10 @@
 	<xsl:attribute name="wrap-option">wrap</xsl:attribute>
 	<xsl:attribute name="hyphenation-character">\</xsl:attribute>
 </xsl:attribute-set>
+
+<xsl:template name="user.manifest.items">
+	<item id="font1" href="DejaVuSansMono.ttf" media-type="font/truetype"/>
+	<item id="font2" href="GraublauWeb.otf" media-type="font/opentype"/>
+	<item id="font3" href="GraublauWebBold.otf" media-type="font/opentype"/>
+</xsl:template>
 </xsl:stylesheet>
