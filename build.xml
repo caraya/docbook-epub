@@ -169,25 +169,5 @@ we use the if task from ant-contrib available from sourceforge.net.
 	      <include name="**/*"/>
 	    </fileset>
 	</move>
-	<if>
-		<!-- if the directory exists delete, otherwise echo a message -->
-		<available file="docbook-xsl-ns-snapshot" type="dir" />
-		<then>
-			<delete verbose="true" dir="docbook-xsl-ns-snapshot"/>
-		</then>
-		<else>
-			<echo message="Directory docbook-xsl-ns-snapshot DOES NOT exist" />
-		</else>
-	</if>
-	<if>
-		<!-- if the file  exists delete, otherwise echo a message -->
-		<available file="docbook.zip" type="file" />
-		<then>
-			<delete verbose="true" file="docbook.zip"/>
-		</then>
-		<else>
-			<echo message="File docbook.zip DOES NOT exist" />
-		</else>
-	</if>
 </target>
 </project>
