@@ -13,3 +13,4 @@ mimetype
 *.ttf
 # Ignore Docbook Snapshot
 docbook/*
+docbook.zip
