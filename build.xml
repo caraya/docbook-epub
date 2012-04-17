@@ -11,8 +11,8 @@ Apache ant build file for Docbook based ebooks
 <!-- Change the value of css_file to the name of your stylesheet with extension-->
 <property name="css_file" value="carlos-new.css"/>
 
-<!-- Configure the path to the docbook stylesheets-->
-<property name="docbook_path" value="/usr/local/docbook/1.0/xslt/"/>
+<!-- Configure the path to the docbook stylesheets we asked ant to download-->
+<property name="docbook_path" value="docbook/xslt/"/>
 
 <!-- Change path to the binaries we use so they match your system -->
 <property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
@@ -21,9 +21,8 @@ Apache ant build file for Docbook based ebooks
 <property name="xmllint_bin" value="/usr/bin/xmllint"/>
 
 <target name="epub2">
-<description>
-	Convert the XML file into epub2 using a snapshot of the stylesheets
-</description>
+<!-- Download the latest docbook snapshot build. Comment out if you're working offline -->
+<antcall target="get-docbook"/>
 <!-- Remove prior versions of the content we're generating -->
 <antcall target="epub-clean"/>
 <!-- Validate XML -->
@@ -43,17 +42,15 @@ Apache ant build file for Docbook based ebooks
 </target>
 
 <target name="epub3">
-<description>
-	Convert the XML file into epub3 using a snapshot of the stylesheets. 
-	We do it with snapshot because epub3 support is still experimental
-</description>
+<!-- Download the latest docbook snapshot build. Comment out if you're working offline -->
+<antcall target="get-docbook"/>
 <!-- Remove prior versions of the content we're generating -->
 <antcall target="epub-clean"/>
 <!-- Validate XML -->
 <antcall target="validate-xml"/>
 <!-- Run the xslt transformation... we should be able to use the XSLT ant task but xsltproc is faster -->
 <exec executable="${xsltproc_bin}">
-	<arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/carlos-chunk.xsl ${src_file}.xml"/>
+	<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
 </exec>
 <!-- Copy css stylesheet -->
 <antcall target="copy-resources"/>
@@ -62,7 +59,6 @@ Apache ant build file for Docbook based ebooks
 <!-- Runs epubcheck on the epub file -->
 <antcall target="epub-check"/>
 </target>
-
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
 <target name="copy-resources">
@@ -78,7 +74,7 @@ Apache ant build file for Docbook based ebooks
 			  </copy>
 		</then>
 		<else>
-			<echo message="There are no fonts available" />
+			<echo message="There are no fonts available. Not a fatal error so we'll continue"/>
 		</else>
 	</if>	
 	<if>
@@ -87,7 +83,7 @@ Apache ant build file for Docbook based ebooks
 			<copy file="${css_file}" tofile="OEBPS/${css_file}"/>
 		</then>
 		<else>
-			<echo>No file ${css_file} available!</echo>
+			<fail message="No ${css_file} available!"/>
 		</else>
 	</if>
 </target>
@@ -123,17 +119,15 @@ Apache ant build file for Docbook based ebooks
 
 <!-- Cleans up leftover epub stuff-->
 <target name="epub-clean">
-<description>
-	Cleans up leftover epub stuff
-</description>
 <!-- 
 If OEBPS exists we assume the other files and directories do as well
-since Docbook would never create only OEBPS
+since Docbook would never create only OEBPS. 
+
+There is one instance where only the OEBPS directory is created and that
+is if we have a syntax error from xmllint. It's not frequent enough and the 
+solution is to delete OEBPS manually.
 
 we use the if task from ant-contrib available from sourceforge.net. 
-
-See the section on Automating the process for more information and about what 
-changes to make if you don't want to use the task
 -->
 <if>
 	<available file="OEBPS" type="dir" />
@@ -159,5 +153,41 @@ changes to make if you don't want to use the task
 <exec executable="${xmllint_bin}">
 	<arg line="-noent -noout ${src_file}.xml"/>
 </exec>
+</target>
+
+<!-- Download the docbook snapshot. Ignore this target if you're working offline -->
+<target name="get-docbook">
+	<mkdir dir="docbook"/>
+	<get 
+		src="http://snapshots.docbook.org/docbook-xsl-ns-snapshot.zip" 
+		dest="docbook.zip"  
+		verbose="true" 
+		usetimestamp="true"/>
+	<unzip src="docbook.zip" dest="."/>
+	<move todir="docbook">
+	    <fileset dir="docbook-xsl-ns-snapshot/">
+	      <include name="**/*"/>
+	    </fileset>
+	</move>
+	<if>
+		<!-- if the directory exists delete, otherwise echo a message -->
+		<available file="docbook-xsl-ns-snapshot" type="dir" />
+		<then>
+			<delete verbose="true" dir="docbook-xsl-ns-snapshot"/>
+		</then>
+		<else>
+			<echo message="Directory docbook-xsl-ns-snapshot DOES NOT exist" />
+		</else>
+	</if>
+	<if>
+		<!-- if the file  exists delete, otherwise echo a message -->
+		<available file="docbook.zip" type="file" />
+		<then>
+			<delete verbose="true" file="docbook.zip"/>
+		</then>
+		<else>
+			<echo message="File docbook.zip DOES NOT exist" />
+		</else>
+	</if>
 </target>
 </project>
