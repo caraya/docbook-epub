@@ -18,7 +18,7 @@ Author			Carlos Araya
 
 @font-face {
     font-family: DejaVuSansMono;
-    font-weight: bold;
+    font-weight: normal;
     src: url(DejaVuSansMono.ttf) format(truetype);
 }
 
@@ -35,6 +35,7 @@ h1, h2, h3, h4, h5, h6 {
 
 pre.programlisting {
 	font-family: DejaVuSansMono, sans-serif;
+	font-size: 62.5%;
 	background-color: #FFFF99 ;
 	border: 1px solid #006600 ;
 }
