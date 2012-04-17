@@ -42,7 +42,13 @@
 
 <para>I don't know about you but I've always dreamed of writing the great big novel. Now it's within our reach. We don't have to worry about getting it published... we can do it ourselves! and not only that, but we can do it as often as we want to. </para>
 
-<para>We can use tools such as <link xlink:href="https://github.com">Github</link> to maintain our collaboration. With tools like this we are no longer limited to manual updates; all collaborators can stay up to date with what everything else is doing by downloading the content of the book and updating periodically. If there is disagreement it can be hammered out as the book is being written and read by everyone rather than at the end of the process when changes are costlier and people are invested in the book as is.<footnote><para>The XML source for this book along with all the ancillary files (Ant build files and others) are available on Github at <link xlink:hrf="https://github.com/caraya/docbook-epub">https://github.com/caraya/docbook-epub</link></para></footnote></para>
+<para>We can use tools such as <link xlink:href="https://github.com">Github</link> to maintain our collaboration. With tools like this we are no longer limited to manual updates; all collaborators can stay up to date with what everything else is doing by downloading the content of the book and updating periodically. If there is disagreement it can be hammered out as the book is being written and read by everyone rather than at the end of the process when changes are costlier and people are invested in the book as is.<footnote><para>The XML source for this book along with all the ancillary files (Ant build files and others) are available on Github at <link xlink:href="https://github.com/caraya/docbook-epub">https://github.com/caraya/docbook-epub</link></para></footnote></para>
+
+<para>Even the funding may be community supported. Services like <link xlink:href="http://www.kickstarter.com/">Kickstarter</link> or <link xlink:href="http://www.indiegogo.com/">Indiegogo</link> provide "crowd funding" platforms where people who are interested in your idea can invest in it even before the product is completed.</para>
+
+<para>There are few differences between Kickstarter and Indiegogo; The biggest difference is that Indiegogo allows for partial funding. Say that we decided to raise $1000 for our book but, for whatever reason, we failed to meet the target. Kickstarter will consider the drive failed and no money will be charged to the people who did sign up. With the flexible option, Indiegogo will charge the amount raised up to that point from the people who pledged their donations.</para>
+
+<para>Now you get no only the funding you need to get your book up and running but you also get a group of enthusiastic people who are as interested in the success of your book as you are, if not more<footnote><para>For a more detailed account of a successful Kickstarter story see Craig Mod's <link xlink:href="http://craigmod.com/journal/kickstartup/">Kickstartup</link> essay.</para></footnote>.</para>
 
 <sect1>
 <title>Why Docbook?</title>
@@ -59,7 +65,12 @@
 
 <para><emphasis role="bold">Apple Pages</emphasis> (part of the Apple office suite along with Keynote and Numbers). It is a fairly robust word processor that has the ability to export the content of the book directly into ePub. It is Macintosh-only but I think it's worth the Investment.</para>
 
-<para><emphasis role="bold">Sigil</emphasis> is available through their Google Code project (<link xlink:href="http://code.google.com/p/sigil/">http://code.google.com/p/sigil/</link>). </para></sect2>
+<para><emphasis role="bold">Sigil</emphasis> is available through their Google Code project (<link xlink:href="http://code.google.com/p/sigil/">http://code.google.com/p/sigil/</link>). Sigil  is very similar to Adobe Dreamweaver, used to create web content.  It is flexible and it has most of the tools that make valid ebooks, such as metadata editor and tools for making chapters.</para>
+
+<para><emphasis role="bold">Adobe InDesign</emphasis> is a very powerful publishing tool. It now allows you to export your publication directly to ePub.</para>
+
+<para>Don't expect your InDesign document to translate 100% into ePub. With all the capabilities of InDesign that is impossible.  </para>
+</sect2>
 </sect1>
 </chapter>
 
@@ -110,18 +121,24 @@
 </chapter>
 
 <chapter>
-<title>Customizing the generated HTML</title>
+<title>Customizations</title>
+<subtitle>Changing the way your book looks</subtitle>
 	<para>Content is required in chapters too.</para>
+
+<sect1>
+	<title>The relatively simple</title>
+	<para></para>
+</sect1>
+
+<sect1>
+	<title>The not-so-simple</title>
+	<para>Content is required in chapters too.</para>
+</sect1>
 </chapter>
 
 <chapter>
-<title>Advanced Customizations</title>
-	<para>Content is required in chapters too.</para>
-</chapter>
-
-<chapter>
-	<title>Automating the process</title>
-
+<title>Automating the process</title>
+<subtitle>Make the computer work for you</subtitle>
 <sect1>
 	<title>Apache Ant and making things easier on yourself</title>
 	
