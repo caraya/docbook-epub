@@ -67,14 +67,16 @@
 
 <para><emphasis role="bold">Sigil</emphasis> is available through their Google Code project (<link xlink:href="http://code.google.com/p/sigil/">http://code.google.com/p/sigil/</link>). Sigil  is very similar to Adobe Dreamweaver, used to create web content.  It is flexible and it has most of the tools that make valid ebooks, such as metadata editor and tools for making chapters.</para>
 
-<para><emphasis role="bold">Adobe InDesign</emphasis> is a very powerful publishing tool. It now allows you to export your publication directly to ePub. Don't expect your InDesign document to translate 100% into ePub. With all the capabilities of InDesign that is impossible. What it is possible is to use your InDesign expertise to tailor your publication to Docbook and then do the conversion.</para>
+<para><emphasis role="bold">Adobe InDesign</emphasis> is a very powerful publishing tool. It now allows you to export your publication directly to ePub. Don't expect your InDesign document to translate 100% into ePub. With all the capabilities of InDesign that is impossible. What it is possible is to use your InDesign expertise to tailor your publication to Docbook and then do the conversion... it takes some manual work but at least it allows you to reuse your content.</para>
 </sect2>
 </sect1>
 </chapter>
 
 <chapter>
 <title>Creating your Docbook content</title>
+
 <para>Content is required in chapters too.</para>
+
 <programlisting><?db-font-size 75% ?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;book 
 	xmlns='http://docbook.org/ns/docbook' 
