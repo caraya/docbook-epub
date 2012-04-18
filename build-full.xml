@@ -156,9 +156,8 @@
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
 <target name="copy-resources">
-	<check if the type directory is available -->
 	<if>
-		<!-- Check if the type directory is available-->
+		<!-- Check if the type directory exists-->
 		<available file="type" type="dir" />
 		<then>
 			<!-- If it is then do this:
