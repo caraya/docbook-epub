@@ -15,17 +15,24 @@
 	This should work on Windows, Mac and Linux since Ant is crossplatform... I hope :-)
 -->
 <property name="saxon_bin" value="/usr/local/java/saxon.jar"/>
-<property name="fop_bin" value="/usr/local/java/fop/build/fop.jar"/>
+<property name="fop_bin" value="/usr/local/java/fop/fop"/>
 <property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
 <property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
 <property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
 <property name="xmllint_bin" value="/usr/bin/xmllint"/>
 
 <!-- set global properties for this build -->
-<property name="dest"  location="ebook-content"/> 
-<property name="css"  location="${dest}/css"/> 
-<property name="js"  location="${dest}/js"/> 
-<property name="images"  location="${dest}/images"/> 
+<!-- Destination directories for the HTML targets-->
+<property name="dest_html2"  value="html_content"/> 
+<property name="dest"  value="ebook-content"/> 
+<!-- locations for ancillary directories-->
+<property name="css"  value="${dest}/css"/> 
+<property name="js"  value="${dest}/js"/> 
+<property name="images"  value="${dest}/images"/> 
+
+<!-- Path to stylesheets -->
+<property name="xslt1_xhtml" value="/usr/local/docbook/1.0/xslt/xhtml/"/>
+<property name="xslt2_xhtml" value="/usr/local/docbook/2.0/release/2.0.3/xslt/base/html/"/>
 
 <target name="init">
 	<!-- 
@@ -70,31 +77,112 @@
 	</copy>
 </target>
 
+<!-- 
+	Docbook-single and docbook-chunks use the standard XSLT stylesheets 
+	available from Sourceforge
+-->
 <target name="docbook-single" depends="init">
+	<echo>Generating HTML Chunks with XSLT 1.0 processor</echo>
+	<exec executable="${xsltproc_bin}">
+		<arg line="${xslt1_xhtml}docbook.xsl ${src_file}.xml"/>
+  	</exec>
+	<echo>Moving html files to ${dest}</echo>
+	<move todir="${dest}">
+		<fileset dir="." casesensitive="yes">
+		  <include name="*.html"/>
+		</fileset>
+	</move>
+</target>
+
+<target name="docbook-chunks">
+	<echo>Generating HTML Chunks with xslt 1.0 processor</echo>
+	<exec executable="${xsltproc_bin}">
+		<arg line="${xslt1_xhtml}chunk.xsl ${src_file}.xml"/>
+  	</exec>
+	<echo>Moving html files to ${dest}</echo>
+	<move todir="${dest}">
+		<fileset dir="." casesensitive="yes">
+		  <include name="*.html"/>
+		</fileset>
+	</move>
+</target>
+
+<!-- 
+	init2, docbook-single2 and docbook-chunks2 use the XSLT 2.0 stylesheets
+	available from http://docbook.github.com/
+-->
+<target name="init2">
+	<!-- 
+		Create the destination directory and appropriate sub directories
+		if they don't exist already
+	-->
+	<if>
+		<available file="${dest_html2}" type="dir" />
+		<then>
+			<echo message="Directory ${dest_html2} exist... skiping" />
+		</then>
+		<else>
+			<echo>Creating directory</echo>
+			<mkdir dir="${dest_html2}"/>
+			<echo>Creating CSS directory</echo>
+			<mkdir dir="${dest_html2}/css"/>
+			<echo>Creating JS directory</echo>
+			<mkdir dir="${dest_html2}/js"/>
+			<echo>Creating image directory</echo>
+			<mkdir dir="${dest_html2}/images"/>
+		</else>
+	</if>
+	<!-- 
+		Copy CSS, JS and any images into their directories 
+	-->
+	<copy todir="${dest_html2}/css">
+		<fileset dir="." casesensitive="yes">
+		  <include name="*.css"/>
+		</fileset>
+	</copy>
+	<copy todir="${dest_html2}/js">
+		<fileset dir="." casesensitive="yes">
+		  <include name="*.js"/>
+		</fileset>
+	</copy>
+	<copy todir="${dest_html2}/images">
+		<fileset dir="." casesensitive="yes">
+		  <include name="*.jpg"/>
+		  <include name="*.gif"/>
+		  <include name="*.png"/>
+		</fileset>
+	</copy>
+</target>
+
+<target name="docbook-single2" depends="init2">
 	<echo>validate XML before converting to Docbook</echo>
 	<antcall target="validate-xml"/>
 	<echo>Generating HTML Single File using Saxon and XSLT2.0</echo>
 	<echo>Saxon 9 or another XSLT2 processor must be used</echo>
 	<java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
 		<arg value="-s:${src_file}.xml"/>
-		<arg value="-xsl:/usr/local/docbook/2.0/release/2.0.3/xslt/base/html/docbook.xsl"/>
+		<arg value="-xsl:${xslt2_xhtml}docbook.xsl"/>
 		<arg value="-o:${src_file}-2.html"/>
 	</java>
-	<echo>Moving files to ${dest}</echo>
-	<copy todir="${dest}">
+	<echo>Moving files to ${dest_html2}</echo>
+	<move todir="${dest_html2}">
 		<fileset dir="." casesensitive="yes">
 		  <include name="*.html"/>
 		</fileset>
-	</copy>
+	</move>
 </target>
 
-<target name="docbook-chunks">
-	<echo>Generating HTML Chunks</echo>
-	<exec executable="${xsltproc_bin}">
-		<arg line="/usr/local/docbook/1.0/xslt/xhtml/chunk.xsl ${src_file}.xml"/>
-  	</exec>
-	<echo>Moving html files to ${dest}</echo>
-	<copy todir="${dest}">
+<target name="docbook-chunks2">
+	<echo>validate XML before converting to Docbook</echo>
+	<antcall target="validate-xml"/>
+	<echo>Generating HTML chunks using Saxon and XSLT2.0</echo>
+	<echo>Saxon 9 or another XSLT2 processor must be used</echo>
+	<java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
+		<arg value="-s:${src_file}.xml"/>
+		<arg value="-xsl:${xslt2_xhtml}chunk.xsl"/>
+	</java>
+	<echo>Moving files to ${dest_html2}</echo>
+	<copy todir="${dest_html2}">
 		<fileset dir="." casesensitive="yes">
 		  <include name="*.html"/>
 		</fileset>
@@ -110,15 +198,12 @@
 
 <target name="pdf-fop" depends="docbook-fo">
 	<echo>Using fop at ${fop_bin}</echo>
-	<java jar="${fop_bin}" fork="true" failonerror="true" maxmemory="128m">
+	<exec executable="${fop_bin}">
 		<arg line="${src_file}.fo ${src_file}.pdf"/>
-	</java>
+	</exec>
 </target>
 
 <target name="epub2">
-<description>
-	Convert the XML file into epub2 using a snapshot of the stylesheets
-</description>
 <!-- Remove prior versions of the content we're generating -->
 <antcall target="epub-clean"/>
 <!-- Validate XML -->
@@ -155,40 +240,6 @@
 </target>
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
-<target name="copy-resources">
-	<if>
-		<!-- Check if the type directory exists-->
-		<available file="type" type="dir" />
-		<then>
-			<!-- If it is then do this:
-			
-				1. Make the OEBPS type directory
-				2. copy all fonts except those starting with Calluna 
-			       to the OEBPS/type directoryexcept those that start with Calluna-->
-			<echo message="Directory exist... copying font files" />
-			<mkdir dir="OEBPS/type"/>
-			 <copy todir="OEBPS/type">
-			    <fileset dir="type/">
-			      <exclude name="Calluna*.*"/>
-			    </fileset>
-			  </copy>
-		</then>
-		<else>
-			<!-- There are no fonts... tough luck buddy -->
-			<echo message="There are no fonts available" />
-		</else>
-	</if>	
-	<if>
-		<available file="${css_file}" type="file" />
-		<then>
-			<copy file="${css_file}" tofile="OEBPS/${css_file}"/>
-		</then>
-		<else>
-			<echo>No file ${css_file} available!</echo>
-		</else>
-	</if>
-</target>
-
 <target name="make-mime">
 <!-- Creates mimetype file as required by epub spec-->
 <echo file="mimetype">application/epub+zip</echo>
@@ -201,30 +252,48 @@
 </target>
 
 <target name="epub-zip">
-<!-- We use exec zip because I can't figure out if the builtin zip task conforms to what ePub expects -->
-<!-- Zip the mimetype first without compression as required-->
-<exec executable="zip">
-<arg line="-X0 ${src_file}.epub mimetype"/>
-</exec>
-<!-- Then zip the other files into the zip/epub archive -->
-<exec executable="zip">
-<arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/>
-</exec>
+	<!-- We use exec zip because I can't figure out if the builtin zip task conforms to what ePub expects -->
+	<!-- Zip the mimetype first without compression as required-->
+	<exec executable="zip">
+		<arg line="-X0 ${src_file}.epub mimetype"/>
+	</exec>
+	<!-- Then zip the other files into the zip/epub archive -->
+	<exec executable="zip">
+		<arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/>
+	</exec>
 </target>
 
 <target name="epub-check">
-<java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m">
-	<arg value="${src_file}.epub"/>
-</java>
+	<java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m">
+		<arg value="${src_file}.epub"/>
+	</java>
 </target>
 
 <!-- We call xmllint to make sure that the XML validates-->
 <target name="validate-xml">
-<exec executable="${xmllint_bin}">
-	<arg line="-noent -noout ${src_file}.xml"/>
-</exec>
+	<exec executable="${xmllint_bin}">
+		<arg line="-noent -noout ${src_file}.xml"/>
+	</exec>
 </target>
 
+<!-- Download the docbook snapshot. Ignore this target if you're working offline -->
+<target name="get-docbook">
+	<mkdir dir="docbook"/>
+	<get 
+		src="http://snapshots.docbook.org/docbook-xsl-ns-snapshot.zip" 
+		dest="docbook.zip"  
+		verbose="true" 
+		usetimestamp="true"/>
+	<unzip src="docbook.zip" dest="docbook"/>
+</target>
+
+<target name="copy-resources">
+	<!-- Macro Task to copy resouces into OEBPS-->
+	<antcall target="copy-css"/>
+	<antcall target="copy-videos"/>
+	<antcall target="copy-images"/>
+	<antcall target="copy-fonts"/>
+</target>
 <target name="copy-videos">
 	<copy todir="OEBPS/video">
 		<fileset dir="video/">
@@ -235,14 +304,78 @@
 	</copy>
 </target>
 
+<target name="copy-images">
+	<if>
+		<available file="images" type="dir"/>
+		<then>
+			<copy todir="OEBPS/images">
+				<fileset dir="." casesensitive="yes">
+				  <include name="*.jpg"/>
+				  <include name="*.gif"/>
+				  <include name="*.png"/>
+				</fileset>
+			</copy>
+		</then>
+		<else>
+			<echo message="no images to copy"/>
+		</else>
+	</if>
+</target>
+
+<target name="copy-fonts">
+	<if>
+		<!-- Check if the type directory exists-->
+		<available file="type" type="dir" />
+		<then>
+			<!-- If it is then do this:
+		
+				1. Make the OEBPS type directory
+				2. copy all fonts except those starting with Calluna 
+			       to the OEBPS/type directory -->
+			<echo message="Directory exist... copying font files" />
+			<mkdir dir="OEBPS/type"/>
+			 <copy todir="OEBPS/type">
+			    <fileset dir="type/">
+			      <exclude name="Calluna*.*"/>
+			    </fileset>
+			  </copy>
+		</then>
+		<else>
+			<!-- There are no fonts... tough luck buddy -->
+			<fail message="There are no fonts available" />
+		</else>
+	</if>	
+</target>
+
+<target name="copy-css">
+	<if>
+		<available file="${css_file}" type="file" />
+		<then>
+			<copy file="${css_file}" tofile="OEBPS/${css_file}"/>
+		</then>
+		<else>
+			<fail message="No file ${css_file} available!"/>
+		</else>
+	</if>
+</target>
+
+
 <target name="all-clean">
 	<!-- 
 		Calls all the cleanup targets
 	-->
 	<antcall target="html-clean"/>
+	<antcall target="html2_clean"/>
 	<antcall target="fo-clean"/>
 	<antcall target="epub-clean"/>
 	<echo>Done deleting files!</echo>
+</target>
+
+<target name="fo-clean">
+	<!-- 
+		Removes the .fo file leftover from creating the PDF version
+	-->
+	<delete file="${src_file}.fo"/> 
 </target>
 
 <target name="html-clean">
@@ -255,10 +388,42 @@
 	<delete dir="${dest}"/>
 </target>
 
-<target name="fo-clean">
+<target name="html2-clean">
 	<!-- 
-		Removes the .fo file leftover from creating the PDF version
+		Cleans up HTML leftovers 
 	-->
-	<delete file="${src_file}.fo"/> 
+	<delete verbose="true">
+		<fileset dir="." includes="*.html"/>
+	</delete>
+	<delete dir="${dest_html2}"/>
+</target>
+
+<!-- Cleans up leftover epub stuff-->
+<target name="epub-clean">
+	<!-- 
+	If OEBPS exists we assume the other files and directories do as well.
+	There is one instance where only the OEBPS directory is created and that
+	is if we have a syntax error from xmllint. It's not frequent enough and the 
+	solution is to delete OEBPS manually.
+
+	we use the if task from ant-contrib available from sourceforge.net. 
+	-->
+	<if>
+		<available file="OEBPS" type="dir" />
+		<then>
+			<echo message="Directory exist... deleting" />
+			<delete verbose="true">
+				<fileset dir="OEBPS" includes="*"/>
+				<fileset dir="META-INF" includes="*"/>
+			</delete>
+			<delete verbose="true" file="mimetype"/>
+			<delete verbose="true" dir="META-INF"/>
+			<delete verbose="true" dir="OEBPS"/>
+			<delete verbose="true" file="${src_file}.epub"/>
+		</then>
+		<else>
+			<echo message="Directory DOES NOT exist... Nothing to delete" />
+		</else>
+	</if>
 </target>
 </project>
