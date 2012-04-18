@@ -8,8 +8,8 @@
 <xsl:param name="admon.graphics" select="1"/>
 
 <xsl:template name="user.manifest.items">
-	<item id="font1" href="type/DejaVuSansMono.ttf" media-type="font/truetype"/>
-	<item id="font2" href="type/GraublauWeb.otf" media-type="font/opentype"/>
-	<item id="font3" href="type/GraublauWebBold.otf" media-type="font/opentype"/>
+    <item xmlns="http://www.idpf.org/2007/opf" id="font1" href="type/DejaVuSansMono.ttf" media-type="font/truetype"/>
+    <item xmlns="http://www.idpf.org/2007/opf" id="font2" href="type/GraublauWeb.otf" media-type="font/opentype"/>
+    <item xmlns="http://www.idpf.org/2007/opf" id="font3" href="type/GraublauWebBold.otf" media-type="font/opentype"/>
 </xsl:template>
 </xsl:stylesheet>
