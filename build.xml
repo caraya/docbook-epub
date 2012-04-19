@@ -31,6 +31,8 @@ Apache ant build file for Docbook based ebooks
 <exec executable="${xsltproc_bin}">
 	<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
 </exec>
+<!-- Copy media resources -->
+<antcall target="copy-resources"/>
 <!-- Create mimetype file, required per epub spec -->
 <antcall target="make-mime"/>
 <!-- zips the fills for the epub -->

@@ -15,7 +15,7 @@ without extension-->
 	tools on your system. 
 	
 	This should work on Windows, Mac and Linux since Ant is
-	crossplatform... I hope :-)
+	crossplatform... I hope
 -->
 <property name="saxon_bin" value="/usr/local/java/saxon.jar"/>
 <property name="fop_bin" value="/usr/local/java/fop/fop"/>
@@ -235,6 +235,8 @@ task but xsltproc is faster -->
 <exec executable="${xsltproc_bin}">
 	<arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/carlos-chunk.xsl ${src_file}.xml"/>
 </exec>
+<!-- Copy media resources -->
+<antcall target="copy-resources"/>
 <!-- Copy css stylesheet -->
 <antcall target="copy-resources"/>
 <!-- zips the fils for the epub -->
