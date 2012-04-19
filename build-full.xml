@@ -302,14 +302,23 @@ if you're working offline -->
 	<antcall target="copy-images"/>
 	<antcall target="copy-fonts"/>
 </target>
+
 <target name="copy-videos">
-	<copy todir="OEBPS/video">
-		<fileset dir="video/">
-			<include name="*.mp4"/>
-			<include name="*.png"/>
-			<include name="*.jpg"/>
-		</fileset>
-	</copy>
+	<if>
+		<available file="video" type="dir"/>
+		<then>
+			<copy todir="OEBPS/video">
+				<fileset dir="video/">
+					<include name="*.mp4"/>
+					<include name="*.png"/>
+					<include name="*.jpg"/>
+				</fileset>
+			</copy>
+		</then>
+		<else>
+			<echo message="No videos to copy"/>
+		</else>
+	</if>
 </target>
 
 <target name="copy-images">

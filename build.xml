@@ -21,82 +21,82 @@ Apache ant build file for Docbook based ebooks
 <property name="xmllint_bin" value="/usr/bin/xmllint"/>
 
 <target name="epub2">
-<!-- Download the latest docbook snapshot build. Comment out if you're working offline -->
-<antcall target="get-docbook"/>
-<!-- Remove prior versions of the content we're generating -->
-<antcall target="epub-clean"/>
-<!-- Validate XML -->
-<antcall target="validate-xml"/>
-<!-- Run the stylesheet conversion -->
-<exec executable="${xsltproc_bin}">
-	<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
-</exec>
-<!-- Copy media resources -->
-<antcall target="copy-resources"/>
-<!-- Create mimetype file, required per epub spec -->
-<antcall target="make-mime"/>
-<!-- zips the fills for the epub -->
-<antcall target="epub-zip"/>
-<!-- Runs epubcheck on the epub file -->
-<antcall target="epub-check"/>
-<!-- Creates a Kindle version of the book -->
-<antcall target="make-kindle"/>
+	<!-- Download the latest docbook snapshot build. Comment out if you're working offline -->
+	<antcall target="get-docbook"/>
+	<!-- Remove prior versions of the content we're generating -->
+	<antcall target="epub-clean"/>
+	<!-- Validate XML -->
+	<antcall target="validate-xml"/>
+	<!-- Run the stylesheet conversion -->
+	<exec executable="${xsltproc_bin}">
+		<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
+	</exec>
+	<!-- Copy media resources -->
+	<antcall target="copy-resources"/>
+	<!-- Create mimetype file, required per epub spec -->
+	<antcall target="make-mime"/>
+	<!-- zips the fills for the epub -->
+	<antcall target="epub-zip"/>
+	<!-- Runs epubcheck on the epub file -->
+	<antcall target="epub-check"/>
+	<!-- Creates a Kindle version of the book -->
+	<antcall target="make-kindle"/>
 </target>
 
 <target name="epub3">
-<!-- Download the latest docbook snapshot build. Comment out if you're working offline -->
-<antcall target="get-docbook"/>
-<!-- Remove prior versions of the content we're generating -->
-<antcall target="epub-clean"/>
-<!-- Validate XML -->
-<antcall target="validate-xml"/>
-<!-- Run the xslt transformation... we should be able to use the XSLT ant task but xsltproc is faster -->
-<exec executable="${xsltproc_bin}">
-	<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
-</exec>
-<!-- Copy css stylesheet -->
-<antcall target="copy-resources"/>
-<!-- zips the fils for the epub -->
-<antcall target="epub-zip"/>
-<!-- Runs epubcheck on the epub file -->
-<antcall target="epub-check"/>
+	<!-- Remove prior versions of the content we're generating -->
+	<antcall target="epub-clean"/>
+	<!-- Validate XML -->
+	<antcall target="validate-xml"/>
+	<!-- Run the xslt transformation... we should be able to use the XSLT ant 
+	task but xsltproc is faster -->
+	<exec executable="${xsltproc_bin}">
+		<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
+	</exec>
+	<!-- Copy css stylesheet -->
+	<antcall target="copy-resources"/>
+	<!-- zips the fils for the epub -->
+	<antcall target="epub-zip"/>
+	<!-- Runs epubcheck on the epub file -->
+	<antcall target="epub-check"/>
 </target>
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
 <target name="make-mime">
-<!-- Creates mimetype file as required by epub spec-->
-<echo file="mimetype">application/epub+zip</echo>
+	<!-- Creates mimetype file as required by epub spec-->
+	<echo file="mimetype">application/epub+zip</echo>
 </target>
 
 <target name="make-kindle">
-<exec executable="${kindlegen_bin}">
-	<arg line="${src_file}.epub"/>
-</exec>
+	<exec executable="${kindlegen_bin}">
+		<arg line="${src_file}.epub"/>
+	</exec>
 </target>
 
 <target name="epub-zip">
-<!-- We use exec zip because I can't figure out if the builtin zip task conforms to what ePub expects -->
-<!-- Zip the mimetype first without compression as required-->
-<exec executable="zip">
-<arg line="-X0 ${src_file}.epub mimetype"/>
-</exec>
-<!-- Then zip the other files into the zip/epub archive -->
-<exec executable="zip">
-<arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/>
-</exec>
+	<!-- We use exec zip because I can't figure out if the builtin zip task 
+	conforms to what ePub expects -->
+	<!-- Zip the mimetype first without compression as required-->
+	<exec executable="zip">
+		<arg line="-X0 ${src_file}.epub mimetype"/>
+	</exec>
+	<!-- Then zip the other files into the zip/epub archive -->
+	<exec executable="zip">
+		<arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/>
+	</exec>
 </target>
 
 <target name="epub-check">
-<java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m">
-	<arg value="${src_file}.epub"/>
-</java>
+	<java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m">
+		<arg value="${src_file}.epub"/>
+	</java>
 </target>
 
 <!-- We call xmllint to make sure that the XML validates-->
 <target name="validate-xml">
-<exec executable="${xmllint_bin}">
-	<arg line="-noent -noout ${src_file}.xml"/>
-</exec>
+	<exec executable="${xmllint_bin}">
+		<arg line="-noent -noout ${src_file}.xml"/>
+	</exec>
 </target>
 
 <!-- Download the docbook snapshot. Ignore this target if you're working offline -->
@@ -118,13 +118,21 @@ Apache ant build file for Docbook based ebooks
 	<antcall target="copy-fonts"/>
 </target>
 <target name="copy-videos">
-	<copy todir="OEBPS/video">
-		<fileset dir="video/">
-			<include name="*.mp4"/>
-			<include name="*.png"/>
-			<include name="*.jpg"/>
-		</fileset>
-	</copy>
+	<if>
+		<available file="video" type="dir"/>
+		<then>
+		<copy todir="OEBPS/video">
+			<fileset dir="video/">
+				<include name="*.mp4"/>
+				<include name="*.png"/>
+				<include name="*.jpg"/>
+			</fileset>
+		</copy>
+		</then>
+		<else>
+			<echo message="No videos to copy"/>
+		</else>
+	</if>
 </target>
 
 <target name="copy-images">
@@ -184,32 +192,32 @@ Apache ant build file for Docbook based ebooks
 
 <!-- Cleans up leftover epub stuff-->
 <target name="epub-clean">
-<!-- 
-If OEBPS exists we assume the other files and directories do as well
-since Docbook would never create only OEBPS. 
+	<!-- 
+	If OEBPS exists we assume the other files and directories do as well
+	since Docbook would never create only OEBPS. 
 
-There is one instance where only the OEBPS directory is created and that
-is if we have a syntax error from xmllint. It's not frequent enough and the 
-solution is to delete OEBPS manually.
+	There is one instance where only the OEBPS directory is created and that
+	is if we have a syntax error from xmllint. It's not frequent enough and the 
+	solution is to delete OEBPS manually.
 
-we use the if task from ant-contrib available from sourceforge.net. 
--->
-<if>
-	<available file="OEBPS" type="dir" />
-	<then>
-		<echo message="Directory exist... deleting" />
-		<delete verbose="true">
-			<fileset dir="OEBPS" includes="*"/>
-			<fileset dir="META-INF" includes="*"/>
-		</delete>
-		<delete verbose="true" file="mimetype"/>
-		<delete verbose="true" dir="META-INF"/>
-		<delete verbose="true" dir="OEBPS"/>
-		<delete verbose="true" file="${src_file}.epub"/>
-	</then>
-	<else>
-		<echo message="Directory DOES NOT exist... Nothing to delete" />
-	</else>
-</if>
+	we use the if task from ant-contrib available from sourceforge.net. 
+	-->
+	<if>
+		<available file="OEBPS" type="dir" />
+		<then>
+			<echo message="Directory exist... deleting" />
+			<delete verbose="true">
+				<fileset dir="OEBPS" includes="*"/>
+				<fileset dir="META-INF" includes="*"/>
+			</delete>
+			<delete verbose="true" file="mimetype"/>
+			<delete verbose="true" dir="META-INF"/>
+			<delete verbose="true" dir="OEBPS"/>
+			<delete verbose="true" file="${src_file}.epub"/>
+		</then>
+		<else>
+			<echo message="Directory DOES NOT exist... Nothing to delete" />
+		</else>
+	</if>
 </target>
 </project>
