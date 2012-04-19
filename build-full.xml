@@ -6,13 +6,16 @@
 
 <!-- Required for the IF Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-<!-- Change the value of src_file to the name of your ebook file without extension-->
+<!-- Change the value of src_file to the name of your ebook file 
+without extension-->
 <property name="src_file" value="docbook-howto"/>
 
 <!-- 
-	Change the properties below to the full path of the respective tools on your system. 
+	Change the properties below to the full path of the respective 
+	tools on your system. 
 	
-	This should work on Windows, Mac and Linux since Ant is crossplatform... I hope :-)
+	This should work on Windows, Mac and Linux since Ant is
+	crossplatform... I hope :-)
 -->
 <property name="saxon_bin" value="/usr/local/java/saxon.jar"/>
 <property name="fop_bin" value="/usr/local/java/fop/fop"/>
@@ -36,8 +39,8 @@
 
 <target name="init">
 	<!-- 
-		Create the destination directory and appropriate sub directories
-		if they don't exist already
+		Create the destination directory and appropriate 
+		sub directories if they don't exist already
 	-->
 	<if>
 		<available file="${dest}" type="dir" />
@@ -78,8 +81,8 @@
 </target>
 
 <!-- 
-	Docbook-single and docbook-chunks use the standard XSLT stylesheets 
-	available from Sourceforge
+	Docbook-single and docbook-chunks use the standard 
+	XSLT stylesheets available from Sourceforge
 -->
 <target name="docbook-single" depends="init">
 	<echo>Generating HTML Chunks with XSLT 1.0 processor</echo>
@@ -227,7 +230,8 @@
 <antcall target="epub-clean"/>
 <!-- Validate XML -->
 <antcall target="validate-xml"/>
-<!-- Run the xslt transformation... we should be able to use the XSLT ant task but xsltproc is faster -->
+<!-- Run the xslt transformation... we should be able to use the XSLT ant 
+task but xsltproc is faster -->
 <exec executable="${xsltproc_bin}">
 	<arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/carlos-chunk.xsl ${src_file}.xml"/>
 </exec>
@@ -252,7 +256,8 @@
 </target>
 
 <target name="epub-zip">
-	<!-- We use exec zip because I can't figure out if the builtin zip task conforms to what ePub expects -->
+	<!-- We use exec zip because I can't figure out if the builtin zip task conforms to
+	     what ePub expects -->
 	<!-- Zip the mimetype first without compression as required-->
 	<exec executable="zip">
 		<arg line="-X0 ${src_file}.epub mimetype"/>
@@ -276,7 +281,8 @@
 	</exec>
 </target>
 
-<!-- Download the docbook snapshot. Ignore this target if you're working offline -->
+<!-- Download the docbook snapshot. Ignore this target 
+if you're working offline -->
 <target name="get-docbook">
 	<mkdir dir="docbook"/>
 	<get 
@@ -401,12 +407,15 @@
 <!-- Cleans up leftover epub stuff-->
 <target name="epub-clean">
 	<!-- 
-	If OEBPS exists we assume the other files and directories do as well.
-	There is one instance where only the OEBPS directory is created and that
-	is if we have a syntax error from xmllint. It's not frequent enough and the 
-	solution is to delete OEBPS manually.
+	If OEBPS exists we assume the other files and directories 
+	do as well.
+	There is one instance where only the OEBPS directory is 
+	created and that is if we have a syntax error from xmllint. 
+	It's not frequent enough and the  solution is to delete OEBPS 
+	manually.
 
-	we use the if task from ant-contrib available from sourceforge.net. 
+	we use the if task from ant-contrib available from 
+	sourceforge.net. 
 	-->
 	<if>
 		<available file="OEBPS" type="dir" />
