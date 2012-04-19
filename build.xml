@@ -2,7 +2,10 @@
 <description>
 Apache ant build file for Docbook based ebooks
 </description>
-<!-- Created by Carlos Araya as part of his eBook research -->
+<!-- We may add this to enable git support -->
+<property name="docbook-git" value="git://github.com/docbook/docbook.github.com.git"/>
+<property name="home-git" value="git@github.com:caraya/docbook-epub.git"/>
+<include file="git-ant.xml"/>
 
 <!-- Required for the IF Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>

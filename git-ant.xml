@@ -1,0 +1,244 @@
+<project name="git-tools" basedir=".">
+<macrodef name="git">
+	<attribute name="command" />
+	<attribute name="options" default="" />
+	<attribute name="dir" default="." />
+	<attribute name="failerror" default="true" />
+	<element name="args" optional="true" />
+	<sequential>
+		<echo message="git dir @{dir}" />
+		<echo message="git @{command}" />
+		<exec executable="git" dir="@{dir}" failonerror="@{failerror}">
+			<arg line="@{command} @{options}" />
+			<args />
+		</exec>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-branch">
+	<attribute name="branch" />
+	<attribute name="options" default="" />
+	<attribute name="dir" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="branch" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{branch}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-push">
+	<attribute name="remote" default="origin"/>
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="localRef" />
+	<attribute name="remoteRef" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="push" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{remote}" />
+				<arg value="@{localRef}:@{remoteRef}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-push-to-branch">
+	<attribute name="branch" />
+	<attribute name="remoteRepositoryName" />
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="push" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{remoteRepositoryName}" />
+				<arg value="@{branch}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-add-remote">
+	<attribute name="repository" />
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="rem" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{repository}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-submodule-add">
+	<attribute name="repository" />
+	<attribute name="destination" />
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="ads" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{repository}" />
+				<arg value="${submodule.dir}/@{destination}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-commit-with-message">
+	<attribute name="message" />
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="commit" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="-m @{message}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-checkout-local">
+	<attribute name="branch" />
+	<attribute name="dir" />
+	<attribute name="options" default=""  />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="checkout" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{branch}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-checkout">
+	<attribute name="branch" />
+	<attribute name="targetbranch" />
+	<attribute name="dir" />
+	<attribute name="options" default=""  />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="checkout" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{branch}" />
+				<arg value="-b@{targetbranch}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-merge-branch">
+	<attribute name="branchFrom" />
+	<attribute name="branchInTo" />
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="checkout" dir="@{dir}"  failerror="@{failerror}" >
+			<args>
+				<arg value="@{branchInTo}" />
+			</args>
+		</git>
+		<git command="merge" dir="@{dir}" options="@{options}" >
+			<args>
+				<arg value="@{branchFrom}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-add">
+	<attribute name="file" />
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="add" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{file}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-tag">
+	<attribute name="tagName" />
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="tag" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{tagName}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-clone">
+	<attribute name="repository" />
+	<attribute name="dest" />
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="clone" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{repository}" />
+				<arg value="@{dest}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-log">
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="log" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="--stat" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+<macrodef name="git-fetch">
+	<attribute name="remote" />
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="fetch" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{remote}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+
+
+<macrodef name="git-pull">
+	<attribute name="remote" />
+	<attribute name="dir" />
+	<attribute name="options" default="" />
+	<attribute name="failerror" default="true" />
+	<sequential>
+		<git command="pull" dir="@{dir}" options="@{options}" failerror="@{failerror}" >
+			<args>
+				<arg value="@{remote}" />
+			</args>
+		</git>
+	</sequential>
+</macrodef>
+</project>
