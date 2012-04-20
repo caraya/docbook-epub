@@ -3,17 +3,28 @@
 	xmlns='http://docbook.org/ns/docbook' 
 	xmlns:xlink='http://www.w3.org/1999/xlink'
 	version="5.0" xml:lang="en">
-<title>Ebooks: From Docbook to ePub and Kindle too</title>
+<title>From Docbook to ePub and Kindle too</title>
 <info>
 	<author>
 		<personname>
 			<firstname>Carlos</firstname><surname>Araya</surname>
 		</personname>
 	</author>
-	</info>
+	<!-- Required to have the image show on the ebook reader cover --> 
+	<mediaobject role="cover">
+		<imageobject>
+			<imagedata fileref="images/docbook.png" format="png"/>
+		</imageobject>
+		<textobject>
+			<phrase>From Docbook to ePub and Kindle too by Carlos Araya - Temp Image!</phrase>
+		</textobject>
+	</mediaobject>
+</info>
 <preface>
 <title>Publishing for everyone</title>
 <subtitle>Trying to get down to a definition of publishing</subtitle>
+
+<blockquote><para><emphasis>Much is to be gained by eBooks: ease, convenience, portability. But something is definitely lost: tradition, a sensual experience, the comfort of thingy-ness — a little bit of humanity.” (Chip Kidd)</emphasis></para></blockquote>
 
 <para>Publishing is no longer the province of big publishers or that crazy people who dream of writing a book and find out that the only way to get published is to do it themselves. Well, we all can publish our work with tools like Docbook,  formats like ePub and publishers like Amazon.</para>
 
@@ -58,7 +69,8 @@
 <para>In addition to the standard itself there are a set of XSLT style sheets that power the transformation process. These stylesheets are available from the <link xlink:href="http://sourceforge.net/projects/docbook/">Docbook Sourceforge Project</link> page. You can see the variety of formats available to convert your content into.</para>
 
 <para>But perhaps the aspect I found out most attractive about Docbook is its community. It is self-supporting and it has evolved along with Docbook and its associated style sheets. It is welcoming and you get quick and accurate answers to your questions (always an important consideration when working with open source software)</para>
-<sect2>
+</sect1>
+<sect1>
 	<title>Is Docbook the only alternative for creating ebooks?</title>
 	
 	<para>No, it isn't. There are several tools we can use to create eBooks. I will only mention the tools and, where appropriate, where you can get a copy.</para>
@@ -68,16 +80,18 @@
 <para><emphasis role="bold">Sigil</emphasis> is available through their Google Code project (<link xlink:href="http://code.google.com/p/sigil/">http://code.google.com/p/sigil/</link>). Sigil  is very similar to Adobe Dreamweaver, used to create web content.  It is flexible and it has most of the tools that make valid ebooks, such as metadata editor and tools for making chapters.</para>
 
 <para><emphasis role="bold">Adobe InDesign</emphasis> is a very powerful publishing tool. It now allows you to export your publication directly to ePub. Don't expect your InDesign document to translate 100% into ePub. With all the capabilities of InDesign that is impossible. What it is possible is to use your InDesign expertise to tailor your publication to Docbook and then do the conversion... it takes some manual work but at least it allows you to reuse your content.</para>
-</sect2>
 </sect1>
 </chapter>
 
 <chapter>
 <title>Creating your Docbook content</title>
 
-<para>Content is required in chapters too.</para>
+<para>Now that we've talked about Why you should write an ebook and why you should use Docbook we can get started writing.</para>
 
-<programlisting><?db-font-size 75% ?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+We will go over some 
+<sect1>
+<title>Getting Started</title>
+<programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;book 
 	xmlns='http://docbook.org/ns/docbook' 
 	xmlns:xlink='http://www.w3.org/1999/xlink'
@@ -98,6 +112,29 @@
 
 &lt;/chapter&gt;
 </programlisting>
+</sect1>
+
+<sect1>
+<title>Making sure we have a cover</title>
+
+<para>You should get a cover in your EPUB output if you add a mediaobject with the role attribute set to "cover" to your bookinfo/articleinfo block. In DocBook 5.0, you may put the mediaobject inside a cover element, which should itself be inside an &lt;info> block.</para>
+</sect1>
+
+<sect1>
+<title>Customizations</title>
+<subtitle>Changing the way your book looks</subtitle>
+<para>Content is required in chapters too.</para>
+
+<sect2>
+	<title>The relatively simple</title>
+	<para></para>
+</sect2>
+
+<sect2>
+	<title>The not-so-simple</title>
+	<para>Content is required in chapters too.</para>
+</sect2>
+</sect1>
 </chapter>
 
 <chapter>
@@ -120,21 +157,6 @@
 </sect1>
 </chapter>
 
-<chapter>
-<title>Customizations</title>
-<subtitle>Changing the way your book looks</subtitle>
-	<para>Content is required in chapters too.</para>
-
-<sect1>
-	<title>The relatively simple</title>
-	<para></para>
-</sect1>
-
-<sect1>
-	<title>The not-so-simple</title>
-	<para>Content is required in chapters too.</para>
-</sect1>
-</chapter>
 
 <chapter>
 <title>Automating the process</title>
@@ -357,20 +379,87 @@ Apache ant build file for Docbook based ebooks
 <title>References</title>
 
 <bibliomixed>
-	<bibliomset relation='book'>Sayton, Robert.
- 		<title role='book'>XSL: The Definitive Guide</title>.
+	<bibliomset relation='blog'>Godin, Seth.
+		<title role='blog'><emphasis>The Domino Project</emphasis></title>.
 	</bibliomset>
 	<bibliomset relation='website'>
-		[Available online]<title>The World Wide Web Journal</title>
-		<volumenum>2</volumenum><issuenum>1</issuenum>.
-		<publishername>O'Reilly &amp; Associates, Inc.</publishername> and The World Wide Web Consortium. Winter, 1996</bibliomset>.
-	</bibliomixed>
-</bibliography>
+		[Available online] at <link xlink:href="http://sethgodin.typepad.com/seths_blog/2010/12/the-domino-project.html">http://sethgodin.typepad.com/seths_blog/2010/12/the-domino-project.html</link>.
+	</bibliomset>
+</bibliomixed>
 
-<!--
+<bibliomixed>
+	<bibliomset relation='blog'>Godin, Seth.
+		<title role='blog'><emphasis>Moving On</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://sethgodin.typepad.com/seths_blog/2010/08/moving-on.html">http://sethgodin.typepad.com/seths_blog/2010/08/moving-on.html</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='article'>Mod, Craig.
+		<title role='article'><emphasis>Books in the age of the iPad</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://craigmod.com/journal/ipad_and_books/">http://craigmod.com/journal/ipad_and_books/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='article'>Mod, Craig.
+		<title role='article'><emphasis>Embracing the digital book</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://craigmod.com/journal/ebooks/">http://craigmod.com/journal/ebooks/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='article'>Mod, Craig.
+		<title role="article"><emphasis>Kickstartup: Successful fundraising with Kickstarter.com &amp; (re)making Art Space Tokyo</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://craigmod.com/journal/kickstartup/">http://craigmod.com/journal/kickstartup/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='article'>Mod, Craig.
+		<title role='article'><emphasis>The shape of our future book</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://craigmod.com/satellite/our_future_book/">http://craigmod.com/satellite/our_future_book/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='blog'>Rusch, Kristine Kathryn.
+		<title role='blog'><emphasis>Quality</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://kriswrites.com/2012/03/21/the-business-rusch-quality/">http://kriswrites.com/2012/03/21/the-business-rusch-quality/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='book'>Stayton, Bob.
+ 		<title role='book'><emphasis>XSL: The Definitive Guide</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://www.sagehill.net/docbookxsl/">http://www.sagehill.net/docbookxsl/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='book'>Walsh, Norman.
+		<title role='book'><emphasis>DocBook 5.1: The Definitive Guide</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://docbook.org/tdg51/en/html/">http://docbook.org/tdg51/en/html/</link>.
+	</bibliomset>
+</bibliomixed>
+</bibliography>
 <colophon>
-<para>Draft versions of the first edition of this book were produced with the DocBook DSSSL Stylesheets. Final production was performed with Troff.</para>
-<para>XSLT and XSL were used to produce the second edition.</para>
+<para>Draft versions of this book were produced with the Docbook XML stylesheets.</para>
 </colophon>
--->
 </book>
