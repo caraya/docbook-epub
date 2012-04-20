@@ -5,6 +5,7 @@
 OEBPS
 META-INF
 *.epub
+*.mobi
 mimetype
 #ignore fonts. Don't want to get in trouble
 *.eot
@@ -15,3 +16,4 @@ mimetype
 # Ignore Docbook Snapshot
 docbook/*
 docbook.zip
+images/*
