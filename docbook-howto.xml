@@ -24,8 +24,6 @@
 <title>Publishing for everyone</title>
 <subtitle>Trying to get down to a definition of publishing</subtitle>
 
-<blockquote><para><emphasis>Much is to be gained by eBooks: ease, convenience, portability. But something is definitely lost: tradition, a sensual experience, the comfort of thingy-ness — a little bit of humanity.” (Chip Kidd)</emphasis></para></blockquote>
-
 <para>Publishing is no longer the province of big publishers or that crazy people who dream of writing a book and find out that the only way to get published is to do it themselves. Well, we all can publish our work with tools like Docbook,  formats like ePub and publishers like Amazon.</para>
 
 <para>We all have something to publish. We all have something to tell the world.</para>
@@ -60,6 +58,16 @@
 <para>There are few differences between Kickstarter and Indiegogo; The biggest difference is that Indiegogo allows for partial funding. Say that we decided to raise $1000 for our book but, for whatever reason, we failed to meet the target. Kickstarter will consider the drive failed and no money will be charged to the people who did sign up. With the flexible option, Indiegogo will charge the amount raised up to that point from the people who pledged their donations.</para>
 
 <para>Now you get no only the funding you need to get your book up and running but you also get a group of enthusiastic people who are as interested in the success of your book as you are, if not more<footnote><para>For a more detailed account of a successful Kickstarter story see Craig Mod's <link xlink:href="http://craigmod.com/journal/kickstartup/">Kickstartup</link> essay.</para></footnote>.</para>
+
+<sect1>
+	<title>Are we replacing (physical) books?</title>
+
+<para>Hell no!!</para>
+
+<blockquote><para><emphasis>"Much is to be gained by eBooks: ease, convenience, portability. But something is definitely lost: tradition, a sensual experience, the comfort of thingy-ness — a little bit of humanity.” (Chip Kidd)</emphasis></para></blockquote>
+
+
+</sect1>
 
 <sect1>
 <title>Why Docbook?</title>
