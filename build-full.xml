@@ -293,6 +293,11 @@ if you're working offline -->
 		verbose="true" 
 		usetimestamp="true"/>
 	<unzip src="docbook.zip" dest="docbook"/>
+	<move todir="docbook">
+		<fileset dir="docbook/docbook-xsl-ns-snapshot" casesensitive="yes">
+		  <include name="**/*"/>
+		</fileset>
+	</move>
 </target>
 
 <target name="copy-resources">
@@ -359,7 +364,7 @@ if you're working offline -->
 		</then>
 		<else>
 			<!-- There are no fonts... tough luck buddy -->
-			<fail message="There are no fonts available" />
+			<echo message="There are no fonts available" />
 		</else>
 	</if>	
 </target>

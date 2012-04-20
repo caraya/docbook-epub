@@ -109,6 +109,11 @@ Apache ant build file for Docbook based ebooks
 		verbose="true" 
 		usetimestamp="true"/>
 	<unzip src="docbook.zip" dest="docbook"/>
+	<move todir="docbook">
+		<fileset dir="docbook/docbook-xsl-ns-snapshot" casesensitive="yes">
+		  <include name="**/*"/>
+		</fileset>
+	</move>
 </target>
 
 <target name="copy-resources">
