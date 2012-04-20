@@ -4,10 +4,51 @@
 </description>
 <!-- Created by Carlos Araya as part of his eBook research -->
 
-<!-- Required for the IF Task -->
+<!-- Required for the IF and SWITCH Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 <!-- Change the value of src_file to the name of your ebook file 
 without extension-->
+<macrodef name="init">
+	<attribute name="dest" default="html_content"/>
+	<sequential>
+		<if>
+			<available file="@{dest}" type="dir" />
+			<then>
+				<echo message="Directory @{dest} exist... skiping" />
+			</then>
+			<else>
+				<echo>Creating directory</echo>
+				<mkdir dir="@{dest}/"/>
+				<echo>Creating CSS directory</echo>
+				<mkdir dir="@{dest}/css"/>
+				<echo>Creating JS directory</echo>
+				<mkdir dir="@{dest}/js"/>
+				<echo>Creating image directory</echo>
+				<mkdir dir="@{dest}/images"/>
+			</else>
+		</if>
+		<!-- 
+			Copy CSS, JS and any images into their directories 
+		-->
+		<copy todir="@{dest}/css">
+			<fileset dir="." casesensitive="yes">
+			  <include name="*.css"/>
+			</fileset>
+		</copy>
+		<copy todir="@{dest}/js">
+			<fileset dir="." casesensitive="yes">
+			  <include name="*.js"/>
+			</fileset>
+		</copy>
+		<copy todir="@{dest}/images">
+			<fileset dir="." casesensitive="yes">
+			  <include name="*.jpg"/>
+			  <include name="*.gif"/>
+			  <include name="*.png"/>
+			</fileset>
+		</copy>
+	</sequential>
+</macrodef>
 <property name="src_file" value="docbook-howto"/>
 
 <!-- 
@@ -24,73 +65,32 @@ without extension-->
 <property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
 <property name="xmllint_bin" value="/usr/bin/xmllint"/>
 
-<!-- set global properties for this build -->
-<!-- Destination directories for the HTML targets-->
-<property name="dest_html2"  value="html_content"/> 
-<property name="dest"  value="ebook-content"/> 
-<!-- locations for ancillary directories-->
-<property name="css"  value="${dest}/css"/> 
-<property name="js"  value="${dest}/js"/> 
-<property name="images"  value="${dest}/images"/> 
 
 <!-- Path to stylesheets -->
 <property name="xslt1_xhtml" value="/usr/local/docbook/1.0/xslt/xhtml/"/>
 <property name="xslt2_xhtml" value="/usr/local/docbook/2.0/release/2.0.3/xslt/base/html/"/>
 
-<target name="init">
-	<!-- 
-		Create the destination directory and appropriate 
-		sub directories if they don't exist already
-	-->
-	<if>
-		<available file="${dest}" type="dir" />
-		<then>
-			<echo message="Directory ${dest} exist... skiping" />
-		</then>
-		<else>
-			<echo>Creating directory</echo>
-			<mkdir dir="${dest}"/>
-			<echo>Creating CSS directory</echo>
-			<mkdir dir="${css}"/>
-			<echo>Creating JS directory</echo>
-			<mkdir dir="${js}"/>
-			<echo>Creating image directory</echo>
-			<mkdir dir="${images}"/>
-		</else>
-	</if>
-	<!-- 
-		Copy CSS, JS and any images into their directories 
-	-->
-	<copy todir="${css}">
-		<fileset dir="." casesensitive="yes">
-		  <include name="*.css"/>
-		</fileset>
-	</copy>
-	<copy todir="${js}">
-		<fileset dir="." casesensitive="yes">
-		  <include name="*.js"/>
-		</fileset>
-	</copy>
-	<copy todir="${images}">
-		<fileset dir="." casesensitive="yes">
-		  <include name="*.jpg"/>
-		  <include name="*.gif"/>
-		  <include name="*.png"/>
-		</fileset>
-	</copy>
-</target>
+<!-- 
+As long as these match the values we setup for init we'll be fine... 
+it bugs me having to do this but I'm still waiting to hear if I can do it 
+the way I want to
+-->
+<property name="html_dest1" value="html_content"/>
+<property name="html_dest2" value="html_content2"/>
 
 <!-- 
 	Docbook-single and docbook-chunks use the standard 
 	XSLT stylesheets available from Sourceforge
 -->
-<target name="docbook-single" depends="init">
+
+<target name="docbook-single">
+	<init dest="html_content"/>
 	<echo>Generating HTML Chunks with XSLT 1.0 processor</echo>
 	<exec executable="${xsltproc_bin}">
-		<arg line="${xslt1_xhtml}docbook.xsl ${src_file}.xml"/>
+		<arg line="-o content.html ${xslt1_xhtml}docbook.xsl ${src_file}.xml"/>
   	</exec>
-	<echo>Moving html files to ${dest}</echo>
-	<move todir="${dest}">
+	<echo>Moving html files to ${html_dest1}</echo>
+	<move todir="${html_dest1}">
 		<fileset dir="." casesensitive="yes">
 		  <include name="*.html"/>
 		</fileset>
@@ -98,66 +98,21 @@ without extension-->
 </target>
 
 <target name="docbook-chunks">
+	<init dest="html_content"/>
 	<echo>Generating HTML Chunks with xslt 1.0 processor</echo>
 	<exec executable="${xsltproc_bin}">
 		<arg line="${xslt1_xhtml}chunk.xsl ${src_file}.xml"/>
   	</exec>
-	<echo>Moving html files to ${dest}</echo>
-	<move todir="${dest}">
+	<echo>Moving html files to ${html_dest1}</echo>
+	<move todir="${html_dest1}">
 		<fileset dir="." casesensitive="yes">
 		  <include name="*.html"/>
 		</fileset>
 	</move>
 </target>
 
-<!-- 
-	init2, docbook-single2 and docbook-chunks2 use the XSLT 2.0 stylesheets
-	available from http://docbook.github.com/
--->
-<target name="init2">
-	<!-- 
-		Create the destination directory and appropriate sub directories
-		if they don't exist already
-	-->
-	<if>
-		<available file="${dest_html2}" type="dir" />
-		<then>
-			<echo message="Directory ${dest_html2} exist... skiping" />
-		</then>
-		<else>
-			<echo>Creating directory</echo>
-			<mkdir dir="${dest_html2}"/>
-			<echo>Creating CSS directory</echo>
-			<mkdir dir="${dest_html2}/css"/>
-			<echo>Creating JS directory</echo>
-			<mkdir dir="${dest_html2}/js"/>
-			<echo>Creating image directory</echo>
-			<mkdir dir="${dest_html2}/images"/>
-		</else>
-	</if>
-	<!-- 
-		Copy CSS, JS and any images into their directories 
-	-->
-	<copy todir="${dest_html2}/css">
-		<fileset dir="." casesensitive="yes">
-		  <include name="*.css"/>
-		</fileset>
-	</copy>
-	<copy todir="${dest_html2}/js">
-		<fileset dir="." casesensitive="yes">
-		  <include name="*.js"/>
-		</fileset>
-	</copy>
-	<copy todir="${dest_html2}/images">
-		<fileset dir="." casesensitive="yes">
-		  <include name="*.jpg"/>
-		  <include name="*.gif"/>
-		  <include name="*.png"/>
-		</fileset>
-	</copy>
-</target>
-
-<target name="docbook-single2" depends="init2">
+<target name="docbook-single2">
+	<init dest="html2_content"/>
 	<echo>validate XML before converting to Docbook</echo>
 	<antcall target="validate-xml"/>
 	<echo>Generating HTML Single File using Saxon and XSLT2.0</echo>
@@ -168,7 +123,7 @@ without extension-->
 		<arg value="-o:${src_file}-2.html"/>
 	</java>
 	<echo>Moving files to ${dest_html2}</echo>
-	<move todir="${dest_html2}">
+	<move todir="${html_dest2}">
 		<fileset dir="." casesensitive="yes">
 		  <include name="*.html"/>
 		</fileset>
@@ -176,6 +131,7 @@ without extension-->
 </target>
 
 <target name="docbook-chunks2">
+	<init dest="html2_content"/>
 	<echo>validate XML before converting to Docbook</echo>
 	<antcall target="validate-xml"/>
 	<echo>Generating HTML chunks using Saxon and XSLT2.0</echo>
@@ -447,8 +403,11 @@ if you're working offline -->
 			<delete verbose="true" file="${src_file}.epub"/>
 		</then>
 		<else>
-			<echo message="Directory DOES NOT exist... Nothing to delete" />
+			<echo message="Nothing to delete" />
 		</else>
 	</if>
 </target>
+
+<!-- Experimental Support for Marcodef to make init and html build targets more modular -->
+
 </project>
