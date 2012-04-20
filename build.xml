@@ -2,10 +2,10 @@
 <description>
 Apache ant build file for Docbook based ebooks
 </description>
-<!-- We may add this to enable git support -->
+<!-- We may add this to enable git support 
 <property name="docbook-git" value="git://github.com/docbook/docbook.github.com.git"/>
 <property name="home-git" value="git@github.com:caraya/docbook-epub.git"/>
-<include file="git-ant.xml"/>
+<include file="git-ant.xml"/>-->
 
 <!-- Required for the IF Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
@@ -34,8 +34,6 @@ Apache ant build file for Docbook based ebooks
 	<exec executable="${xsltproc_bin}">
 		<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
 	</exec>
-	<!-- Copy media resources -->
-	<antcall target="copy-resources"/>
 	<!-- Create mimetype file, required per epub spec -->
 	<antcall target="make-mime"/>
 	<!-- zips the fills for the epub -->
@@ -142,8 +140,9 @@ Apache ant build file for Docbook based ebooks
 	<if>
 		<available file="images" type="dir"/>
 		<then>
+			<mkdir dir="OEBPS/images"/>
 			<copy todir="OEBPS/images">
-				<fileset dir="." casesensitive="yes">
+				<fileset dir="images" casesensitive="yes">
 				  <include name="*.jpg"/>
 				  <include name="*.gif"/>
 				  <include name="*.png"/>
