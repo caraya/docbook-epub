@@ -1,4 +1,4 @@
-<project name="eBook" default="docbook-single" basedir=".">
+<project name="docbook" default="docbook-single" basedir=".">
 <description>
 	Apache ant build file for Docbook based ebooks
 </description>
@@ -78,7 +78,7 @@ the way I want to
 -->
 <property name="html_dest1" value="html_content"/>
 <property name="html_dest2" value="html_content2"/>
-
+<property name="docbook_path" value="docbook/"/>
 <!-- 
 	Docbook-single and docbook-chunks use the standard 
 	XSLT stylesheets available from Sourceforge
@@ -123,7 +123,7 @@ the way I want to
 		<arg value="-xsl:${xslt2_xhtml}docbook.xsl"/>
 		<arg value="-o:${src_file}-2.html"/>
 	</java>
-	<echo>Moving files to ${dest_html2}</echo>
+	<echo>Moving files to {dest_html2}</echo>
 	<move todir="${html_dest2}">
 		<fileset dir="." casesensitive="yes">
 		  <include name="*.html"/>
@@ -142,7 +142,7 @@ the way I want to
 		<arg value="-xsl:${xslt2_xhtml}chunk.xsl"/>
 	</java>
 	<echo>Moving files to ${dest_html2}</echo>
-	<copy todir="${dest_html2}">
+	<copy todir="${html_dest2}">
 		<fileset dir="." casesensitive="yes">
 		  <include name="*.html"/>
 		</fileset>
@@ -169,6 +169,7 @@ the way I want to
 <!-- Validate XML -->
 <antcall target="validate-xml"/>
 <!-- Run the stylesheet conversion -->
+<echo message="Using docbook at ${docbook_path}epub/docbook.xsl"/>
 <exec executable="${xsltproc_bin}">
 	<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
 </exec>
@@ -190,7 +191,7 @@ the way I want to
 <!-- Run the xslt transformation... we should be able to use the XSLT ant 
 task but xsltproc is faster -->
 <exec executable="${xsltproc_bin}">
-	<arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/carlos-chunk.xsl ${src_file}.xml"/>
+	<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
 </exec>
 <!-- Copy media resources -->
 <antcall target="copy-resources"/>
@@ -288,7 +289,7 @@ if you're working offline -->
 		<available file="images" type="dir"/>
 		<then>
 			<copy todir="OEBPS/images">
-				<fileset dir="." casesensitive="yes">
+				<fileset dir="images" casesensitive="yes">
 				  <include name="*.jpg"/>
 				  <include name="*.gif"/>
 				  <include name="*.png"/>
@@ -330,8 +331,8 @@ if you're working offline -->
 	<if>
 		<available file="css" type="dir"/>
 		<then>
-			<copy todir="OEBPS/css">
-				<fileset dir="." casesensitive="yes">
+			<copy todir="OEBPS">
+				<fileset dir="css" casesensitive="yes">
 				  <include name="*.css"/>
 				</fileset>
 			</copy>
@@ -344,7 +345,7 @@ if you're working offline -->
 
 <target name="clean-all">
 	<antcall target="html-clean"/>
-	<antcall target="html2_clean"/>
+	<antcall target="html2-clean"/>
 	<antcall target="fo-clean"/>
 	<antcall target="epub-clean"/>
 	<echo>Done deleting files!</echo>
