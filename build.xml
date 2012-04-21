@@ -2,17 +2,14 @@
 <description>
 Apache ant build file for Docbook based ebooks
 </description>
-<!-- We may add this to enable git support 
-<property name="docbook-git" value="git://github.com/docbook/docbook.github.com.git"/>
-<property name="home-git" value="git@github.com:caraya/docbook-epub.git"/>
-<include file="git-ant.xml"/>-->
+<!-- Created by Carlos Araya as part of his eBook research -->
 
 <!-- Required for the IF Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 <!-- Change the value of src_file to the name of your ebook file without extension-->
 <property name="src_file" value="docbook-howto"/>
 <!-- Change the value of css_file to the name of your stylesheet with extension-->
-<property name="css_file" value="carlos-new.css"/>
+<property name="css_file" value="css/carlos-new.css"/>
 
 <!-- Configure the path to the docbook stylesheets we asked ant to download-->
 <property name="docbook_path" value="docbook/"/>
@@ -34,6 +31,8 @@ Apache ant build file for Docbook based ebooks
 	<exec executable="${xsltproc_bin}">
 		<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
 	</exec>
+	<!-- Copy media resources -->
+	<antcall target="copy-resources"/>
 	<!-- Create mimetype file, required per epub spec -->
 	<antcall target="make-mime"/>
 	<!-- zips the fills for the epub -->
@@ -110,10 +109,11 @@ Apache ant build file for Docbook based ebooks
 		usetimestamp="true"/>
 	<unzip src="docbook.zip" dest="docbook"/>
 	<move todir="docbook">
-		<fileset dir="docbook/docbook-xsl-ns-snapshot" casesensitive="yes">
-		  <include name="**/*"/>
+		<fileset dir="docbook/docbook-xsl-ns-snapshot">
+			<include name="**/*"/>
 		</fileset>
 	</move>
+	
 </target>
 
 <target name="copy-resources">
@@ -145,7 +145,6 @@ Apache ant build file for Docbook based ebooks
 	<if>
 		<available file="images" type="dir"/>
 		<then>
-			<mkdir dir="OEBPS/images"/>
 			<copy todir="OEBPS/images">
 				<fileset dir="images" casesensitive="yes">
 				  <include name="*.jpg"/>
@@ -187,12 +186,16 @@ Apache ant build file for Docbook based ebooks
 
 <target name="copy-css">
 	<if>
-		<available file="${css_file}" type="file" />
+		<available file="css" type="dir" />
 		<then>
-			<copy file="${css_file}" tofile="OEBPS/${css_file}"/>
+			<copy todir="OEBPS">
+				<fileset dir="css/">
+			      <include name="*.css"/>
+			    </fileset>
+			</copy>
 		</then>
 		<else>
-			<fail message="No file ${css_file} available!"/>
+			<fail message="No CSS files available!"/>
 		</else>
 	</if>
 </target>

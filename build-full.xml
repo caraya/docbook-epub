@@ -6,8 +6,7 @@
 
 <!-- Required for the IF and SWITCH Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-<!-- Change the value of src_file to the name of your ebook file 
-without extension-->
+<!-- Experimental Support for Marcodef to make init and html build targets more modular -->
 <macrodef name="init">
 	<attribute name="dest" default="html_content"/>
 	<sequential>
@@ -49,6 +48,8 @@ without extension-->
 		</copy>
 	</sequential>
 </macrodef>
+
+<!-- Change the value of src_file to the name of your ebook file -->
 <property name="src_file" value="docbook-howto"/>
 
 <!-- 
@@ -327,21 +328,21 @@ if you're working offline -->
 
 <target name="copy-css">
 	<if>
-		<available file="${css_file}" type="file" />
+		<available file="css" type="dir"/>
 		<then>
-			<copy file="${css_file}" tofile="OEBPS/${css_file}"/>
+			<copy todir="OEBPS/css">
+				<fileset dir="." casesensitive="yes">
+				  <include name="*.css"/>
+				</fileset>
+			</copy>
 		</then>
 		<else>
-			<fail message="No file ${css_file} available!"/>
+			<echo message="no images to copy"/>
 		</else>
 	</if>
 </target>
 
-
-<target name="all-clean">
-	<!-- 
-		Calls all the cleanup targets
-	-->
+<target name="clean-all">
 	<antcall target="html-clean"/>
 	<antcall target="html2_clean"/>
 	<antcall target="fo-clean"/>
@@ -349,12 +350,6 @@ if you're working offline -->
 	<echo>Done deleting files!</echo>
 </target>
 
-<target name="fo-clean">
-	<!-- 
-		Removes the .fo file leftover from creating the PDF version
-	-->
-	<delete file="${src_file}.fo"/> 
-</target>
 
 <target name="html-clean">
 	<!-- 
@@ -374,6 +369,16 @@ if you're working offline -->
 		<fileset dir="." includes="*.html"/>
 	</delete>
 	<delete dir="${dest_html2}"/>
+</target>
+
+<target name="fo-clean">
+	<!-- 
+		Removes the .fo file leftover from creating the PDF version
+	-->
+	<delete verbose="true">
+		<fileset dir="." includes="*.fo"/>
+		<fileset dir="." includes="*.pdf"/>
+	</delete> 
 </target>
 
 <!-- Cleans up leftover epub stuff-->
@@ -408,6 +413,5 @@ if you're working offline -->
 	</if>
 </target>
 
-<!-- Experimental Support for Marcodef to make init and html build targets more modular -->
 
 </project>
