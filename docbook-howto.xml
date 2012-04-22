@@ -24,6 +24,9 @@
 <title>Publishing for everyone</title>
 <subtitle>Trying to get down to a definition of publishing</subtitle>
 
+<blockquote><para><emphasis>"Much is to be gained by eBooks: ease, convenience, portability. But something is definitely lost: tradition, a sensual experience, the comfort of thingy-ness — a little bit of humanity.” (Chip Kidd)</emphasis></para></blockquote>
+
+
 <para>Publishing is no longer the province of big publishers or that crazy people who dream of writing a book and find out that the only way to get published is to do it themselves. Well, we all can publish our work with tools like Docbook,  formats like ePub and publishers like Amazon.</para>
 
 <para>We all have something to publish. We all have something to tell the world.</para>
@@ -35,7 +38,7 @@
 <itemizedlist>
 	<listitem>Why should I publish my own content?</listitem>
 	<listitem>Why should I use Docbook to do it?</listitem>
-	<listitem>How do I create my ebook using this tools?</listitem>
+	<listitem>How do I create my ebook using these tools?</listitem>
 </itemizedlist>
 
 <para>In answering these questions my hope is that you will create new content and give it to the world. I'm sure we'll all be much better for it</para>
@@ -58,16 +61,6 @@
 <para>There are few differences between Kickstarter and Indiegogo; The biggest difference is that Indiegogo allows for partial funding. Say that we decided to raise $1000 for our book but, for whatever reason, we failed to meet the target. Kickstarter will consider the drive failed and no money will be charged to the people who did sign up. With the flexible option, Indiegogo will charge the amount raised up to that point from the people who pledged their donations.</para>
 
 <para>Now you get no only the funding you need to get your book up and running but you also get a group of enthusiastic people who are as interested in the success of your book as you are, if not more<footnote><para>For a more detailed account of a successful Kickstarter story see Craig Mod's <link xlink:href="http://craigmod.com/journal/kickstartup/">Kickstartup</link> essay.</para></footnote>.</para>
-
-<sect1>
-	<title>Are we replacing (physical) books?</title>
-
-<para>Hell no!!</para>
-
-<blockquote><para><emphasis>"Much is to be gained by eBooks: ease, convenience, portability. But something is definitely lost: tradition, a sensual experience, the comfort of thingy-ness — a little bit of humanity.” (Chip Kidd)</emphasis></para></blockquote>
-
-
-</sect1>
 
 <sect1>
 <title>Why Docbook?</title>
@@ -96,7 +89,7 @@
 
 <para>Now that we've talked about Why you should write an ebook and why you should use Docbook we can get started writing.</para>
 
-We will go over some 
+We will go over some of the basics of using Docbook and then cover some customization topics. 
 <sect1>
 <title>Getting Started</title>
 <programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
@@ -119,6 +112,7 @@ We will go over some
 &lt;para&gt;Required paragraph.&lt;/para&gt;
 
 &lt;/chapter&gt;
+&lt;/book&gt;
 </programlisting>
 </sect1>
 
@@ -175,206 +169,6 @@ We will go over some
 	<para>I love Apache Ant</para>
 </sect1>
 
-<sect1>
-	<title>One little addition or substractions</title>
-
-	<para>Because I'm paranoid and I like to build my book over and over I found out a problem. If I accidentally delete any of the directories that Docbook creates for me, the build process will fail. However, removing the existing files and directories is essential to ensure that only the latest version of our generated files makes it into the ebook.</para>
-
-<para>I decided to use the If ant task from the Ant Contrib Project. Download links and instructions for installing the additional tasks and configuring your build file to use them see <link xlink:href="http://ant-contrib.sourceforge.net/">http://ant-contrib.sourceforge.net/</link>.</para>
-
-<para>The <emphasis>if</emphasis> task acts as a conditional if. It allows a task to branch out based in a condition, in our case if a directory exists. If it does then go ahead and delete everything (Docbook will never create the directory we're using for the condition alone); if it doesn't exist then print a message and do nothing.</para>
-
-<para>if you do not want to use the if task for whatever reason you will have to make the following changes:</para>
-
-<para>Remove <emphasis>&lt;taskdef resource="net/sf/antcontrib/antcontrib.properties"/&gt;</emphasis> from your build file.</para>
-
-<para>Remove <emphasis>&lt;antcall target="epub-clean"/&gt;</emphasis> from bot the epub and epub3 targets. This call will cause the build to fail if any of the files or directories are missing. You will have to run this task manually before building the book.</para>
-
-<para>Change the epub-clean target from this:</para>
-
-<programlisting><?db-font-size 75% ?>&lt;target name="epub-clean"&gt;
-&lt;description&gt;
-	Cleans up leftover epub stuff
-&lt;/description&gt;
-&lt;if&gt;
-	&lt;available file="OEBPS" type="dir" /&gt;
-	&lt;then&gt;
-		&lt;echo message="Directory exist... deleting" /&gt;
-		&lt;delete verbose="true"&gt;
-			&lt;fileset dir="OEBPS" includes="*"/&gt;
-			&lt;fileset dir="META-INF" includes="*"/&gt;
-		&lt;/delete&gt;
-		&lt;delete verbose="true" file="mimetype"/&gt;
-		&lt;delete verbose="true" dir="META-INF"/&gt;
-		&lt;delete verbose="true" dir="OEBPS"/&gt;
-		&lt;delete verbose="true" file="${src_file}.epub"/&gt;
-	&lt;/then&gt;
-	&lt;else&gt;
-		&lt;echo message="Directory DOES NOT exist... Nothing to delete" /&gt;
-	&lt;/else&gt;
-&lt;/if&gt;
-&lt;/target&gt;</programlisting>
-
-<para>to this:</para>
-
-<programlisting><?db-font-size 75% ?>&lt;target name="epub-clean"&gt;
-&lt;description&gt;
-	Cleans up leftover epub stuff
-&lt;/description&gt;
-&lt;delete verbose="true"&gt;
-	&lt;fileset dir="OEBPS" includes="*"/&gt;
-	&lt;fileset dir="META-INF" includes="*"/&gt;
-&lt;/delete&gt;
-&lt;delete verbose="true" file="mimetype"/&gt;
-&lt;delete verbose="true" dir="META-INF"/&gt;
-&lt;delete verbose="true" dir="OEBPS"/&gt;
-&lt;delete verbose="true" file="${src_file}.epub"/&gt;
-&lt;/then&gt;
-&lt;/target&gt;</programlisting>
-
-<para>Notice how we've removed the if, available, then and else tags on the epub-clean tag.</para>
-</sect1>
-
-<sect1>
-	<title>The final build file</title>
-
-<para>After adding the if task the complete build file looks like this:</para>
-
-<programlisting><?db-font-size 65% ?>&lt;project name="epub" default="epub3" basedir="."&gt;
-&lt;description&gt;
-Apache ant build file for Docbook based ebooks
-&lt;/description&gt;
-&lt;!-- Created by Carlos Araya as part of his eBook research --&gt;
-
-&lt;!-- Required for the IF Task --&gt;
-&lt;taskdef resource="net/sf/antcontrib/antcontrib.properties"/&gt;
-&lt;!-- Change the value of src_file to the name of your ebook file without extension--&gt;
-&lt;property name="src_file" value="docbook-howto"/&gt;
-&lt;!-- Configure the path to the docbook stylesheets--&gt;
-&lt;property name="docbook_path" value="/usr/local/docbook/1.0/xslt/"/&gt;
-
-&lt;!-- Put the name of the binaries that you're using that are not stock on OS X--&gt;
-&lt;property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/&gt;
-&lt;property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/&gt;
-
-&lt;target name="epub2"&gt;
-&lt;!-- Downlod the docbook snapshot. Comment out the line below if working offline --&gt;
-&lt;antcall target="get-docbook"/&gt;
-&lt;!-- Remove prior versions of the content we're generating --&gt;
-&lt;antcall target="epub-clean"/&gt;
-&lt;!-- Validate XML --&gt;
-&lt;antcall target="validate-xml"/&gt;
-&lt;!-- Run the stylesheet conversion --&gt;
-&lt;exec executable="xsltproc"&gt;
-	&lt;arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/&gt;
-&lt;/exec&gt;
-&lt;!-- Create mimetype file, required per epub spec --&gt;
-&lt;antcall target="make-mime"/&gt;
-&lt;!-- zips the fills for the epub --&gt;
-&lt;antcall target="epub-zip"/&gt;
-&lt;!-- Runs epubcheck on the epub file --&gt;
-&lt;antcall target="epub-check"/&gt;
-&lt;!-- Creates a Kindle version of the book --&gt;
-&lt;antcall target="make-kindle"/&gt;
-&lt;/target&gt;
-
-&lt;target name="epub3"&gt;
-&lt;!-- Downlod the docbook snapshot. Comment out the line below if working offline --&gt;
-&lt;antcall target="get-docbook"/&gt;
-&lt;!-- Remove prior versions of the content we're generating --&gt;
-&lt;antcall target="epub-clean"/&gt;
-&lt;!-- Validate XML --&gt;
-&lt;antcall target="validate-xml"/&gt;
-&lt;!-- Run the xslt transformation... we should be able to use the XSLT ant task but xsltproc is faster --&gt;
-&lt;exec executable="xsltproc"&gt;
-	&lt;arg line="--stringparam base.dir OEBPS/ ${docbook_path}epub3/chunk.xsl ${src_file}.xml"/&gt;
-&lt;/exec&gt;
-&lt;!-- zips the fils for the epub --&gt;
-&lt;antcall target="epub-zip"/&gt;
-&lt;!-- Runs epubcheck on the epub file --&gt;
-&lt;antcall target="epub-check"/&gt;
-&lt;/target&gt;
-
-
-&lt;!-- Utility targets called from elsewhere epub2 and/or epub3 targets--&gt;
-&lt;target name="make-mime"&gt;
-&lt;!-- Creates mimetype file as required by epub spec--&gt;
-&lt;echo file="mimetype"&gt;application/epub+zip&lt;/echo&gt;
-&lt;/target&gt;
-
-&lt;target name="make-kindle"&gt;
-&lt;exec executable="${kindlegen_bin}"&gt;
-	&lt;arg line="${src_file}.epub"/&gt;
-&lt;/exec&gt;
-&lt;/target&gt;
-
-&lt;target name="epub-zip"&gt;
-&lt;!-- We use exec zip because I can't figure out if the builtin zip task conforms to what ePub expects --&gt;
-&lt;!-- Zip the mimetype first without compression as required--&gt;
-&lt;exec executable="zip"&gt;
-&lt;arg line="-X0 ${src_file}.epub mimetype"/&gt;
-&lt;/exec&gt;
-&lt;!-- Then zip the other files into the zip/epub archive --&gt;
-&lt;exec executable="zip"&gt;
-&lt;arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/&gt;
-&lt;/exec&gt;
-&lt;/target&gt;
-
-&lt;target name="epub-check"&gt;
-&lt;java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m"&gt;
-	&lt;arg value="${src_file}.epub"/&gt;
-&lt;/java&gt;
-&lt;/target&gt;
-
-&lt;!-- Cleans up leftover epub stuff--&gt;
-&lt;target name="epub-clean"&gt;
-&lt;description&gt;
-	Cleans up leftover epub stuff
-&lt;/description&gt;
-&lt;if&gt;
-	&lt;available file="OEBPS" type="dir" /&gt;
-	&lt;then&gt;
-		&lt;echo message="Directory exist... deleting" /&gt;
-		&lt;delete verbose="true"&gt;
-			&lt;fileset dir="OEBPS" includes="*"/&gt;
-			&lt;fileset dir="META-INF" includes="*"/&gt;
-		&lt;/delete&gt;
-		&lt;delete verbose="true" file="mimetype"/&gt;
-		&lt;delete verbose="true" dir="META-INF"/&gt;
-		&lt;delete verbose="true" dir="OEBPS"/&gt;
-		&lt;delete verbose="true" file="${src_file}.epub"/&gt;
-	&lt;/then&gt;
-	&lt;else&gt;
-		&lt;echo message="Directory DOES NOT exist... Nothing to delete" /&gt;
-	&lt;/else&gt;
-&lt;/if&gt;
-&lt;/target&gt;
-
-&lt;!-- We call xmllint to make sure that the XML validates--&gt;
-&lt;target name="validate-xml"&gt;
-&lt;exec executable="xmllint"&gt;
-	&lt;arg line="-noent -noout ${src_file}.xml"/&gt;
-&lt;/exec&gt;
-&lt;/target&gt;
-
-&lt;!-- Download the docbook snapshot. Ignore this target if you're working offline --&gt;
-&lt;target name="get-docbook"&gt;
-	&lt;mkdir dir="docbook"/&gt;
-	&lt;get 
-		src="http://snapshots.docbook.org/docbook-xsl-ns-snapshot.zip" 
-		dest="docbook.zip"  
-		verbose="true" 
-		usetimestamp="true"/&gt;
-	&lt;unzip src="docbook.zip" dest="."/&gt;
-	&lt;move todir="docbook"&gt;
-	    &lt;fileset dir="docbook-xsl-ns-snapshot/"&gt;
-	      &lt;include name="**/*"/&gt;
-	    &lt;/fileset&gt;
-	&lt;/move&gt;
-&lt;/target&gt;
-
-&lt;/project&gt;</programlisting>
-</sect1>
 </chapter>
 
 <chapter>
