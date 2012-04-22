@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<book 
+	xmlns='http://docbook.org/ns/docbook' 
+	xmlns:xlink='http://www.w3.org/1999/xlink'
+	version="5.0" xml:lang="en">
+<title>Using From Docbook to ePub and Kindle too</title>
+<info>
+	<author>
+		<personname>
+			<firstname>Carlos</firstname>
+			<surname>Araya</surname>
+		</personname>
+	</author>
+	</info>
+<chapter>
+<title>Required Title</title>
+
+<para>Required paragraph.</para>
+
+</chapter>
+</book>
