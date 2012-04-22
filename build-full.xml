@@ -243,7 +243,7 @@ task but xsltproc is faster -->
 
 <!-- Download the docbook snapshot. Ignore this target 
 if you're working offline -->
-<target name="get-docbook">
+<target name="get-xsl">
 	<mkdir dir="docbook"/>
 	<get 
 		src="http://snapshots.docbook.org/docbook-xsl-ns-snapshot.zip" 
@@ -338,7 +338,7 @@ if you're working offline -->
 			</copy>
 		</then>
 		<else>
-			<echo message="no images to copy"/>
+			<echo message="no style sheet to copy"/>
 		</else>
 	</if>
 </target>
@@ -357,9 +357,9 @@ if you're working offline -->
 		Cleans up HTML leftovers 
 	-->
 	<delete verbose="true">
-		<fileset dir="." includes="*.html"/>
-	</delete>
-	<delete dir="${dest}"/>
+		<fileset dir="${html_dest1}" includes="**/*"/>
+	</delete> 	
+	<delete dir="${html_dest1}"/>
 </target>
 
 <target name="html2-clean">
@@ -367,8 +367,8 @@ if you're working offline -->
 		Cleans up HTML leftovers 
 	-->
 	<delete verbose="true">
-		<fileset dir="." includes="*.html"/>
-	</delete>
+		<fileset dir="${html_dest2}" includes="**/*"/>
+	</delete> 
 	<delete dir="${dest_html2}"/>
 </target>
 

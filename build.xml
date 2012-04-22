@@ -100,7 +100,7 @@ Apache ant build file for Docbook based ebooks
 </target>
 
 <!-- Download the docbook snapshot. Ignore this target if you're working offline -->
-<target name="get-docbook">
+<target name="get-xsl">
 	<mkdir dir="docbook"/>
 	<get 
 		src="http://snapshots.docbook.org/docbook-xsl-ns-snapshot.zip" 
@@ -113,7 +113,7 @@ Apache ant build file for Docbook based ebooks
 			<include name="**/*"/>
 		</fileset>
 	</move>
-	
+	<delete dir="docbook/docbook-xsl-ns-snapshot"/>	
 </target>
 
 <target name="copy-resources">
