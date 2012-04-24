@@ -16,9 +16,6 @@
 		<imageobject>
 			<imagedata fileref="images/docbook.png" format="png"/>
 		</imageobject>
-		<textobject>
-			<phrase>From Docbook to ePub and Kindle too by Carlos Araya - Temp Image!</phrase>
-		</textobject>
 	</mediaobject>
 </info>
 <preface>
@@ -98,6 +95,8 @@
 
 The skeleton file below is all you need to get started with Docbook. You can copy this to a text file with the xml extension and then start to work. 
 
+<figure xml:id="basic.docbook">
+<title>Minimal Docbook document</title>
 <programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;book 
 	xmlns='http://docbook.org/ns/docbook'
@@ -120,6 +119,7 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 &lt;/chapter&gt;
 &lt;/book&gt;
 </programlisting>
+</figure>
 </sect1>
 
 <para>The main work of creating the content for the book is to write one or more chapters: create a title, and add your text.</para>
@@ -206,8 +206,9 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 
 <para>We also setup a default target (in this case docbook-single) and a base directory (the directory where the build file is located). If we call ant without telling it what task to run it'll run docbook-single. </para>
 
+<figure xml:id="script.setup">
+<title>Setting up the Ant Project</title>
 <programlisting>&lt;project name="eBook" default="docbook-single" basedir="."&gt;
-
 &lt;!-- Required for the IF Task --&gt;
 &lt;taskdef resource="net/sf/antcontrib/antcontrib.properties"/&gt;
 
@@ -245,205 +246,12 @@ without extension--&gt;
 &lt;property name="xslt2_xhtml" 
         value="/usr/local/docbook/2.0/release/2.0.3/xslt/base/html/"/&gt;
 </programlisting>
+</figure>
 </sect1>
 <sect1>
 	<title>Basic Tasks</title>
 
 <para>Here is a rundown of the basic tasks that we need to complete.</para>
-
-<sect2>
-	<title>Initializing</title>
-
-Before we start building our HTML content we need to make sure that all the directories are created. We will populate them at a later time. Instead of creating two separate tasks we use Ant's macrodef task that will let us define our own tasks for later use. We set up a parameter called dest which will hold the root directory we want to create. 
-
-<programlisting>&lt;macrodef name="init"&gt;
-	&lt;attribute name="dest" default="html_content"/&gt;
-	&lt;sequential&gt;
-		&lt;if&gt;
-			&lt;available file="@{dest}" type="dir" /&gt;
-			&lt;then&gt;
-				&lt;echo message="Directory @{dest} exist... skiping" /&gt;
-			&lt;/then&gt;
-			&lt;else&gt;
-				&lt;echo&gt;Creating directory&lt;/echo&gt;
-				&lt;mkdir dir="@{dest}/"/&gt;
-				&lt;echo&gt;Creating CSS directory&lt;/echo&gt;
-				&lt;mkdir dir="@{dest}/css"/&gt;
-				&lt;echo&gt;Creating JS directory&lt;/echo&gt;
-				&lt;mkdir dir="@{dest}/js"/&gt;
-				&lt;echo&gt;Creating image directory&lt;/echo&gt;
-				&lt;mkdir dir="@{dest}/images"/&gt;
-			&lt;/else&gt;
-		&lt;/if&gt;
-		&lt;!-- 
-			Copy CSS, JS and any images into their directories 
-		--&gt;
-		&lt;copy todir="@{dest}/css"&gt;
-			&lt;fileset dir="." casesensitive="yes"&gt;
-			  &lt;include name="*.css"/&gt;
-			&lt;/fileset&gt;
-		&lt;/copy&gt;
-		&lt;copy todir="@{dest}/js"&gt;
-			&lt;fileset dir="." casesensitive="yes"&gt;
-			  &lt;include name="*.js"/&gt;
-			&lt;/fileset&gt;
-		&lt;/copy&gt;
-		&lt;copy todir="@{dest}/images"&gt;
-			&lt;fileset dir="." casesensitive="yes"&gt;
-			  &lt;include name="*.jpg"/&gt;
-			  &lt;include name="*.gif"/&gt;
-			  &lt;include name="*.png"/&gt;
-			&lt;/fileset&gt;
-		&lt;/copy&gt;
-	&lt;/sequential&gt;
-&lt;/macrodef&gt;
-</programlisting>
-
-After we have created the base directory we create different directories to hold our associated resources:
-
-<itemizedlist>
-	<listitem>CSS for style sheets</listitem>
-	<listitem>JS for Javascript files</listitem>
-	<listitem>Images</listitem>
-	<listitem>Audio</listitem>
-	<listitem>video</listitem>
-</itemizedlist>
-
-We then copy respective files to the corresponding directories.  In lines 36 to 40 we use a little trick. We tell Ant that in the current directory we want to select all the files with JPG, GIF and PNG extensions and to be case sensitive when selecting the files so a file called image.PNG will not be copied. 
-
-It will be used later as:
-
-<programlisting>
-&lt;init dest="html_content"/&gt;
-</programlisting>
-</sect2>
-<sect2>
-	<title>Docbook 1.0 conversion</title>
-
-<para>These are two of the main targets for the project. Using <link xlink:href="http://xmlsoft.org/xslt/xsltproc2.html">xsltproc</link> (a part of the <link xlink:href="http://xmlsoft.org/XSLT.html">XSLT library</link>) to convert the XML file into HTML both a single file and chunks (multiple HTML files with linked navigation). </para>
-
-<para>I chose xsltproc because of its speed and the fact that I couldn't find any java XSLT processor for XSLT 1.0 documents. Apache Xalan exists but it has to be compiled from source (the last binary install is more than 4 years old). </para>
-
-<programlisting>&lt;target name="docbook-single"&gt;
-	&lt;init dest="html_content"/&gt;
-	&lt;echo&gt;Generating HTML Chunks with XSLT 1.0 processor&lt;/echo&gt;
-	&lt;exec executable="${xsltproc_bin}"&gt;
-		&lt;arg line="-o content.html 
-                          ${xslt1_xhtml}docbook.xsl 
-                          ${src_file}.xml"/&gt;
-  	&lt;/exec&gt;
-	&lt;echo&gt;Moving html files to ${html_dest1}&lt;/echo&gt;
-	&lt;move todir="${html_dest1}"&gt;
-		&lt;fileset dir="." casesensitive="yes"&gt;
-		  &lt;include name="*.html"/&gt;
-		&lt;/fileset&gt;
-	&lt;/move&gt;
-&lt;/target&gt;
-
-&lt;target name="docbook-chunks"&gt;
-	&lt;init dest="html_content"/&gt;
-	&lt;echo&gt;Generating HTML Chunks with xslt 1.0 processor&lt;/echo&gt;
-	&lt;exec executable="${xsltproc_bin}"&gt;
-		&lt;arg line="${xslt1_xhtml}chunk.xsl ${src_file}.xml"/&gt;
-  	&lt;/exec&gt;
-	&lt;echo&gt;Moving html files to ${html_dest1}&lt;/echo&gt;
-	&lt;move todir="${html_dest1}"&gt;
-		&lt;fileset dir="." casesensitive="yes"&gt;
-		  &lt;include name="*.html"/&gt;
-		&lt;/fileset&gt;
-	&lt;/move&gt;
-&lt;/target&gt;
-</programlisting>
-
-<para>We use Ant's exect task to invoke xsltproc to generate the HTML. We then move all HTML files into the destination directory. Both tasks are essentially identical, the only change is in lines 4 and 17. In line 4 we tell xsltproc to use the docbook.xsl stylesheet to generate a single HTML file while line 17 uses chunk.xsl to generate multiple files from the same content.</para> 
-
-<para>Validating the XML before running through the conversion process is redundant but I'd rather feel safe than sorry. </para>
-</sect2>
-<sect2>
-	<title>HTML with XSLT 2.0</title>
-
-<para><link xlink:href="http://www.w3.org/standards/xml/transformation">XSLT 2.0</link> is a newer version of the XSL standard being worked out at the <link xlink:href="http://www.w3.org/">World Wide Web Consortium</link>. The Style sheets supporting 2.0 are relatively new and don't offer the same level of support in terms of FO and EPub. </para>
-
-<para>Until the time the 2.0 stylesheets support the same features as the older 1.0 style sheets we will have to support both versions. </para>
-
-<programlisting>&lt;target name="docbook-single2"&gt;
-	&lt;init dest="html2_content"/&gt;
-	&lt;echo&gt;validate XML before converting to Docbook&lt;/echo&gt;
-	&lt;antcall target="validate-xml"/&gt;
-	&lt;echo&gt;Generating HTML Single File using Saxon and XSLT2.0&lt;/echo&gt;
-	&lt;echo&gt;Saxon 9 or another XSLT2 processor must be used&lt;/echo&gt;
-	&lt;java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m"&gt;
-		&lt;arg value="-s:${src_file}.xml"/&gt;
-		&lt;arg value="-xsl:${xslt2_xhtml}docbook.xsl"/&gt;
-		&lt;arg value="-o:${src_file}-2.html"/&gt;
-	&lt;/java&gt;
-	&lt;echo&gt;Moving files to ${dest_html2}&lt;/echo&gt;
-	&lt;move todir="${html_dest2}"&gt;
-		&lt;fileset dir="." casesensitive="yes"&gt;
-		  &lt;include name="*.html"/&gt;
-		&lt;/fileset&gt;
-	&lt;/move&gt;
-&lt;/target&gt;
-
-&lt;target name="docbook-chunks2"&gt;
-	&lt;init dest="html2_content"/&gt;
-	&lt;echo&gt;validate XML before converting to Docbook&lt;/echo&gt;
-	&lt;antcall target="validate-xml"/&gt;
-	&lt;echo&gt;Generating HTML chunks using Saxon and XSLT2.0&lt;/echo&gt;
-	&lt;echo&gt;Saxon 9 or another XSLT2 processor must be used&lt;/echo&gt;
-	&lt;java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m"&gt;
-		&lt;arg value="-s:${src_file}.xml"/&gt;
-		&lt;arg value="-xsl:${xslt2_xhtml}chunk.xsl"/&gt;
-	&lt;/java&gt;
-	&lt;echo&gt;Moving files to ${dest_html2}&lt;/echo&gt;
-	&lt;copy todir="${dest_html2}"&gt;
-		&lt;fileset dir="." casesensitive="yes"&gt;
-		  &lt;include name="*.html"/&gt;
-		&lt;/fileset&gt;
-	&lt;/copy&gt;
-&lt;/target&gt;
-</programlisting>
-
-<para>Because we generate the same files as we do for the docbook-single and docbook-chunks we changed the target we depend on to a different directory and that we prepared as part of our initialization step. </para>
-
-<para>We use the java task instead of exec because Saxon, our XSLT 2.0 processor, is a Java application, a jar archive in this case. </para>
-
-<itemizedlist>
-	<listitem>The Java task requires us to use the fork attribute set to true when running a JAR archive.</listitem>
-	<listitem>I chose to fail the task on error. If we can't run the task we shouldn't continue.</listitem>
- 	<listitem>I assigned 128 MB to the task. Larger documents will require more memory assigned to it</listitem> 
-</itemizedlist>
-
-<para>Again, the only difference between the templates is lines 9 and 28 where we change the name of the style sheet we are running (docbook.xsl in line 9 and chunk.xsl on 28). </para>
-</sect2>
-<sect2>
-	<title>Generating PDF</title>
-
-<para>Generating <link xlink:href="http://en.wikipedia.org/wiki/Portable_Document_Format">PDF</link> from Docbook sources is a 2 step process. First we need to convert the XML document into a XSL FO (formatting objects) file and then we process the result with Apache Fop or another FO processor.</para>
-
-<para>We make the pdf-fop target dependent on docbook-fo because there is no way to generate the PDF file without having the FO file available to us. Making it a dependency, FO file will be generated first no matter which order we call the tasks in. We keep them as separate tasks because there are are still cases when we will only want to generate the PDF (if we have made manual changes the FO file, for example).</para>
-
-<programlisting>&lt;target name="docbook-fo"&gt;
-	&lt;echo&gt;Creating FO file&lt;/echo&gt;
-	&lt;exec executable="${xsltproc_bin}"&gt;
-		&lt;arg line="-o ${src_file}.fo 
-                /usr/local/docbook/1.0/xslt/fo/docbook.xsl 
-                ${src_file}.xml"/&gt;
-  	&lt;/exec&gt;
-&lt;/target&gt;
-
-&lt;target name="pdf-fop" depends="docbook-fo"&gt;
-	&lt;echo&gt;Using fop at ${fop_bin}&lt;/echo&gt;
-	&lt;exec executable="${fop_bin}"&gt;
-		&lt;arg line="${src_file}.fo ${src_file}.pdf"/&gt;
-	&lt;/exec&gt;
-&lt;/target&gt;
-</programlisting>
-
-<para>We continue to run the exec task with xsltproc as our executable. This time we use the fo/docbook.xsl style sheet to generate the FO file. We have to use  xsltproc because the FO style sheets are still XSLT 1.0</para>
-
-<para>We execute a shell script to run Fop to generate the PDF file, at least in my Mac I was not able to run the jar file directly. </para>
-</sect2>
 <sect2>
 	<title>EPub 2</title>
 
@@ -451,6 +259,8 @@ It will be used later as:
 
 <para>For example: Let's say that we made a change to the CSS stylesheets for the book. We could generate the HTML files all over again by calling the epub2 task or we could just copy the CSS file using the copy-css target (called as part of copy-resources) and then epub-zip to compress it all together and epub-check to validate the resulting EPub document.</para>
 
+<figure xml:id="task.epub2">
+<title>EPub 2 Ant target</title>
 <programlisting>&lt;target name="epub2"&gt;
 &lt;!-- Remove prior versions of the content we're generating --&gt;
 &lt;antcall target="epub-clean"/&gt;
@@ -471,6 +281,7 @@ based on the epub file we just created --&gt;
 &lt;antcall target="make-kindle"/&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 
 <para>The antcall task is used to call other targets inside the same build file. Think of it as a subroutine call in languages like basic. </para>
 
@@ -491,6 +302,8 @@ based on the epub file we just created --&gt;
 
 <para>The latest released version of the EPub specification adds more multimedia functionality to EPub books. We can add video, audio and change the way we style our text.</para>
 
+<figure xml:id="task.epub3">
+<title>EPub 3 Ant target</title>
 <programlisting>&lt;target name="epub3"&gt;
 &lt;!-- Remove prior versions of the content we're generating --&gt;
 &lt;antcall target="epub-clean"/&gt;
@@ -511,6 +324,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;antcall target="epub-check"/&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 
 <para>There are a few differences between the epub2 and epub3 targets. They will be noted below.</para>
 
@@ -546,11 +360,14 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>epub2 calls this target to create a mimetype file to add to the zipped EPub book. this is a requirement of the EPub specifications. For some reason EPub 3 creates this file for you. </para>
 
+<figure xml:id="task.make-mime">
+<title>make-mime Ant target</title>
 <programlisting>&lt;target name="make-mime"&gt;
 &lt;!-- Creates mimetype file as required by epub spec--&gt;
 &lt;echo file="mimetype"&gt;application/epub+zip&lt;/echo&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 <sect2>
 	<title>make-kindle</title>
@@ -559,12 +376,15 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>This is an Ant wrapper around the kindlegen application available from Amazon.</para>
 
+<figure xml:id="task.make-kindle">
+<title>make-kindle Ant target</title>
 <programlisting>&lt;target name="make-kindle"&gt;
 &lt;exec executable="${kindlegen_bin}"&gt;
 	&lt;arg line="${src_file}.epub"/&gt;
 &lt;/exec&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 <sect2>
 	<title>epub-zip</title>
@@ -576,6 +396,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
     <listitem>We then add the rest of the files to the archive with regular compression settings.</listitem>
 </orderedlist>
 
+<figure xml:id="task.epub-zip">
+<title>epub-zip Ant target</title>
 <programlisting>&lt;target name="epub-zip"&gt;
 &lt;!-- We use exec zip because I can't figure out if the 
      builtin zip task conforms to what ePub expects --&gt;
@@ -589,6 +411,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;/exec&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 
 <sect2>
@@ -596,6 +419,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>This target executes the epubcheck application available from its Googlecode project. It validates that the file conforms to the EPub specification (either version 2 or 3) and will report warnings or errors to standard output (most often your screen).</para> 
 
+<figure xml:id="task.epub-check">
+<title>epub-check Ant target</title>
 <programlisting>&lt;target name="epub-check"&gt;
 &lt;java jar="${epubcheck_bin}" fork="true" failonerror="true" 
     maxmemory="128m"&gt;
@@ -603,6 +428,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;/java&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 </sect1>
 <sect1>
@@ -615,6 +441,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>This is the wrapper task that will copy resources into our OEBPS directory.</para> 
 
+<figure xml:id="task.copy-resources">
+<title>copy-resources Ant target</title>
 <programlisting>&lt;target name="copy-resources"&gt;
 &lt;!-- Macro Task to copy resouces into OEBPS--&gt;
 &lt;antcall target="copy-css"/&gt;
@@ -623,6 +451,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;antcall target="copy-fonts"/&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 
 <sect2>
@@ -634,6 +463,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>When authoring our content we need to be sure that we remember to put the proper path to our videos. If we are the editor then we need to keep an eye for this, otherwise the videos will not work and, most likely, epubcheck will complain that there are videos referenced in the document but not available in the package. </para>
 
+<figure xml:id="task.copy-video">
+<title>copy-video Ant target</title>
 <programlisting>&lt;target name="copy-videos"&gt;
 &lt;if&gt;
 &lt;available file="video" type="dir"/&gt;
@@ -652,6 +483,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;/if&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 
 <sect2>
@@ -661,6 +493,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>We support the copy of jpg, png and gif images. </para>
 
+<figure xml:id="task.copy-images">
+<title>copy-images Ant target</title>
 <programlisting>&lt;target name="copy-images"&gt;
 &lt;if&gt;
 	&lt;available file="images" type="dir"/&gt;
@@ -680,6 +514,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;/if&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 
 <sect2>
@@ -689,6 +524,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>Whether the fonts display properly will depend on the style sheet you create to support the font embedding process. </para>
  
+<figure xml:id="task.copy-fonts">
+<title>copy-fonts Ant target</title>
 <programlisting>&lt;target name="copy-fonts"&gt;
 &lt;if&gt;
 &lt;available file="type" type="dir" /&gt;
@@ -708,6 +545,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;/if&gt;	
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 
 <sect2>
@@ -715,6 +553,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>When copying style sheets to out OEBPS directory we do things slightly different than what we've done so far. We are still checking if there's a css directory in our workspace but instead of copying to an equivalent directory under OEBPS we copy them to the root of our EBook content. </para>
 
+<figure xml:id="task.copy-css">
+<title>copy-css Ant target</title>
 <programlisting>&lt;target name="copy-css"&gt;
 &lt;if&gt;
 	&lt;available file="css" type="dir"/&gt;
@@ -731,6 +571,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;/if&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 </sect1>
 
@@ -744,6 +585,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>We call xmllint and tell it to suppress its output if it's successful and not to go online to complete its validation of our xml file. </para>
 
+<figure xml:id="task.validate-xml">
+<title>copy-resources Ant target</title>
 <programlisting>&lt;!-- We call xmllint to make sure that the XML validates--&gt;
 &lt;target name="validate-xml"&gt;
 &lt;exec executable="${xmllint_bin}"&gt;
@@ -751,6 +594,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;/exec&gt;
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 </sect1>
 
@@ -775,7 +619,10 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>Please don't delete docbook.zip unless it is absolutely necessary. The get task uses the timestamp on this file to decide if it has to download the snapshot again. If this file is removed the snapshot will be downloaded every time this target is executed. </para>
 
-<programlisting>&lt;!-- Download the docbook snapshot distribution. Ignore this target if you're working offline --&gt;
+<figure xml:id="task.get-xsl">
+<title>get-xsl Ant target</title>
+<programlisting>&lt;!-- Download the docbook snapshot distribution. 
+	Ignore this target if you're working offline --&gt;
 &lt;target name="get-xsl"&gt;
 &lt;mkdir dir="docbook"/&gt;
 &lt;get 
@@ -787,6 +634,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;delete dir="docbook/docbook-xsl-ns-snapshot"/&gt;	
 &lt;/target&gt;
 </programlisting>
+</figure>
 </sect2>
 </sect1>
 
@@ -795,65 +643,14 @@ use the XSLT ant task but xsltproc is faster --&gt;
 	
 <para>I always setup tasks to clean up the working files used when creating the different versions of docbook.</para>
 
-<sect2>
-	<title>all-clean</title>
-
-<para>As with the copy tasks we have a wrapper that calls the individual cleanup tasks.</para>
-
-<programlisting>&lt;target name="all-clean"&gt;
-&lt;antcall target="html-clean"/&gt;
-&lt;antcall target="html2_clean"/&gt;
-&lt;antcall target="fo-clean"/&gt;
-&lt;antcall target="epub-clean"/&gt;
-&lt;echo&gt;Done deleting files!&lt;/echo&gt;
-&lt;/target&gt;
-</programlisting>
-</sect2>
-
-<sect2>
-	<title>fo-clean</title>
-
-<para>This target will remove both FO and PDF files. If you want to only remove the PDF file you will have to do it manually.</para>
-
-<programlisting>&lt;target name="fo-clean"&gt;
-&lt;delete verbose="true"&gt;
-	&lt;fileset dir="." includes="*.fo"/&gt;
-	&lt;fileset dir="." includes="*.pdf"/&gt;
-&lt;/delete&gt; 
-&lt;/target&gt;
-</programlisting>
-</sect2>
-
-<sect2>
-	<title>html-clean and html2-clean</title>
-
-<para>Because we created two different directories when we setup the build file we need to have two different tasks that essentially accomplish the same thing.</para>
-
-<para>Each target goes into the destination directory (${html_dest1} or ${html_dest2} depending on the version of the style sheets in use) and deletes all the content of the directory. It then deletes the directory itself.</para>
-
-<para>We could have achieved the same result by just deleting the directory but I want to know what it is that was deleted even if the files can not be recovered.</para>
-
-<programlisting>&lt;target name="html-clean"&gt;
-&lt;delete verbose="true"&gt;
-	&lt;fileset dir="${html_dest1}" includes="**/*"/&gt;
-&lt;/delete&gt; 	
-&lt;delete dir="${html_dest1}"/&gt;
-&lt;/target&gt;
-
-&lt;target name="html2-clean"&gt;
-&lt;delete verbose="true"&gt;
-	&lt;fileset dir="${html_dest2}" includes="**/*"/&gt;
-&lt;/delete&gt; 
-&lt;delete dir="${dest_html2}"/&gt;
-&lt;/target&gt;
-</programlisting>
-</sect2>
 
 <sect2>
 	<title>epub-clean</title>
 
 <para>The final cleanup task is to remove all the files created by epub2 or epub3. We use the same directories for both versions so it is important that we clean up all the files.</para>
 
+<figure xml:id="task.epub-clean">
+<title>epub-clean Ant target</title>
 <programlisting>&lt;target name="epub-clean"&gt;
 &lt;if&gt;
 	&lt;available file="OEBPS" type="dir" /&gt;
@@ -875,6 +672,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 &lt;/target&gt;
 &lt;/project&gt;
 </programlisting>
+</figure>
 
 <para>We first check that the OEBPS directory exist. If it does we delete its content</para>
 
