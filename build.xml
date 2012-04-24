@@ -114,6 +114,11 @@ Apache ant build file for Docbook based ebooks
 		</fileset>
 	</move>
 	<delete dir="docbook/docbook-xsl-ns-snapshot"/>	
+	<move todir="../docbook">
+		<fileset dir="docbook">
+			<include name="**/*"/>
+		</fileset>
+	</move>
 </target>
 
 <target name="copy-resources">
