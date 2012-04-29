@@ -243,7 +243,7 @@ the way I want to
 
 <!-- We call xmllint to make sure that the XML validates-->
 <target name="validate-xml">
-	<exec executable="${xmllint_bin}">
+	<exec executable="${xmllint_bin}" failonerror="true">
 		<arg line="-noent -noout ${src_file}.xml"/>
 	</exec>
 </target>
