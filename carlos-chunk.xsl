@@ -16,7 +16,7 @@
 
 <!-- Additional items to add to package.opf-->
 <xsl:template name="user.manifest.items">
-    <item xmlns="http://www.idpf.org/2007/opf" id="font2" href="type/GraublauWeb.otf" media-type="font/opentype"/>
-    <item xmlns="http://www.idpf.org/2007/opf" id="font3" href="type/GraublauWebBold.otf" media-type="font/opentype"/>
+    <item xmlns="http://www.idpf.org/2007/opf" id="font1" href="type/GraublauWeb.otf" media-type="application/vnd.ms-opentype"/>
+    <item xmlns="http://www.idpf.org/2007/opf" id="font2" href="type/GraublauWebBold.otf" media-type="application/vnd.ms-opentype"/>
 </xsl:template>
 </xsl:stylesheet>

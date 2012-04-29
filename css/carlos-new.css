@@ -16,11 +16,6 @@ Author			Carlos Araya
     src: url(GraublauWebBold.otf) format(truetype);
 }
 
-@font-face {
-    font-family: DejaVuSansMono;
-    font-weight: normal;
-    src: url(DejaVuSansMono.ttf) format(truetype);
-}
 
 /* Rest of the CSS declarations */
 body { 
@@ -34,7 +29,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 pre.programlisting {
-	font-family: DejaVuSansMono, sans-serif;
+	font-family: sans-serif;
 	font-size: 11pt;
 	background-color: #FFFF99 ;
 	border: 1px solid #006600 ;
