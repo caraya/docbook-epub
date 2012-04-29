@@ -173,32 +173,92 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 <title>Automating the process</title>
 <subtitle>Make the computer work for you</subtitle>
 
-<para>During all the development of the ebooks using Docbook I kept asking myself the question "Is there an easier way to do this? There is, it has a steep initial development but it saves lots of time in the long run. </para>
+<para>During all the development of the ebooks using Docbook I kept asking myself the question "Is there an easier way to do this? There is, it has a steep initial development but it saves lots of time in the long run. I've finally settled on Apache Ant for the task.</para>
 
 <sect1>
 	<title>Apache Ant and making things easier on yourself</title>
 	
-	<para>I love Apache Ant</para>
+	<para>I love Apache Ant!</para>
+	
+	<para>It is a cross-platform tool written in Java originally created to automate software development tasks it can be used for just about everything Make can and then some more. I've used Ant for a number of years and have developed a number of scripts for working with Docbook. The latest iteration of the build file will be covered in this chapter in detail. </para>
 
+	<para>The basic requirements for running this build file are:</para>
+	
+	<itemizedlist>
+		<listitem>
+		    <para>A Java Runtime Engine (JRE) or Java Development Kit (JDK) available from <link xlink:href="http://www.java.com/en/download/index.jsp">http://www.java.com/en/download/index.jsp</link>.</para></listitem>
+		<listitem>
+		    <para>Apache Ant binary distribution available from <link xlink:href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</link>. This will download the software from the closest Apache mirror to your location.</para>
+		</listitem>
+		<listitem>
+		    <para><link xlink:href="http://ant-contrib.sourceforge.net/">Ant-Contrib</link> Tasks. These additions to Ant provide with new tasks that make it easier to create conditional actions. There are more tasks but we only use if and, in a future version of the build file, switch for conditional task execution.</para>
+		</listitem>
+		<listitem>
+		    <para>XMLlint, a part of the <link xlink:href="http://xmlsoft.org">XML C toolkit and Library of Gnome</link>. Most Unix-like systems (Macintosh OS X and Linux) have this software already installed.</para>
+		    <para>Binary installations for Windows machines can be downloaded from the <link xlink:href="http://www.zlatkovic.com/libxml.en.html">maintainer's website</link>. These binary distributions don't require compilation.</para></listitem>
+		<listitem>
+		    <para><link xlink:href="http://xmlsoft.org/xslt/xsltproc2.html">XSLTProc</link>, part of the XSLT library. This library lives on top of <link xlink:hef="http://xmlsoft.org/">LibXML</link>. Install LibXML first and then LibXSLT otherwise XSLTProc will not work.</para>
+		</listitem>
+		<listitem>
+		    <para><link xlink:href="http://code.google.com/p/epubcheck/">epubcheck</link> (current version is 3.0b5) used to validate the resulting epub document.</para>
+		</listitem>
+		<listitem>
+		    <para><link xlink:href="http://www.amazon.com/gp/feature.html/?docId=1000765211">Kindlegen</link>. An application from Amazon used to convert epub books into the mobi format used by the Kindle.</para>
+		</listitem>
+	</itemizedlist>
+		
+	<para>I chose Ant because it is cross platform. As long as we have the tools listed above it won't matter if we are on a Macintosh or Windows system. The targets and tasks will run in whatever system Ant and Java are installed in.</para>
+	
 <sect2>
-	<title>What I need to do</title>
+	<title>A quick over view of Ant</title>
+	
+	<para>In order to make better sense of the targets and tasks below it is important to understand Ant and its vocabulary. It is by no means a complete tutorial on Ant. It is meant to cover the basics and provide the background needed to interact with the Build file and modify it if necessary.</para>
+	
+	<para>The introduction to the <link xlink:href="http://ant.apache.org/manual/">Ant manual</link> explains why Ant is a good solution:</para>
 
-<para>Here are the basic tasks I need to do when working with Docbook-based documents.</para> 
+	<blockquote>
+		<para>Why another build tool when there is already make, gnumake, nmake, jam, and others? Because all those tools have limitations that Ant's original author couldn't live with when developing software across multiple platforms. Make-like tools are inherently shell-based: they evaluate a set of dependencies, then execute commands not unlike what you would issue on a shell. This means that you can easily extend these tools by using or writing any program for the OS that you are working on; however, this also means that you limit yourself to the OS, or at least the OS type, such as Unix, that you are working on.</para>
+	</blockquote>
+	
+	<para>There are three main concepts to know about Ant build files:</para>
 
-<itemizedlist>
-	<listitem>Transform my XML document into HTML (single file and multiple file outputs) </listitem>
-	<listitem>Transform the XML document using experimental XSLT 2.0 stylesheets</listitem>
-	<listitem>Convert the document into an intermediary FO file and from there to PDF</listitem>
-	<listitem>Convert the document to ePub 2 and from there to MOBI to be used by Kindle devices</listitem>
-	<listitem>Convert the document to ePub 3 to use with compatible readers</listitem>
-</itemizedlist>
+	<orderedlist>
+		<listitem><para><emphasis role="bold">Tasks</emphasis> - are your instructions, like java, move, copy. We group 1 or more tasks into targets. See</para></listitem>
+		<listitem><para><emphasis role="bold">Targets</emphasis> – are groups of tasks put together to accomplish a goal like creating a PDF version of the XML source. Think of targets as modules in Ruby or functions in Java or Python. They can be reused.</para></listitem>
+		<listitem><para><emphasis role="bold">Properties</emphasis> – define variables in your build file which may change from project to project. We call these properties from within the build file by using the syntax ${name_of_property}.</para></listitem>
+	</orderedlist>
+	
+	<para>For the example build file we will make the following assumptions:  We have a property called src_file that will hold the location of our xml file and a single target that will use xsltproc to create a single-file HTML version of our document. the build file may look like this:</para>
 
-<para>As you can see even at this basic level there are many tasks to complete. The tasks listed above are, by no stretch of the imagination, the only tasks involved in the creation process. </para>
+<example xml:id="ant.basic.docbook">
+<title>Sample Ant Project</title>
+<programlistingco>
+<programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt; <co xml:id="ant.xml.decl"/>
+&lt;project name="epub" default="make" basedir="."&gt; <co xml:id="ant.project.def"/>
+&lt;property name="src_file" value="docbook-howto"/&gt; <co xml:id="ant.property.def"/>    
+&lt;target name="make"&gt; <co xml:id="ant.target.def"/>
+	&lt;exec executable="xsltproc"&gt;
+		&lt;arg line="/usr/local/docbook/xhtml/docbook.xsl ${src_file}"/&gt; <co xml:id="ex.prop.use"/>
+	&lt;/exec&gt;
+&lt;/target&gt;
+&lt;target name="clean"&gt;
+    &lt;delete dir="bin"/&gt;
+&lt;/target&gt;
+</programlisting>
+<calloutlist>
+	<callout arearefs="ant.xml.decl"><para>The build file is an XML document and this marks it as such.</para></callout>
+	<callout arearefs="ant.project.def"><para>This defines the project we will work on.</para></callout>
+	<callout arearefs="ant.property.def"><para>Property definition for src_file.</para></callout>
+	<callout arearefs="ant.target.def"><para>we define the target called make and inside we run xsltproc</para></callout>
+	<callout arearefs="ex.prop.use"><para>As part of the arguments to xsltproc we use the call to src_file as ${src_file}</para></callout>
+</calloutlist>
+</programlistingco>
+</example>
 
-<para>We'll review the tasks involved in the process.</para> 
+    <para>In order to use these tasks we just call them using <command>ant</command> and the name of the target we want to run. In order to execute the clean target we would use <command>ant clean</command>. If we call ant without arguments it will execute the task listed under the project's default element. For our sample project, calling <command>ant</command> it will execute the make task because it is the default listed under the project.</para>
+    
+    <para>This introduction barely scratches the surface of what Ant is and what it can do. A god tutorial can be found at <link xlink:href="http://www.comscigate.com/ant/Automate_your_build_process_using_Java_and_Ant.htm">http://www.comscigate.com/ant/Automate_your_build_process_using_Java_and_Ant.htm</link>.</para>
 </sect2>
-</sect1>
-
 <sect1>
 	<title>Setting everything up</title>
 

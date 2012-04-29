@@ -12,7 +12,7 @@ Apache ant build file for Docbook based ebooks
 <property name="css_file" value="css/carlos-new.css"/>
 
 <!-- Configure the path to the docbook stylesheets we asked ant to download-->
-<property name="docbook_path" value="docbook/"/>
+<property name="docbook_path" value="../docbook/"/>
 
 <!-- Change path to the binaries we use so they match your system -->
 <property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
@@ -21,8 +21,6 @@ Apache ant build file for Docbook based ebooks
 <property name="xmllint_bin" value="/usr/bin/xmllint"/>
 
 <target name="epub2">
-	<!-- Download the latest docbook snapshot build. Comment out if you're working offline -->
-	<antcall target="get-docbook"/>
 	<!-- Remove prior versions of the content we're generating -->
 	<antcall target="epub-clean"/>
 	<!-- Validate XML -->
@@ -119,6 +117,7 @@ Apache ant build file for Docbook based ebooks
 			<include name="**/*"/>
 		</fileset>
 	</move>
+	<delte dir="docbook"/>
 </target>
 
 <target name="copy-resources">
@@ -179,6 +178,7 @@ Apache ant build file for Docbook based ebooks
 			 <copy todir="OEBPS/type">
 			    <fileset dir="type/">
 			      <exclude name="Calluna*.*"/>
+			      <exclude name="DejaVu*.*"/>
 			    </fileset>
 			  </copy>
 		</then>
