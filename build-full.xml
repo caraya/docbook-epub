@@ -24,26 +24,31 @@
 				<mkdir dir="@{dest}/js"/>
 				<echo>Creating image directory</echo>
 				<mkdir dir="@{dest}/images"/>
+				<mkdir dir="@{dest}/images/callouts"/>
 			</else>
 		</if>
 		<!-- 
 			Copy CSS, JS and any images into their directories 
 		-->
 		<copy todir="@{dest}/css">
-			<fileset dir="." casesensitive="yes">
+			<fileset dir="css" casesensitive="yes">
 			  <include name="*.css"/>
 			</fileset>
 		</copy>
 		<copy todir="@{dest}/js">
-			<fileset dir="." casesensitive="yes">
+			<fileset dir="js" casesensitive="yes">
 			  <include name="*.js"/>
 			</fileset>
 		</copy>
 		<copy todir="@{dest}/images">
-			<fileset dir="." casesensitive="yes">
-			  <include name="*.jpg"/>
-			  <include name="*.gif"/>
-			  <include name="*.png"/>
+			<fileset dir="images" casesensitive="yes">
+  			  <include name="*.png"/>
+			  <include name="callouts/*.png"/>
+			</fileset>
+		</copy>
+		<copy todir="@{dest}/images/callouts">
+			<fileset dir="images" casesensitive="yes">
+			  <include name="callouts/*.png"/>
 			</fileset>
 		</copy>
 	</sequential>
@@ -61,7 +66,7 @@
 -->
 <property name="saxon_bin" value="/usr/local/java/saxon.jar"/>
 <property name="fop_bin" value="/usr/local/java/fop/fop"/>
-<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
+<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b5.jar"/>
 <property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
 <property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
 <property name="xmllint_bin" value="/usr/bin/xmllint"/>
@@ -78,7 +83,7 @@ the way I want to
 -->
 <property name="html_dest1" value="html_content"/>
 <property name="html_dest2" value="html_content2"/>
-<property name="docbook_path" value="docbook/"/>
+<property name="docbook_path" value="../docbook/"/>
 <!-- 
 	Docbook-single and docbook-chunks use the standard 
 	XSLT stylesheets available from Sourceforge
@@ -102,7 +107,7 @@ the way I want to
 	<init dest="html_content"/>
 	<echo>Generating HTML Chunks with xslt 1.0 processor</echo>
 	<exec executable="${xsltproc_bin}">
-		<arg line="${xslt1_xhtml}chunk.xsl ${src_file}.xml"/>
+		<arg line="html-chunk.xsl ${src_file}.xml"/>
   	</exec>
 	<echo>Moving html files to ${html_dest1}</echo>
 	<move todir="${html_dest1}">
@@ -164,43 +169,42 @@ the way I want to
 </target>
 
 <target name="epub2">
-<!-- Remove prior versions of the content we're generating -->
-<antcall target="epub-clean"/>
-<!-- Validate XML -->
-<antcall target="validate-xml"/>
-<!-- Run the stylesheet conversion -->
-<echo message="Using docbook at ${docbook_path}epub/docbook.xsl"/>
-<exec executable="${xsltproc_bin}">
-	<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
-</exec>
-<!-- Create mimetype file, required per epub spec -->
-<antcall target="make-mime"/>
-<!-- zips the fills for the epub -->
-<antcall target="epub-zip"/>
-<!-- Runs epubcheck on the epub file -->
-<antcall target="epub-check"/>
-<!-- Creates a Kindle version of the book -->
-<antcall target="make-kindle"/>
+	<!-- Remove prior versions of the content we're generating -->
+	<antcall target="epub-clean"/>
+	<!-- Validate XML -->
+	<antcall target="validate-xml"/>
+	<!-- Run the stylesheet conversion -->
+	<exec executable="${xsltproc_bin}">
+		<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
+	</exec>
+	<!-- Copy media resources -->
+	<antcall target="copy-images"/>
+	<!-- Create mimetype file, required per epub spec -->
+	<antcall target="make-mime"/>
+	<!-- zips the fills for the epub -->
+	<antcall target="epub-zip"/>
+	<!-- Runs epubcheck on the epub file -->
+	<antcall target="epub-check"/>
+	<!-- Creates a Kindle version of the book -->
+	<antcall target="make-kindle"/>
 </target>
 
 <target name="epub3">
-<!-- Remove prior versions of the content we're generating -->
-<antcall target="epub-clean"/>
-<!-- Validate XML -->
-<antcall target="validate-xml"/>
-<!-- Run the xslt transformation... we should be able to use the XSLT ant 
-task but xsltproc is faster -->
-<exec executable="${xsltproc_bin}">
-	<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
-</exec>
-<!-- Copy media resources -->
-<antcall target="copy-resources"/>
-<!-- Copy css stylesheet -->
-<antcall target="copy-resources"/>
-<!-- zips the fils for the epub -->
-<antcall target="epub-zip"/>
-<!-- Runs epubcheck on the epub file -->
-<antcall target="epub-check"/>
+	<!-- Remove prior versions of the content we're generating -->
+	<antcall target="epub-clean"/>
+	<!-- Validate XML -->
+	<antcall target="validate-xml"/>
+	<!-- Run the xslt transformation... we should be able to use the XSLT ant 
+	task but xsltproc is faster -->
+	<exec executable="${xsltproc_bin}">
+		<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
+	</exec>
+	<!-- Copy css stylesheet -->
+	<antcall target="copy-resources"/>
+	<!-- zips the fils for the epub -->
+	<antcall target="epub-zip"/>
+	<!-- Runs epubcheck on the epub file -->
+	<antcall target="epub-check"/>
 </target>
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
@@ -252,10 +256,17 @@ if you're working offline -->
 		usetimestamp="true"/>
 	<unzip src="docbook.zip" dest="docbook"/>
 	<move todir="docbook">
-		<fileset dir="docbook/docbook-xsl-ns-snapshot" casesensitive="yes">
-		  <include name="**/*"/>
+		<fileset dir="docbook/docbook-xsl-ns-snapshot">
+			<include name="**/*"/>
 		</fileset>
 	</move>
+	<delete dir="docbook/docbook-xsl-ns-snapshot"/>	
+	<move todir="../docbook">
+		<fileset dir="docbook">
+			<include name="**/*"/>
+		</fileset>
+	</move>
+	<delte dir="docbook"/>
 </target>
 
 <target name="copy-resources">
@@ -290,9 +301,7 @@ if you're working offline -->
 		<then>
 			<copy todir="OEBPS/images">
 				<fileset dir="images" casesensitive="yes">
-				  <include name="*.jpg"/>
-				  <include name="*.gif"/>
-				  <include name="*.png"/>
+				  <include name="**/*"/>
 				</fileset>
 			</copy>
 		</then>

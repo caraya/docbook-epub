@@ -7,13 +7,13 @@ Author			Carlos Araya
 /* @fontface declarations to locally stored fonts */
 @font-face {
     font-family: GraublauWeb;
-    src: url(GraublauWeb.otf) format(truetype);
+    src: url(type/GraublauWeb.otf) format(truetype);
 }
 
 @font-face {
     font-family: GraublauWebBold;
     font-weight: bold;
-    src: url(GraublauWebBold.otf) format(truetype);
+    src: url(type/GraublauWebBold.otf) format(truetype);
 }
 
 
