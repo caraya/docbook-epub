@@ -248,8 +248,11 @@ the way I want to
 	</exec>
 </target>
 
-<!-- Download the docbook snapshot. Ignore this target 
-if you're working offline -->
+<!-- Download the docbook snapshot. Ignore this target if you're working offline
+
+     Do not delete the docbook.zip file. This will be compared with the remote file
+     to determine if the file has to be downloaded or not
+-->
 <target name="get-xsl">
 	<mkdir dir="docbook"/>
 	<get 
@@ -359,6 +362,7 @@ if you're working offline -->
 	<antcall target="html-clean"/>
 	<antcall target="html2-clean"/>
 	<antcall target="fo-clean"/>
+	<antcall target="pdf-clean"/>
 	<antcall target="epub-clean"/>
 	<echo>Done deleting files!</echo>
 </target>
@@ -390,6 +394,14 @@ if you're working offline -->
 	-->
 	<delete verbose="true">
 		<fileset dir="." includes="*.fo"/>
+	</delete> 
+</target>
+
+<target name="pdf-clean">
+	<!-- 
+		Removes the .pdf file
+	-->
+	<delete verbose="true">
 		<fileset dir="." includes="*.pdf"/>
 	</delete> 
 </target>
