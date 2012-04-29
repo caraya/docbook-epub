@@ -15,7 +15,7 @@ Apache ant build file for Docbook based ebooks
 <property name="docbook_path" value="../docbook/"/>
 
 <!-- Change path to the binaries we use so they match your system -->
-<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
+<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b5.jar"/>
 <property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
 <property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
 <property name="xmllint_bin" value="/usr/bin/xmllint"/>
