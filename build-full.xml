@@ -84,6 +84,9 @@ the way I want to
 <property name="html_dest1" value="html_content"/>
 <property name="html_dest2" value="html_content2"/>
 <property name="docbook_path" value="../docbook/"/>
+<property name="ebook_custom" value="carlos-chunk.xsl"/>
+<property name="html_custom" value="html-custom.xsl"/>
+
 <!-- 
 	Docbook-single and docbook-chunks use the standard 
 	XSLT stylesheets available from Sourceforge
@@ -93,7 +96,7 @@ the way I want to
 	<init dest="html_content"/>
 	<echo>Generating HTML Chunks with XSLT 1.0 processor</echo>
 	<exec executable="${xsltproc_bin}">
-		<arg line="-o content.html ${xslt1_xhtml}docbook.xsl ${src_file}.xml"/>
+		<arg line="-o content.html ${html_custom} ${src_file}.xml"/>
   	</exec>
 	<echo>Moving html files to ${html_dest1}</echo>
 	<move todir="${html_dest1}">
@@ -107,7 +110,7 @@ the way I want to
 	<init dest="html_content"/>
 	<echo>Generating HTML Chunks with xslt 1.0 processor</echo>
 	<exec executable="${xsltproc_bin}">
-		<arg line="html-chunk.xsl ${src_file}.xml"/>
+		<arg line="${html_custom} ${src_file}.xml"/>
   	</exec>
 	<echo>Moving html files to ${html_dest1}</echo>
 	<move todir="${html_dest1}">
