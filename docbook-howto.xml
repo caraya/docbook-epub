@@ -123,19 +123,17 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 <calloutlist>
 	<callout arearefs="xml.decl"><para>The Docbook file is an XML document and this marks it as such.</para></callout>
 	<callout arearefs="docbook.root"><para>This is the root of the Docbook document.</para></callout>
-	<callout arearefs="default.namespace"><para>The namespace declaration without a prefix will be used for all elements without an explicit prefix. This means that all elements without a prefix are implicitly in the Docbook namespace.</para></callout>
+	<callout arearefs="default.namespace"><para>The namespace declaration without a prefix will be used for all elements without an explicit prefix. This means that all elements without a prefix are, by default, in the Docbook namespace.</para></callout>
 	<callout arearefs="xlink.namespace"><para>We define xlink explicitly. Xlink is used in the &lt;link&gt; element to create hyperlinks.</para></callout>
 	<callout arearefs="docbook.author"><para>This is how Docbook expects to see an author.</para></callout>
     <callout arearefs="chapter.title chapter.para"><para>These elements are requires inside a Docbook chapter.</para></callout>
 </calloutlist>
 </programlistingco>
 </example>
-</sect1>
 
-<para>The main work of creating the content for the book is to write one or more chapters: create a title, and add your text.</para>
+<para>With that basic structure let's get to work.</para>
 
-
-<sect1>
+<sect2>
 <title>Making sure we have a cover</title>
 
 <para>You should get a cover in your EPUB output if you add a mediaobject with the role attribute set to "cover" to your bookinfo/articleinfo block. In DocBook 5.0, you may put the mediaobject inside a cover element, which should itself be inside an &lt;info> block.</para>
