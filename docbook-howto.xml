@@ -259,6 +259,7 @@ The skeleton file below is all you need to get started with Docbook. You can cop
     
     <para>This introduction barely scratches the surface of what Ant is and what it can do. A god tutorial can be found at <link xlink:href="http://www.comscigate.com/ant/Automate_your_build_process_using_Java_and_Ant.htm">http://www.comscigate.com/ant/Automate_your_build_process_using_Java_and_Ant.htm</link>.</para>
 </sect2>
+</sect1>
 <sect1>
 	<title>Setting everything up</title>
 
