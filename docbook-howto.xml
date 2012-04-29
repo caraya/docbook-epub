@@ -14,7 +14,7 @@
 	<!-- Required to have the image show on the ebook reader cover --> 
 	<mediaobject role="cover">
 		<imageobject>
-			<imagedata fileref="images/docbook.png" format="png"/>
+			<imagedata fileref="images/docbook.png" format="PNG"/>
 		</imageobject>
 	</mediaobject>
 </info>
@@ -98,7 +98,7 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 <example xml:id="basic.docbook">
 <title>Minimal Docbook document</title>
 <programlistingco>
-<programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt; <co xml:id="xml-declaration"/>
+<programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt; <co xml:id="xml.decl"/>
 &lt;book <co xml:id="docbook.root"/>
 	xmlns='http://docbook.org/ns/docbook' <co xml:id="default.namespace"/>
 	xmlns:xlink='http://www.w3.org/1999/xlink' <co xml:id="xlink.namespace"/>
@@ -113,13 +113,21 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 	&lt;/author&gt;
 	&lt;/info&gt;
 &lt;chapter&gt;
-&lt;title&gt;Required Title&lt;/title&gt; <co xml:id=""
+&lt;title&gt;Required Title&lt;/title&gt; <co xml:id="chapter.title"/>
 
-&lt;para&gt;Required paragraph.&lt;/para&gt;
+&lt;para&gt;Required paragraph.&lt;/para&gt; <co xml:id="chapter.para"/>
 
 &lt;/chapter&gt;
 &lt;/book&gt;
 </programlisting>
+<calloutlist>
+	<callout arearefs="xml.decl"><para>The Docbook file is an XML document and this marks it as such.</para></callout>
+	<callout arearefs="docbook.root"><para>This is the root of the Docbook document.</para></callout>
+	<callout arearefs="default.namespace"><para>The namespace declaration without a prefix will be used for all elements without an explicit prefix. This means that all elements without a prefix are implicitly in the Docbook namespace.</para></callout>
+	<callout arearefs="xlink.namespace"><para>We define xlink explicitly. Xlink is used in the &lt;link&gt; element to create hyperlinks.</para></callout>
+	<callout arearefs="docbook.author"><para>This is how Docbook expects to see an author.</para></callout>
+    <callout arearefs="chapter.title chapter.para"><para>These elements are requires inside a Docbook chapter.</para></callout>
+</calloutlist>
 </programlistingco>
 </example>
 </sect1>
@@ -259,7 +267,8 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 
     <para>In order to use these tasks we just call them using <command>ant</command> and the name of the target we want to run. In order to execute the clean target we would use <command>ant clean</command>. If we call ant without arguments it will execute the task listed under the project's default element. For our sample project, calling <command>ant</command> it will execute the make task because it is the default listed under the project.</para>
     
-    <para>This introduction barely scratches the surface of what Ant is and what it can do. A god tutorial can be found at <link xlink:href="http://www.comscigate.com/ant/Automate_your_build_process_using_Java_and_Ant.htm">http://www.comscigate.com/ant/Automate_your_build_process_using_Java_and_Ant.htm</link>.</para>
+<!-- Beef this up -->    
+<para>This introduction barely scratches the surface of what Ant is and what it can do. A god tutorial can be found at <link xlink:href="http://www.comscigate.com/ant/Automate_your_build_process_using_Java_and_Ant.htm">http://www.comscigate.com/ant/Automate_your_build_process_using_Java_and_Ant.htm</link>.</para>
 </sect2>
 </sect1>
 <sect1>
@@ -267,7 +276,7 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 
 <para>We begin our file by declaring our root element and setting properties for use throughout the build file. We also declare that we will use the if task from the ant-contrib project. </para>
 
-<para>We also setup a default target (in this case docbook-single) and a base directory (the directory where the build file is located). If we call ant without telling it what task to run it'll run docbook-single. </para>
+<para>We also setup a default target (in this case docbook-single) and a base directory (the directory where the build file is located). If we call ant without telling it what task to run it will execute the default task assigned to the project (docbook-single in this case). </para>
 
 <example xml:id="script.setup">
 <title>Setting up the Ant Project</title>
