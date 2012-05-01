@@ -7,50 +7,11 @@
 <!-- Required for the IF and SWITCH Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 <!-- Experimental Support for Marcodef to make init and html build targets more modular -->
-<macrodef name="init">
-	<attribute name="dest" default="html_content"/>
+<macrodef name="fixed-layout">
+	<attribute name="" default=""/>
+	<attribute name="" default=""/>
 	<sequential>
-		<if>
-			<available file="@{dest}" type="dir" />
-			<then>
-				<echo message="Directory @{dest} exist... skiping" />
-			</then>
-			<else>
-				<echo>Creating directory</echo>
-				<mkdir dir="@{dest}/"/>
-				<echo>Creating CSS directory</echo>
-				<mkdir dir="@{dest}/css"/>
-				<echo>Creating JS directory</echo>
-				<mkdir dir="@{dest}/js"/>
-				<echo>Creating image directory</echo>
-				<mkdir dir="@{dest}/images"/>
-				<mkdir dir="@{dest}/images/callouts"/>
-			</else>
-		</if>
-		<!-- 
-			Copy CSS, JS and any images into their directories 
-		-->
-		<copy todir="@{dest}/css">
-			<fileset dir="css" casesensitive="yes">
-			  <include name="*.css"/>
-			</fileset>
-		</copy>
-		<copy todir="@{dest}/js">
-			<fileset dir="js" casesensitive="yes">
-			  <include name="*.js"/>
-			</fileset>
-		</copy>
-		<copy todir="@{dest}/images">
-			<fileset dir="images" casesensitive="yes">
-  			  <include name="*.png"/>
-			  <include name="callouts/*.png"/>
-			</fileset>
-		</copy>
-		<copy todir="@{dest}/images/callouts">
-			<fileset dir="images" casesensitive="yes">
-			  <include name="callouts/*.png"/>
-			</fileset>
-		</copy>
+	    
 	</sequential>
 </macrodef>
 
