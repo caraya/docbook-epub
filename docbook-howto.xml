@@ -204,7 +204,7 @@
 
 <sect3 xml:id="hyperlinks">
 <title>Hyperlinks</title>
-<para></para>
+<para>Hyperlinks allow us to connect to resources outside the book/website we are reading. As long as we're online we can click on the links (usually underlined and in a different color) to open the website at the specified resource. Note that if the device/browser is offline it should prompt you to the fact. This is different than if the resource is not available.</para>
 
 <example xml:id="link.example">
 <title>Examples of hyperlink in a Docbook paragraph.</title>
@@ -217,7 +217,7 @@
 <sect2 xml.id="images">
 <title>Images</title>
 
-<para>Images take a little bit of extra work to create with Docbook. As you can see below the image is wrapped around a <tag>&lt;mediaobject&gt;tag</tag> that also contains the caption for the image we are inserting. Notice that we </para>
+<para>Images take a little bit of extra work to create with Docbook. As you can see below the image is wrapped around a <tag>&lt;mediaobject&gt;tag</tag> that also contains the caption for the image we are inserting. Notice that we have to add the format in uppe</para>
 <example xml:id="image.example">
 <title>An image in Docbook</title>
 <programlisting>&lt;mediaobject&gt;
@@ -231,12 +231,35 @@
 </programlisting>
 </example>
 </sect2>
+</sect1>
 
+<sect1>
+<title>Customizations</title>
+<subtitle>Changing the way your book looks</subtitle>
+<para>Content is required in chapters too.</para>
+
+<sect2 xml:id="making.cover">
+<title>Making sure we have a cover</title>
+
+<para>Aren't the covers of the ebooks you see online awesome?</para> 
+
+<para>You should get a cover in your EPUB output if you add a mediaobject with the role attribute set to "cover" to your bookinfo/articleinfo block. In DocBook 5.0, you may put the mediaobject inside a cover element, which should itself be inside an &lt;info> block.</para>
+
+<example xml:id="docbook.cover">
+<title>Cover image for a Docbook-based book.</title>
+<programlisting>&lt;mediaobject role="cover"&gt;
+	&lt;imageobject&gt;
+		&lt;imagedata fileref="images/docbook.png" format="PNG"/&gt;
+	&lt;/imageobject&gt;
+&lt;/mediaobject&gt;
+</programlisting> 
+</example>
+</sect2>
 
 <sect2 xml:id="audio.video">
 <title>Adding multimedia: audio and video.</title>
 
-<para>One of the coolest things, IMO, about EPub3</para>
+<para>One of the coolest things, in my opinion, about EPub3 is the way that you can include multimedia on your ebook content. </para>
 <example xml:id="video.example">
 <title>Adding a video to Docbook.</title>
 <programlisting>&lt;mediaobject&gt;
@@ -255,31 +278,6 @@
 <para></para>
 </sect2>
 
-
-<sect2 xml:id="making.cover">
-<title>Making sure we have a cover</title>
-
-<para>Aren't the covers of the ebooks you see online awesome?</para> 
-
-<para>You should get a cover in your EPUB output if you add a mediaobject with the role attribute set to "cover" to your bookinfo/articleinfo block. In DocBook 5.0, you may put the mediaobject inside a cover element, which should itself be inside an &lt;info> block.</para>
-</sect2>
-
-<!--
-<sect1>
-<title>Customizations</title>
-<subtitle>Changing the way your book looks</subtitle>
-<para>Content is required in chapters too.</para>
-
-<sect2>
-	<title>The relatively simple</title>
-	<para></para>
-</sect2>
-
-<sect2>
-	<title>The not-so-simple</title>
-	<para>Content is required in chapters too.</para>
-</sect2>
--->
 </sect1>
 </chapter>
 
