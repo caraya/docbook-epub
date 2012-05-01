@@ -16,6 +16,10 @@ Author			Carlos Araya
     src: url(type/GraublauWebBold.otf) format(opentype);
 }
 
+@font-face {
+    font-family: DejaVuSansMono;
+    src: url(type/DejaVuSansMono.ttf) format(truetype);
+}
 
 /* Rest of the CSS declarations */
 body { 
@@ -36,6 +40,7 @@ pre.programlisting {
 }
 
 div.figure {
-	margin-top: 1.2em;
+	margin: 0 auto;
 	padding: 1em;
+	width: 60;
 }

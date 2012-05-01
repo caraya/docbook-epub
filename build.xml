@@ -177,7 +177,6 @@ Apache ant build file for Docbook based ebooks
 			 <copy todir="OEBPS/type">
 			    <fileset dir="type/">
 			      <exclude name="Calluna*.*"/>
-			      <exclude name="DejaVu*.*"/>
 			    </fileset>
 			  </copy>
 		</then>
