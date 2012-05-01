@@ -27,7 +27,8 @@ Apache ant build file for Docbook based ebooks
 	<antcall target="validate-xml"/>
 	<!-- Run the stylesheet conversion -->
 	<exec executable="${xsltproc_bin}">
-		<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
+		<arg value="carlos-chunk2.xsl"/>
+		<arg value="${src_file}.xml"/> 
 	</exec>
 	<!-- Copy media resources -->
 	<antcall target="copy-images"/>
@@ -117,7 +118,7 @@ Apache ant build file for Docbook based ebooks
 			<include name="**/*"/>
 		</fileset>
 	</move>
-	<delte dir="docbook"/>
+	<delete dir="docbook"/>
 </target>
 
 <target name="copy-resources">

@@ -18,7 +18,7 @@
 		</imageobject>
 	</mediaobject>
 </info>
-<preface>
+<preface xml:id="preface">
 <title>Publishing for everyone</title>
 
 <blockquote><para><emphasis role="bold"><emphasis>"Much is to be gained by eBooks: ease, convenience, portability. But something is definitely lost: tradition, a sensual experience, the comfort of thingy-ness — a little bit of humanity." (Chip Kidd)</emphasis></emphasis></para></blockquote>
@@ -43,7 +43,7 @@
 </preface>
 
 
-<chapter>
+<chapter xml:id="create">
 <title>Why should I create an ebook? Why with Docbook?</title>
 <para>Again, We all have something to say to the world. And ebooks make it easier than ever to have the world as your audience. Whatever form your message takes we can build a book and a community around it. We have different technologies to communicate before, during and after creating our content and we are given plenty of opportunities to engage with our readers during the process.</para>
 
@@ -61,7 +61,7 @@
 
 <para>Now you get no only the funding you need to get your book up and running but you also get a group of enthusiastic people who are as interested in the success of your book as you are, if not more<footnote><para>For a more detailed account of a successful Kickstarter story see Craig Mod's <link xlink:href="http://craigmod.com/journal/kickstartup/">Kickstartup</link> essay.</para></footnote>.</para>
 
-<sect1>
+<sect1 xml:id="why.docbook">
 <title>Why Docbook?</title>
 
 <para>Over the years <link xlink:href="http://docbook.org/">Docbook</link> has proved to be a very versatile vocabulary for book authoring. I've written training manuals and converted them to PDF, HTML and even Microsoft Help. Epub (both version 2 and 3) are another tool added to the arsenal.</para>
@@ -70,7 +70,7 @@
 
 <para>But perhaps the aspect I found out most attractive about Docbook is its community. It is self-supporting and it has evolved along with Docbook and its associated style sheets. It is welcoming and you get quick and accurate answers to your questions (always an important consideration when working with open source software)</para>
 </sect1>
-<sect1>
+<sect1 xml:id="other.choices">
 	<title>Is Docbook the only alternative for creating ebooks?</title>
 	
 	<para>No, it isn't. There are several tools we can use to create eBooks. I will only mention the tools and, where appropriate, where you can get a copy.</para>
@@ -83,17 +83,17 @@
 </sect1>
 </chapter>
 
-<chapter>
+<chapter xml:id="docbook.creation">
 <title>Creating your Docbook content</title>
 
 <para>Now that we've talked about Why you you should use Docbook to publish your book we can get started writing.</para>
 
 <para>We will go over some of the basics of using Docbook and then cover some customization topics. </para>
 
-<sect1>
+<sect1 xml:id="getting.started">
 <title>Getting Started</title>
 
-The skeleton file below is all you need to get started with Docbook. You can copy this to a text file with the xml extension and then start to work. 
+<para>The skeleton file below is all you need to get started with Docbook. You can copy this to a text file with the xml extension and then start to work.</para>
 
 <example xml:id="basic.docbook">
 <title>Minimal Docbook document</title>
@@ -133,12 +133,138 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 
 <para>With that basic structure let's get to work.</para>
 
-<sect2>
+<sect2 xml:id="creating.chapters">
+<title>Creating chapters</title>
+
+<para>A book has one or more chapters. They are normally used to separate the big parts of your content.</para>
+
+<para>The Docbook syntax to create a chapter is shown below</para>
+
+<example id="ch.sample">
+<title>Sample Docbook Chapter</title>
+<programlisting>
+&lt;chapter&gt;
+&lt;title&gt;Required Title&lt;/title&gt; 
+
+&lt;para&gt;Required paragraph.&lt;/para&gt;
+
+&lt;/chapter&gt;
+</programlisting>
+</example>
+
+<para><tag>&lt;title&gt;</tag> and at least one paragraph (<tag>&lt;para&gt;</tag>) are required.</para>
+
+</sect2>
+
+
+<sect2 xml:id="creating.headings">
+<title>Creating headings</title>
+
+<para>Just like chapters are used to organize the big units of content in your book headings can be used to organize the content inside the chapter. They are equivalent to the <tag>&lt;h1&gt;</tag> to <tag>&lt;h6&gt;</tag> heading tags. The main difference is that in Docbook you wrap the heading tag around the content. For example, the example below will generate an H1 tag in the resulting HTML file.</para>
+
+<example xml:id="sect.example">
+<title>Examples of a section in a Docbook document.</title>
+<programlisting>&lt;sect1 xml:id="creating.chapters"&gt;
+&lt;title&gt;Creating chapters&lt;/title&gt;
+
+&lt;para&gt;The content that goes under the &lt;h1&gt; tag goes here.&lt;/para&gt;
+&lt;/sect1&gt;
+</programlisting>
+</example>
+
+<para>The difference is that, in HTML, you can jump directly to a level 2 or level 3 heading. In Docbook the heading hierarchy has to be maintained. Your first sect tag has to be a level 1 and so on. This is required.</para>
+</sect2>
+
+<sect2 xml:id="adding.text">
+<title>Adding text content.</title>
+
+<para>The basic unit of content is the paragraph. It is as simple as doing the following:</para>
+
+<example xml:id="para.example">
+<title>Examples of a paragraph in a Docbook document.</title>
+<programlisting>&lt;para&gt;The paragraph is the basic unit of text in a Docbook document&lt;/para&gt;
+</programlisting>
+</example>
+
+<para>The examples below include additional elements that we can add inside a paragraph.</para> 
+
+<sect3 xml:id="bold.italics">
+<title>Bold and Italics</title>
+
+<para>Both bold and italics in a Docbook document use the same tag, &lt;emphasis&gt;. To get a bold effect we need to add a role to our emphasis tag; something like this &lt;emphasis role="bold"&gt;; Italics are obtained with the regular &lt;emphasis&gt; tag.</para>    
+
+<para>In the example below, the word paragraph will appear in bold while the word Docbook will appear in italics.</para>
+
+<example xml:id="bold.italic.example">
+<title>Examples of a bold of italics emphasis in a Docbook paragraph.</title>
+<programlisting>&lt;para&gt;The &lt;emphasis role="bold">paragraph&lt;role&gt; is the basic unit of text in a &lt;emphasis&gt;Docbook&lt;/emphasis&gt; document&lt;/para&gt;
+</programlisting>
+</example>
+</sect3>
+
+<sect3 xml:id="hyperlinks">
+<title>Hyperlinks</title>
+<para></para>
+
+<example xml:id="link.example">
+<title>Examples of hyperlink in a Docbook paragraph.</title>
+<programlisting>&lt;para&gt;The paragraph is the basic unit of text in a &lt;link xlink:href="http://docbook.org"&gt;Docbook&lt;link&gt; document &lt;/para&gt;
+</programlisting>
+</example>
+</sect3>
+</sect2>
+
+<sect2 xml.id="images">
+<title>Images</title>
+
+<para>Images take a little bit of extra work to create with Docbook. As you can see below the image is wrapped around a <tag>&lt;mediaobject&gt;tag</tag> that also contains the caption for the image we are inserting. Notice that we </para>
+<example xml:id="image.example">
+<title>An image in Docbook</title>
+<programlisting>&lt;mediaobject&gt;
+    &lt;imageobject condition="web"&gt;
+          &lt;imagedata fileref="tower.png" format="PNG"/&gt;
+      &lt;/imageobject&gt;
+      &lt;caption&gt;
+          &lt;para&gt;Designed by Gustave Eiffel in 1889, The Eiffel Tower is one of the most widely recognized buildings in the world.&lt;/para&gt;
+      &lt;/caption&gt;
+&lt;/mediaobject&gt;
+</programlisting>
+</example>
+</sect2>
+
+
+<sect2 xml:id="audio.video">
+<title>Adding multimedia: audio and video.</title>
+
+<para>One of the coolest things, IMO, about EPub3</para>
+<example xml:id="video.example">
+<title>Adding a video to Docbook.</title>
+<programlisting>&lt;mediaobject&gt;
+&lt;videoobject&gt;
+	&lt;videodata controls="controls" fileref="video/do-lectures.mp4"/&gt;
+&lt;/videoobject&gt;
+&lt;imageobject role="poster"&gt;
+	&lt;imagedata fileref="video/do-lectures.png"/&gt;
+&lt;/imageobject&gt;
+&lt;textobject&gt;
+	&lt;para&gt;Craig Mod presenting at the Do Lecture in 2010&lt;/para&gt;
+&lt;/textobject&gt;
+&lt;/mediaobject&gt;
+</programlisting>
+</example>
+<para></para>
+</sect2>
+
+
+<sect2 xml:id="making.cover">
 <title>Making sure we have a cover</title>
 
-<para>You should get a cover in your EPUB output if you add a mediaobject with the role attribute set to "cover" to your bookinfo/articleinfo block. In DocBook 5.0, you may put the mediaobject inside a cover element, which should itself be inside an &lt;info> block.</para>
-</sect1>
+<para>Aren't the covers of the ebooks you see online awesome?</para> 
 
+<para>You should get a cover in your EPUB output if you add a mediaobject with the role attribute set to "cover" to your bookinfo/articleinfo block. In DocBook 5.0, you may put the mediaobject inside a cover element, which should itself be inside an &lt;info> block.</para>
+</sect2>
+
+<!--
 <sect1>
 <title>Customizations</title>
 <subtitle>Changing the way your book looks</subtitle>
@@ -153,37 +279,38 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 	<title>The not-so-simple</title>
 	<para>Content is required in chapters too.</para>
 </sect2>
+-->
 </sect1>
 </chapter>
 
-<chapter>
+<chapter xml:id="transformation">
 <title>Converting the XML into different formats</title>
 	<para>something interesting goes here</para>
 
-<sect1>
+<sect1 xml:id="convert.epub2">
 	<title>Converting to ePub 2</title>
 	<para>Content is required in chapters too.</para>
 </sect1>
 
-<sect1>
+<sect1 xml:id="convert.epub3">
 <title>Making an ePub3 ebook </title>
 	<para>Content is required in chapters too.</para>
 </sect1>
 
-<sect1>
+<sect1 xml:id="convert.kindle">
 <title>Let's not forget the Kindle</title>
 	<para>Content is required in chapters too.</para>
 </sect1>
 </chapter>
 
 
-<chapter>
+<chapter xml:id="automation">
 <title>Automating the process</title>
 <subtitle>Make the computer work for you</subtitle>
 
 <para>During all the development of the ebooks using Docbook I kept asking myself the question "Is there an easier way to do this? There is, it has a steep initial development but it saves lots of time in the long run. I've finally settled on Apache Ant for the task.</para>
 
-<sect1>
+<sect1 xml:id="apache.ant">
 	<title>Apache Ant and making things easier on yourself</title>
 	
 	<para>I love Apache Ant!</para>
@@ -205,7 +332,7 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 		    <para>XMLlint, a part of the <link xlink:href="http://xmlsoft.org">XML C toolkit and Library of Gnome</link>. Most Unix-like systems (Macintosh OS X and Linux) have this software already installed.</para>
 		    <para>Binary installations for Windows machines can be downloaded from the <link xlink:href="http://www.zlatkovic.com/libxml.en.html">maintainer's website</link>. These binary distributions don't require compilation.</para></listitem>
 		<listitem>
-		    <para><link xlink:href="http://xmlsoft.org/xslt/xsltproc2.html">XSLTProc</link>, part of the XSLT library. This library lives on top of <link xlink:hef="http://xmlsoft.org/">LibXML</link>. Install LibXML first and then LibXSLT otherwise XSLTProc will not work.</para>
+		    <para><link xlink:href="http://xmlsoft.org/xslt/xsltproc2.html">XSLTProc</link>, part of the XSLT library. This library lives on top of <link xlink:hef="http://xmlsoft.org/">LibXML</link>. Install LibXML first and then LibXSLT otherwise XSLTProc will not work. You need to have LibXML installed before installing LibXSLT and XSLTProc.</para>
 		</listitem>
 		<listitem>
 		    <para><link xlink:href="http://code.google.com/p/epubcheck/">epubcheck</link> (current version is 3.0b5) used to validate the resulting epub document.</para>
@@ -217,8 +344,8 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 		
 	<para>I chose Ant because it is cross platform. As long as we have the tools listed above it won't matter if we are on a Macintosh or Windows system. The targets and tasks will run in whatever system Ant and Java are installed in.</para>
 	
-<sect2>
-	<title>A quick over view of Ant</title>
+<sect2 xml:id="ant.overview">
+	<title>A quick overview of Ant</title>
 	
 	<para>In order to make better sense of the targets and tasks below it is important to understand Ant and its vocabulary. It is by no means a complete tutorial on Ant. It is meant to cover the basics and provide the background needed to interact with the Build file and modify it if necessary.</para>
 	
@@ -269,7 +396,8 @@ The skeleton file below is all you need to get started with Docbook. You can cop
 <para>This introduction barely scratches the surface of what Ant is and what it can do. A god tutorial can be found at <link xlink:href="http://www.comscigate.com/ant/Automate_your_build_process_using_Java_and_Ant.htm">http://www.comscigate.com/ant/Automate_your_build_process_using_Java_and_Ant.htm</link>.</para>
 </sect2>
 </sect1>
-<sect1>
+
+<sect1 xml:id="ant.setup">
 	<title>Setting everything up</title>
 
 <para>We begin our file by declaring our root element and setting properties for use throughout the build file. We also declare that we will use the if task from the ant-contrib project. </para>
@@ -318,11 +446,11 @@ without extension--&gt;
 </programlisting>
 </example>
 </sect1>
-<sect1>
+<sect1 xml:id="ant.basic.tasks">
 	<title>Basic Tasks</title>
 
 <para>Here is a rundown of the basic tasks that we need to complete.</para>
-<sect2>
+<sect2 xml:id="ant.epub2">
 	<title>EPub 2</title>
 
 <para>EPub 2 is the older version of the standard and, as such, has a more limited set of features than the more recent EPub 3 standard (see below). This target and the one below make extensive use of the auxiliary tasks listed under <emphasis>Secondary Targets</emphasis>. We set up the targets like this because there may be times when we want to execute the secondary targets on their own without generating the enter epub file again.</para>
@@ -367,7 +495,8 @@ based on the epub file we just created --&gt;
 
 <para>Assuming the book validates we run our last target, we make a kindle version of the book.</para>
 </sect2>
-<sect2>
+
+<sect2 xml:id="ant.epub3">
 	<title>EPub 3</title>
 
 <para>The latest released version of the EPub specification adds more multimedia functionality to EPub books. We can add video, audio and change the way we style our text.</para>
@@ -420,12 +549,12 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </sect2>
 </sect1>
 
-<sect1>
+<sect1 xml:id="ant.epub.support">
 	<title>EPub support</title>
 
 <para>Now for the supporting cast. Some of these tasks get called from the main tasks listed above and others are mean to be called from the command line. I'm a lazy coder and that has expanded into my writing as well; why use 4 commands when you can use only one call to Ant to accomplish the same thing?. </para>
 
-<sect2>
+<sect2 xml:id="ant.make.mime">
 	<title>make-mime</title>
 
 <para>epub2 calls this target to create a mimetype file to add to the zipped EPub book. this is a requirement of the EPub specifications. For some reason EPub 3 creates this file for you. </para>
@@ -439,7 +568,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </programlisting>
 </example>
 </sect2>
-<sect2>
+<sect2 xml:id="ant.make.kindle">
 	<title>make-kindle</title>
 
 <para>Given a valid EPub 2 zip file this target will create and validate the mobi file for Kindle and other devices supporting the format. This is a proprietary tool and may add encryption to the file (don't have a way verify this without a Kindle device)</para>
@@ -456,7 +585,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </programlisting>
 </example>
 </sect2>
-<sect2>
+<sect2 xml:id="ant.epub.zip">
 	<title>epub-zip</title>
 	
 <para>This target does a lot of the heavy lifting for the EPub generation process. We use the system's zip tool to create the EPUB file in two steps:</para>
@@ -484,7 +613,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </example>
 </sect2>
 
-<sect2>
+<sect2 xml:id="ant.epub.check">
 	<title>epub-check</title>
 
 <para>This target executes the epubcheck application available from its Googlecode project. It validates that the file conforms to the EPub specification (either version 2 or 3) and will report warnings or errors to standard output (most often your screen).</para> 
@@ -501,12 +630,12 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </example>
 </sect2>
 </sect1>
-<sect1>
+<sect1 xml:id="ant.copying.resources">
 	<title>Copying Resources</title>
 	
 <para>The following tasks copy our resources to the EBook directory (OEBPS). We have a global task that will, in turn call the individual copy tasks, and then we have the individual ones. Again, we have sacrificed the length of the build file for flexibility as we can call the individual tasks from the command line or run them as part of the epub3 task. </para>
 
-<sect2>
+<sect2 xml:id="ant.copy.resources">
 	<title>copy-resources</title>
 
 <para>This is the wrapper task that will copy resources into our OEBPS directory.</para> 
@@ -524,7 +653,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </example>
 </sect2>
 
-<sect2>
+<sect2 xml:id="ant.copy.video">
 	<title>copy-video</title>
 
 <para>This target will first check if there is a video directory in our current workspace. If there is one it'll copy all files with mp4, jpg and png extensions into OEBPS/video. The images in this directory will be used as poster images for the videos. That's why we put them here and not in the images directory. </para>
@@ -556,7 +685,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </example>
 </sect2>
 
-<sect2>
+<sect2 xml:id="ant.copy.images">
 	<title>copy-images</title>
 
 <para>This task does with images what copy-video did with videos. We make sure that the images directory exist before we do anything to avoid epubcheck complains.</para>
@@ -587,7 +716,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </example>
 </sect2>
 
-<sect2>
+<sect2 xml:id="ant.copy.fonts">
 	<title>copy-fonts</title>
 
 <para>When copying fonts we are excluding any that contain the string Callua. I'm not 100% sure that I want to use the font but, at the same time, I may. So I keep it in the directory and exclude it from the copy process. </para>
@@ -618,7 +747,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </example>
 </sect2>
 
-<sect2>
+<sect2 xml:id="ant.copy.css">
 	<title>copy-css</title>
 
 <para>When copying style sheets to out OEBPS directory we do things slightly different than what we've done so far. We are still checking if there's a css directory in our workspace but instead of copying to an equivalent directory under OEBPS we copy them to the root of our EBook content. </para>
@@ -645,12 +774,12 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </sect2>
 </sect1>
 
-<sect1>
+<sect1 xml:id="ant.validation">
 	<title>Validation</title>
 
 <para>In addition to validating the output of the Ebook and having Ant, XSLTProc and Saxon validate our content to make sure it is correct we also validate it manually using xmllint (part of the libxml project). </para>
 
-<sect2>
+<sect2 xml:id="ant.validate.xml">
 	<title>validate-xml</title>
 
 <para>We call xmllint and tell it to suppress its output if it's successful and not to go online to complete its validation of our xml file. </para>
@@ -668,12 +797,12 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </sect2>
 </sect1>
 
-<sect1>
+<sect1 xml:id="ant.file.download">
 	<title>File download</title>
 
 <para>EPub 3 is still experimental, which means that it's part of the snapshot distribution of the XSLT 1.0 of the style sheets. The snapshot build is regenerated any time that a developer makes a change in Sourceforge which makes it very important to keep up to date with the releases.</para> 
 
-<sect2>
+<sect2 xml:id="ant.get.xsl">
 	<title>get-xsl</title>
 
 <para>The get-docbook task will do 4 things in order</para>
@@ -708,13 +837,13 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </sect2>
 </sect1>
 
-<sect1>
+<sect1 xml:id="ant.cleanup">
 	<title>Cleanup</title>
 	
 <para>I always setup tasks to clean up the working files used when creating the different versions of docbook.</para>
 
 
-<sect2>
+<sect2 xml:id="ant.epub.clean">
 	<title>epub-clean</title>
 
 <para>The final cleanup task is to remove all the files created by epub2 or epub3. We use the same directories for both versions so it is important that we clean up all the files.</para>
@@ -757,13 +886,14 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </sect2>
 </sect1>
 
-<sect1>
+<sect1 xml:id="ant.final.result">
 	<title>The final result</title>
 		
 <para>The final result can be viewed and downloaded from <link xlink:href="https://github.com/caraya/docbook-epub/blob/master/build-full.xml">my Github repository</link>.</para>
-</sect1></chapter>
+</sect1>
+</chapter>
 
-<chapter>
+<chapter xml:id="pulishing">
 <title>Publishing your content</title>
 
 <para>This is where we talk about publishing your content yourself, publishing to Amazon and, maybe, to the iBooks store</para>
@@ -853,6 +983,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 	</bibliomset>
 </bibliomixed>
 </bibliography>
+
 <colophon>
 <para>Draft versions of this book were produced with the Docbook XML stylesheets.</para>
 </colophon>

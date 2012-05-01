@@ -96,7 +96,7 @@ the way I want to
 	<init dest="html_content"/>
 	<echo>Generating HTML Chunks with XSLT 1.0 processor</echo>
 	<exec executable="${xsltproc_bin}">
-		<arg line="-o content.html ${html_custom} ${src_file}.xml"/>
+		<arg line="-o content.html ${docbook_path}xhtml/docbook.xsl ${src_file}.xml"/>
   	</exec>
 	<echo>Moving html files to ${html_dest1}</echo>
 	<move todir="${html_dest1}">

@@ -13,7 +13,7 @@
 <xsl:param name="callout.graphics.extension">.png</xsl:param>
 <xsl:param name="callout.graphics.path">images/callouts/</xsl:param>
 <xsl:param name="callout.graphics" select="1"></xsl:param>
-
+<xsl:param name="callout.graphics.number.limit" select="8"></xsl:param>
 <!-- Additional items to add to package.opf-->
 <xsl:template name="user.manifest.items">
     <item xmlns="http://www.idpf.org/2007/opf" id="font1" href="type/GraublauWeb.otf" media-type="application/vnd.ms-opentype"/>
