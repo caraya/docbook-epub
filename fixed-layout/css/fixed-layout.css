@@ -1,0 +1,58 @@
+/*
+File name:      fixed-layout.css
+Purpose:        Fixed Layout Specific examples
+Author:         Carlos Araya
+*/
+
+/*
+	Basic image positioning. Change the top and left attributes for exact 
+	positioning on the page
+*/
+img {
+	position: absolute;
+	top: 100px;
+	left: 100px;
+}
+
+/*
+	single page, full size image. We use z-index: -1 so we can lay text on top of it
+*/
+img.full-single {
+	position: absolute;
+	height: 1700px; 
+	z-index: -1;
+}
+
+
+/* 
+	CLASSES FOR 2-PAGE SPREAD 
+*/
+
+/*
+	We make the position relative and the overflow hidden. 
+*/.leftside, 
+.rightside {
+	 width: 1200px;
+	 height: 1700px;
+	 overflow: hidden;
+	 position: relative;
+}
+
+/*
+	Images inside the classes above are set absolute, the height is the full size of 
+	the page and the zindex is set to below the text (any negative number will do)
+*/
+.leftside img, 
+.rightside img {
+	position: absolute;
+	height: 1700px;
+	z-index: -1;
+}
+
+/*
+	On the right side of the spread we move the image 100% (in this case 1200px) 
+	to the left so it matchesthe left side of the spread
+*/
+.rightside > img {
+	left: -100%;
+}
