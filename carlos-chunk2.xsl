@@ -9,5 +9,4 @@
 <xsl:param name="callout.graphics.path">images/callouts/</xsl:param>
 <xsl:param name="callout.graphics" select="1"></xsl:param>
 <xsl:param name="callout.graphics.number.limit" select="8"></xsl:param>
-<!-- Additional items to add to package.opf-->
 </xsl:stylesheet>

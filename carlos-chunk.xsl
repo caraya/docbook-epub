@@ -7,6 +7,7 @@
 <!-- Additional Stylesheet-->
 <xsl:param name="html.stylesheet" select="'carlos-new.css'"/> 
 <!-- Use graphics for admonitions? -->
+<!-- Graphics -->
 <xsl:param name="admon.graphics" select="1"/>
 
 <!-- Callouts -->
