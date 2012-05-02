@@ -1,6 +1,8 @@
 <?xml version='1.0'?>
 <xsl:stylesheet  
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:exsl="http://exslt.org/common"
+    exclude-prefixes="exsl" 
     version="1.0">
 
 <xsl:import href="../docbook/epub3/chunk.xsl"/>
@@ -23,25 +25,8 @@
 
 <!-- Work on fixed layout for epub3 books -->
 <!-- Right now it only works on Apple iBooks reader -->
-<xsl:template match="imageobject[@role]">
-<div> 
-    <xsl:choose>
-        <xsl:when test="@role = 'full-single'">
-            <xsl:attribute name="class">fullsingle</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@role = 'leftside'">
-            <xsl:attribute name="class">leftside</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@role = 'rightside'">
-            <xsl:attribute name="class">rightside</xsl:attribute>
-        </xsl:when>
-    </xsl:choose>
-    <xsl:apply-templates/>
-</div>
-</xsl:template>
-
 <xsl:template match="sect1[@role]">
-<div> 
+<section> 
     <xsl:choose>
         <xsl:when test="@role = 'full-single'">
             <xsl:attribute name="class">fullsingle</xsl:attribute>
@@ -57,17 +42,21 @@
 </div>
 </xsl:template>
 
-<!-- This hopefully will create the com.apple.ibooks.display-options.xml file that is required for fixed layout books 
-<xsl:template name="create.display.options">
-<exsl:document href="com.apple.ibooks.display-options.xml" method="xml" encoding="UTF8" indent="yes" omit-xml-declaration="no" standalone="yes">
-<display_options>
-<platform name="*">
-        <option name="fixed-layout">true</option>
-        <option name="orientation-lock">landscape-only</option>
-        <option name="open-to-spread">true</option>
-</platform>
-</display_options>
+<!-- 
+    This hopefully will create the com.apple.ibooks.display-options.xml file that is 
+    required for fixed layout books. Eventually I'd like to move it to XSLT from ANT so that
+    we can run it with XSLTPROC only 
+-->
+
+<xsl:template match="/" mode = "create.options">
+<exsl:document href="com.apple.ibooks.display-options.xml" indent="yes" omit-xml-declaration="no" >
+&lt;display_options&gt;
+&lt;platform name="*"&gt;
+    &lt;option name="fixed-layout"&gt;true&lt;/option&gt;
+    &lt;option name="orientation-lock"&gt;landscape-only&lt;/option&gt;
+    &lt;option name="open-to-spread"&gt;true&lt;/option&gt;
+&lt;/platform&gt;
+&lt;/display_options&gt;
 </exsl:document>
-If this works then all I have left is to copy the resulting xml file into META-INF
-</xsl:template>-->
+</xsl:template>
 </xsl:stylesheet>
