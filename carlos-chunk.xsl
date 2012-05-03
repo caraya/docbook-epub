@@ -6,15 +6,17 @@
 
 <!-- Additional Stylesheet-->
 <xsl:param name="html.stylesheet" select="'carlos-new.css'"/> 
+
+<!-- Kindle extensions -->
+<xsl:param name="kindle.extensions" select="1"/>
+
 <!-- Use graphics for admonitions? -->
-<!-- Graphics -->
 <xsl:param name="admon.graphics" select="1"/>
 
 <!-- Callouts -->
 <xsl:param name="callout.graphics.extension">.png</xsl:param>
 <xsl:param name="callout.graphics.path">images/callouts/</xsl:param>
 <xsl:param name="callout.graphics" select="1"></xsl:param>
-<xsl:param name="callout.graphics.number.limit" select="8"></xsl:param>
 
 <!-- Additional items to add to package.opf-->
 <xsl:template name="user.manifest.items">
