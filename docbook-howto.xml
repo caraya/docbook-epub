@@ -47,7 +47,7 @@
 <itemizedlist>
     <listitem><para>You are comfortable with HTML, CSS and to a lesser degree XML.</para></listitem>
     <listitem><para>You know your way around a command line interface on your operating system (terminal in Linux and OS X, CMD on Windows)</para></listitem>
-    <listitem><para>You can install software on your system.</para></listitem>
+    <listitem><para>You know how to install software on your system and have permission to do so.</para></listitem>
 </itemizedlist>
 </sect1>
 </preface>
@@ -177,7 +177,7 @@
 <programlisting>&lt;sect1 xml:id="creating.chapters"&gt;
 &lt;title&gt;Creating chapters&lt;/title&gt;
 
-&lt;para&gt;The content that goes under the &lt;h1&gt; tag goes here.&lt;/para&gt;
+&lt;para&gt;The content that goes under the &lt;h1&gt; tag goes here.&lt;/h1&gt;&lt;/para&gt;
 &lt;/sect1&gt;
 </programlisting>
 </example>
@@ -323,18 +323,64 @@
 <sect1>
 <title>Changing the fonts for the book</title>
 
-<para></para>
+<para>You can add fonts and do basic typography in your book by using the method below. We first need to add the fonts to our document through Cascading Style Sheets. Create a css file (call it example.css) with the following content:</para>
+
+<example xml:id="css.example">
+<title>CSS Style Sheet for EPUB ebook</title>
+<programlistingco>
+<programlisting>@font-face { <co xml:id="css.font.decl"/>
+    font-family: GraublauWeb; 
+    src: url(type/GraublauWeb.otf) format(opentype);
+}
+
+body { <co xml:id="css.font.use"/>
+	font-family:GraublauWeb, sans-serif;
+}    
+</programlisting>
+<calloutlist>
+	<callout arearefs="css.font.decl"><para>This tells the style sheet where to pull the font from.</para></callout>
+	<callout arearefs="css.font.use"><para>Using the information that we set up on step 1 above we tell the stylesheet to use the font for the body of our book.</para></callout>
+</calloutlist>
+</programlistingco>
+</example>
+
+<para>The CSS file uses standard syntax to tell the book which fonts to use and where to get them from.</para>
+
+<para>There is one more thing we have to do. We need to use an XSL customization layer to add references to the fonts to the package file. The complete customization layer can be found in the section <link linkend="ex.customization.layer">Making an ePub3 ebook</link>.</para>
+<example xml:id="add.items.xsl">
+<title>Adding elements to the book manifest</title>
+<programlistingco>
+<programlisting>&lt;xsl:stylesheet  
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"&gt;
+
+&lt;xsl:import href="../docbook/epub3/chunk.xsl"/&gt; <co xml:id="db.import"/>
+
+&lt;!-- Additional items to add to package.opf--&gt; 
+&lt;xsl:template name="user.manifest.items"&gt; <co xml:id="db.add.to.manifest"/>
+    &lt;item xmlns="http://www.idpf.org/2007/opf" 
+        id="font1" 
+        href="type/GraublauWeb.otf" 
+        media-type="application/vnd.ms-opentype"/&gt;
+&lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;
+</programlisting>
+<calloutlist>
+	<callout arearefs="db.import"><para>Because we are working with the Docbook style sheets we have to import them into the file we are working with.</para></callout>
+	<callout arearefs="db.add.to.manifest"><para>This template is empty by default. We add the elements that we want to add to the manifest and let the style sheets take care of them.</para></callout>
+</calloutlist>
+</programlistingco>
+</example>
 </sect1>
 
 </chapter>
 
 <chapter xml:id="transformation">
 <title>Converting the XML into different formats</title>
-	<para>something interesting goes here</para>
+	<para>The main reason why I chose to work with Docbook is its flexibility. Starting from the same base document we can convert our files to HTML, PDF, EPub, WebHelp and many more. In this chapter we'll discuss converting our XML documents to ebook formats. Because of it's popularity we will also discuss how to generate MOBI files to be read with Kindle devices.</para>
 
 <sect1 xml:id="convert.epub2">
 	<title>Converting to ePub 2</title>
-	<para>Content is required in chapters too.</para>
+	<para>Even though EPub 2.1 has been superseded by the new EPub 3 standard it is still in use by most ebook readers.</para>
 </sect1>
 
 <sect1 xml:id="convert.epub3">
@@ -381,7 +427,6 @@
 	<para>Content is required in chapters too.</para>
 </sect1>
 </chapter>
-
 
 <chapter xml:id="automation">
 <title>Automating the process</title>
