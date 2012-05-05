@@ -39,6 +39,17 @@
 
 <para>In answering these questions my hope is that you will create new content and give it to the world. I'm sure we'll all be much better for it</para>
 
+<sect1>
+<title>Assumptions and what you should already know</title>
+
+<para>In writing this book I've made some assumptions. They are:</para>
+
+<itemizedlist>
+    <listitem><para>You are comfortable with HTML, CSS and to a lesser degree XML.</para></listitem>
+    <listitem><para>You know your way around a command line interface on your operating system (terminal in Linux and OS X, CMD on Windows)</para></listitem>
+    <listitem><para>You can install software on your system.</para></listitem>
+</itemizedlist>
+</sect1>
 </preface>
 
 
@@ -207,7 +218,8 @@
 
 <example xml:id="link.example">
 <title>Examples of hyperlink in a Docbook paragraph.</title>
-<programlisting>&lt;para&gt;The paragraph is the basic unit of text in a &lt;link xlink:href="http://docbook.org"&gt;Docbook&lt;link&gt; document &lt;/para&gt;
+<programlisting>&lt;para&gt;The paragraph is the basic unit of text in a 
+    &lt;link xlink:href="http://docbook.org"&gt;Docbook&lt;link&gt; document &lt;/para&gt;
 </programlisting>
 </example>
 </sect3>
@@ -216,49 +228,65 @@
 <sect2 xml.id="images">
 <title>Images</title>
 
-<para>Images take a little bit of extra work to create with Docbook. As you can see below the image is wrapped around a <tag>&lt;mediaobject&gt;tag</tag> that also contains the caption for the image we are inserting. Notice that we have to add the format in uppe</para>
+<para>Images take a little bit of extra work to create with Docbook. As you can see below the image is wrapped around a <tag>&lt;mediaobject&gt;tag</tag> that also contains the caption for the image we are inserting. Notice that we have to add the format in <emphasis role="bold">uppercase</emphasis> letters.</para>
+
+<para>Images formats supported for EPub publications are: JPEG (best used for photographies) and PNG (for not photographic images).</para>
 <example xml:id="image.example">
 <title>An image in Docbook</title>
 <programlisting>&lt;mediaobject&gt;
-    &lt;imageobject condition="web"&gt;
+    &lt;imageobject&gt;
           &lt;imagedata fileref="tower.png" format="PNG"/&gt;
       &lt;/imageobject&gt;
       &lt;caption&gt;
-          &lt;para&gt;Designed by Gustave Eiffel in 1889, The Eiffel Tower is one of the most widely recognized buildings in the world.&lt;/para&gt;
+          &lt;para&gt;Designed by Gustave Eiffel in 1889, The Eiffel Tower is one of the 
+          most widely recognized buildings in the world.&lt;/para&gt;
       &lt;/caption&gt;
 &lt;/mediaobject&gt;
 </programlisting>
 </example>
 </sect2>
 </sect1>
+</chapter>
 
-<sect1>
+<chapter>
 <title>Customizations</title>
 <subtitle>Changing the way your book looks</subtitle>
-<para>Content is required in chapters too.</para>
 
-<sect2 xml:id="making.cover">
+<para>Below are some customizations that you can make to your Docbook XML content to add specific content to your ebook.</para>
+
+<sect1 xml:id="making.cover">
 <title>Making sure we have a cover</title>
 
 <para>Aren't the covers of the ebooks you see online awesome?</para> 
 
-<para>You should get a cover in your EPUB output if you add a mediaobject with the role attribute set to "cover" to your bookinfo/articleinfo block. In DocBook 5.0, you may put the mediaobject inside a cover element, which should itself be inside an &lt;info> block.</para>
+<para>In order to generate an image-based cover for your book we need to add the &lt;mediaobject&gt; tag with a role attribute of <emphasis role="bold">cover</emphasis> inside the &lt;info&gt; element, the same one where we put our author information. As with the image tags above we need to make sure that we add the format of the image in all uppercase.</para>
 
 <example xml:id="docbook.cover">
 <title>Cover image for a Docbook-based book.</title>
-<programlisting>&lt;mediaobject role="cover"&gt;
-	&lt;imageobject&gt;
-		&lt;imagedata fileref="images/docbook.png" format="PNG"/&gt;
-	&lt;/imageobject&gt;
-&lt;/mediaobject&gt;
+<programlisting>&lt;info&gt;
+	&lt;author&gt;
+		&lt;personname&gt;
+			&lt;firstname&gt;Carlos&lt;/firstname&gt;
+			&lt;surname&gt;Araya&lt;/surname&gt;
+		&lt;/personname&gt;
+	&lt;/author&gt;
+	&lt;mediaobject role="cover"&gt;
+		&lt;imageobject&gt;
+			&lt;imagedata fileref="images/docbook.png" format="PNG"/&gt;
+		&lt;/imageobject&gt;
+	&lt;/mediaobject&gt;
+&lt;/info&gt;
 </programlisting> 
 </example>
-</sect2>
+</sect1>
 
-<sect2 xml:id="audio.video">
+<sect1 xml:id="audio.video">
 <title>Adding multimedia: audio and video.</title>
 
-<para>One of the coolest things, in my opinion, about EPub3 is the way that you can include multimedia on your ebook content. </para>
+<para>One of the coolest things, in my opinion, about EPub3 is the way that you can include multimedia on your ebook content. Right now only the iPad and the Barnes and Noble Nook can play the embedded video content.</para>
+
+<para>In the Docbook video tag example below notice that we do not give an explicit size to the video. Docbook will calculate the dimensions from the video itself which makes it even more important to crop and encode the video properly. The example below also complies with the fallback instructions for EPub 3 books by using the poster image; if the reader can not play the video then it will display the poster image.</para>
+
 <example xml:id="video.example">
 <title>Adding a video to Docbook.</title>
 <programlisting>&lt;mediaobject&gt;
@@ -274,10 +302,30 @@
 &lt;/mediaobject&gt;
 </programlisting>
 </example>
-<para></para>
-</sect2>
-
 </sect1>
+
+<sect1>
+    <title>Notes on working with video</title>
+
+    <para>The video has to be encoded as MPEG4 and size limitations both in terms of size scaling and overall file size for the ebook (2 GB maximum size) will constraint what size we make out video.</para>
+
+    <para>Encoding video and audio are beyond the scope of this book, but there are two things to consider when working with audio and video: bit rate and aspect ratio.</para>
+
+    <para>Bit rate refers at how much data per second your movie is being transferred to your device. It is important because it will contribute to the size of the video file and because devices are usually limited in terms of how much data they can transfer at one time. How to reduce the bit rate for your video will depend on the tool you are using.</para>
+
+    <para>The aspect ratio refers to the proportion of the width to the height of the video, in that order. The most common aspect ratios are 4:3 (like an old-style television) or 16:9 (widescreen). The most common sizes for 4:3 video in ebooks is 480 x 360, and 320 x 240 pixels. The most common size for 16:9 video is 480 x 270 pixels.</para>
+
+    <para>IF you try to view a widescreen video in an iPhone or iPad you will get black bars filling the rest of the video space. When you toggle the video to full screen it will zoom and crop the video to fit on its proportions</para>
+
+    <para>The Nook Color almost has the wide screen dimensions. There are 24 extra pixels of height, which can barely be seen when the device is held horizontally.The other important thing about the NOOK Color is that the text block where videos are displayed when the device is held vertically is 480 pixels wide—ideal for a standard portable widescreen movie (480 x 270 pixels).</para>
+</sect1>
+
+<sect1>
+<title>Changing the fonts for the book</title>
+
+<para></para>
+</sect1>
+
 </chapter>
 
 <chapter xml:id="transformation">
@@ -292,6 +340,40 @@
 <sect1 xml:id="convert.epub3">
 <title>Making an ePub3 ebook </title>
 	<para>Content is required in chapters too.</para>
+
+<example xml:id="ex.customization.layer">
+<title>EPub3 customization layer</title>
+<programlisting>&lt;?xml version='1.0'?&gt;
+&lt;xsl:stylesheet  
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"&gt;
+
+&lt;xsl:import href="../docbook/epub3/chunk.xsl"/&gt;
+
+&lt;!-- Additional Stylesheet--&gt;
+&lt;xsl:param name="html.stylesheet" select="'carlos-new.css'"/&gt; 
+
+&lt;!-- Kindle extensions --&gt;
+&lt;xsl:param name="kindle.extensions" select="1"/&gt;
+
+&lt;!-- Use graphics for admonitions? --&gt;
+&lt;xsl:param name="admon.graphics" select="1"/&gt;
+
+&lt;!-- Callouts --&gt;
+&lt;xsl:param name="callout.graphics.extension"&gt;.png&lt;/xsl:param&gt;
+&lt;xsl:param name="callout.graphics.path"&gt;images/callouts/&lt;/xsl:param&gt;
+&lt;xsl:param name="callout.graphics" select="1"&gt;&lt;/xsl:param&gt;
+
+&lt;!-- Additional items to add to package.opf--&gt;
+&lt;xsl:template name="user.manifest.items"&gt;
+    &lt;item xmlns="http://www.idpf.org/2007/opf" id="font1" href="type/GraublauWeb.otf" 
+            media-type="application/vnd.ms-opentype"/&gt;
+    &lt;item xmlns="http://www.idpf.org/2007/opf" id="font2" href="type/GraublauWebBold.otf" 
+            media-type="application/vnd.ms-opentype"/&gt;
+    &lt;item xmlns="http://www.idpf.org/2007/opf" id="font3" href="type/DejaVuSansMono.ttf" 
+            media-type="application/vnd.ms-opentype"/&gt;
+&lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</programlisting>    
+</example>
 </sect1>
 
 <sect1 xml:id="convert.kindle">
