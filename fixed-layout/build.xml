@@ -49,14 +49,14 @@ Apache ant build file for Docbook based ebooks
 		<arg line="--stringparam base.dir OEBPS/ fixed_layout.xsl ${src_file}.xml"/>
 	</exec>
     <!-- make the display options file-->
+<!--
     <antcall target="make-display-options"/> 
-	<!-- Copy css stylesheet -->
 	<copy todir="META-INF">
 		<fileset dir=".">
 	      <include name="com.apple.ibooks.display-options.xml"/>
 	    </fileset>
 	</copy>	
-	<antcall target="copy-resources"/>
+-->	<antcall target="copy-resources"/>
 	<!-- zips the fils for the epub -->
 	<antcall target="epub-zip"/>
 	<!-- Runs epubcheck on the epub file -->

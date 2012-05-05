@@ -48,8 +48,7 @@
     exsl:document
 -->
 
-<!-- 
-<xsl:template match="/" mode = "create.options">
+<xsl:template match="*" mode = "create.options">
 <exsl:document href="com.apple.ibooks.display-options.xml" indent="yes" omit-xml-declaration="no" >
 &lt;display_options&gt;
 &lt;platform name="*"&gt;
@@ -59,5 +58,5 @@
 &lt;/platform&gt;
 &lt;/display_options&gt;
 </exsl:document>
-</xsl:template> -->
+</xsl:template>
 </xsl:stylesheet>
