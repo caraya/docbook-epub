@@ -58,6 +58,7 @@ Apache ant build file for Docbook based ebooks
 	<antcall target="epub-zip"/>
 	<!-- Runs epubcheck on the epub file -->
 	<antcall target="epub-check"/>
+	<!-- Make mobi/kindle book -->
 </target>
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
@@ -227,6 +228,7 @@ Apache ant build file for Docbook based ebooks
 			<delete verbose="true" dir="META-INF"/>
 			<delete verbose="true" dir="OEBPS"/>
 			<delete verbose="true" file="${src_file}.epub"/>
+			<delete verbose="true" file="${src_file}.mobi"/>
 		</then>
 		<else>
 			<echo message="Directory DOES NOT exist... Nothing to delete" />
