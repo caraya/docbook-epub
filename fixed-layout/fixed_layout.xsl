@@ -5,7 +5,7 @@
     exclude-prefixes="exsl" 
     version="1.0">
 
-<xsl:import href="../docbook/epub3/chunk.xsl"/>
+<xsl:import href="../../docbook/epub3/chunk.xsl"/>
 
 <!-- The two additional style sheets we're adding for ebook development-->
 <xsl:param name="html.stylesheet" select="'carlos-new.css'"/> 
@@ -15,7 +15,7 @@
 
 <!-- Element to add to the header of the individual chunks -->
 <xsl:template name="user.head.content">
-    <meta name="viewport" content="width=1200, height=1700"/>
+    <meta xmlns="http://www.w3.org/1999/xhtml" name="viewport" content="width=1200, height=1700"/>
 </xsl:template>
 <!-- Additional items to add to package.opf -->
 <xsl:template name="user.manifest.items">
@@ -25,7 +25,7 @@
 
 <!-- Work on fixed layout for epub3 books -->
 <!-- Right now it only works on Apple iBooks reader -->
-<xsl:template match="sect1[@role]">
+<xsl:template match="sect1[@role]" mode="class.value">
 <section> 
     <xsl:choose>
         <xsl:when test="@role = 'full-single'">
@@ -39,15 +39,16 @@
         </xsl:when>
     </xsl:choose>
     <xsl:apply-templates/>
-</div>
+</section>
 </xsl:template>
 
 <!-- 
     This hopefully will create the com.apple.ibooks.display-options.xml file that is 
-    required for fixed layout books. Eventually I'd like to move it to XSLT from ANT so that
-    we can run it with XSLTPROC only 
+    required for fixed layout books. Processor has to support exslt extensions, specifically
+    exsl:document
 -->
 
+<!-- 
 <xsl:template match="/" mode = "create.options">
 <exsl:document href="com.apple.ibooks.display-options.xml" indent="yes" omit-xml-declaration="no" >
 &lt;display_options&gt;
@@ -58,5 +59,5 @@
 &lt;/platform&gt;
 &lt;/display_options&gt;
 </exsl:document>
-</xsl:template>
+</xsl:template> -->
 </xsl:stylesheet>

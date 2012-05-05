@@ -1,4 +1,4 @@
-<project name="epub" default="epub3" basedir=".">
+<project name="epub" default="epub-fixed" basedir=".">
 <description>
 Apache ant build file for Docbook based ebooks
 </description>
@@ -46,18 +46,16 @@ Apache ant build file for Docbook based ebooks
 	<!-- Run the xslt transformation... we should be able to use the XSLT ant 
 	task but xsltproc is faster -->
 	<exec executable="${xsltproc_bin}">
-		<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
+		<arg line="--stringparam base.dir OEBPS/ fixed_layout.xsl ${src_file}.xml"/>
 	</exec>
-    <!-- make the display.options file-->
-    <echo file="com.apple.ibooks.display-options.xml">
-        <?xml version="1.0" encoding="UTF-8"?>
-        <display_options>
-        	<platform name="*">
-        	    <option name="fixed-layout">true</option>
-        	</platform>
-        </display_options>
-    </echo>
+    <!-- make the display options file-->
+    <antcall target="make-display-options"/> 
 	<!-- Copy css stylesheet -->
+	<copy todir="META-INF">
+		<fileset dir=".">
+	      <include name="com.apple.ibooks.display-options.xml"/>
+	    </fileset>
+	</copy>	
 	<antcall target="copy-resources"/>
 	<!-- zips the fils for the epub -->
 	<antcall target="epub-zip"/>
@@ -89,6 +87,18 @@ Apache ant build file for Docbook based ebooks
 	<exec executable="${xmllint_bin}">
 		<arg line="-noent -noout ${src_file}.xml"/>
 	</exec>
+</target>
+
+<target name="make-display-options">
+<echo file="com.apple.ibooks.display-options.xml">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;display_options&gt;
+&lt;platform name="*"&gt;
+    &lt;option name="fixed-layout"&gt;true&lt;/option&gt;
+&lt;/platform&gt;
+&lt;/display_options&gt;
+</echo>
+<echo message="Done creating com.apple.ibooks.display-options.xml"/>    
 </target>
 
 <target name="copy-resources">
@@ -195,6 +205,7 @@ Apache ant build file for Docbook based ebooks
 			<delete verbose="true" dir="META-INF"/>
 			<delete verbose="true" dir="OEBPS"/>
 			<delete verbose="true" file="${src_file}.epub"/>
+			<delete verbose="true" file="com.apple.ibooks.display-options.xml"/>
 		</then>
 		<else>
 			<echo message="Directory DOES NOT exist... Nothing to delete" />
