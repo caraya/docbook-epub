@@ -1,15 +1,10 @@
 <?xml version='1.0'?>
-<xsl:stylesheet  
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:exsl="http://exslt.org/common"
-    exclude-prefixes="exsl" 
-    version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:exsl="http://exslt.org/common" exclude-prefixes="exsl" version="1.0">
 
 <xsl:import href="../../docbook/epub3/chunk.xsl"/>
 
 <!-- The two additional style sheets we're adding for ebook development-->
-<xsl:param name="html.stylesheet" select="'carlos-new.css'"/> 
-<xsl:param name="html.stylesheet" select="'fixed-layout.css'"/>
+<xsl:param name="html.stylesheet" select="'carlos-new.css fixed-layout.css'"/> 
 <!-- Use graphics for admonitions -->
 <xsl:param name="admon.graphics" select="1"/>
 
@@ -48,15 +43,15 @@
     exsl:document
 -->
 
-<xsl:template match="*" mode = "create.options">
-<exsl:document href="com.apple.ibooks.display-options.xml" indent="yes" omit-xml-declaration="no" >
-&lt;display_options&gt;
-&lt;platform name="*"&gt;
-    &lt;option name="fixed-layout"&gt;true&lt;/option&gt;
-    &lt;option name="orientation-lock"&gt;landscape-only&lt;/option&gt;
-    &lt;option name="open-to-spread"&gt;true&lt;/option&gt;
-&lt;/platform&gt;
-&lt;/display_options&gt;
+<xsl:template match="/" mode = "create.options">
+<exsl:document href="com.apple.ibooks.display-options.xml" indent="yes" omit-xml-declaration="no">
+<display_options>
+<platform name="*">
+    <option name="fixed-layout">true</option>
+    <option name="orientation-lock">landscape-only</option>
+    <option name="open-to-spread">true</option>
+</platform>
+</display_options>
 </exsl:document>
 </xsl:template>
 </xsl:stylesheet>
