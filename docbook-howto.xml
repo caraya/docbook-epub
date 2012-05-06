@@ -346,7 +346,8 @@ body { <co xml:id="css.font.use"/>
 
 <para>The CSS file uses standard syntax to tell the book which fonts to use and where to get them from.</para>
 
-<para>There is one more thing we have to do. We need to use an XSL customization layer to add references to the fonts to the package file. The complete customization layer can be found in the section <link linkend="ex.customization.layer">Making an ePub3 ebook</link>.</para>
+<para>There is one more thing we have to do. We need to use an XSL customization layer to add references to the fonts to the package file. The complete customization layer can be found in the section <link linkend="epub3.customization.layer">Making an ePub3 ebook</link>.</para>
+
 <example xml:id="add.items.xsl">
 <title>Adding elements to the book manifest</title>
 <programlistingco>
@@ -378,16 +379,15 @@ body { <co xml:id="css.font.use"/>
 <title>Converting the XML into different formats</title>
 	<para>The main reason why I chose to work with Docbook is its flexibility. Starting from the same base document we can convert our files to HTML, PDF, EPub, WebHelp and many more. In this chapter we'll discuss converting our XML documents to ebook formats. Because of it's popularity we will also discuss how to generate MOBI files to be read with Kindle devices.</para>
 
-<sect1 xml:id="convert.epub2">
-	<title>Converting to ePub 2</title>
-	<para>Even though EPub 2.1 has been superseded by the new EPub 3 standard it is still in use by most ebook readers.</para>
-</sect1>
+<sect1 xml:id="convert.epub">
+	<title>Converting to ePub</title>
 
-<sect1 xml:id="convert.epub3">
-<title>Making an ePub3 ebook </title>
-	<para>Content is required in chapters too.</para>
 
-<example xml:id="ex.customization.layer">
+<sect2 xml:id="epub2">
+<title>Making EPub</title>
+
+<para>Even though the Ant build file supports creation of EPub 2 we have decided to stay </para>
+<example xml:id="epub3.customization.layer">
 <title>EPub3 customization layer</title>
 <programlisting>&lt;?xml version='1.0'?&gt;
 &lt;xsl:stylesheet  
@@ -420,6 +420,7 @@ body { <co xml:id="css.font.use"/>
 &lt;/xsl:template&gt;
 &lt;/xsl:stylesheet&gt;</programlisting>    
 </example>
+</sect2>
 </sect1>
 
 <sect1 xml:id="convert.kindle">
