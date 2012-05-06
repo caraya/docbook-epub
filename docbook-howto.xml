@@ -358,10 +358,10 @@ body { <co xml:id="css.font.use"/>
 
 &lt;!-- Additional items to add to package.opf--&gt; 
 &lt;xsl:template name="user.manifest.items"&gt; <co xml:id="db.add.to.manifest"/>
-    &lt;item xmlns="http://www.idpf.org/2007/opf" 
-        id="font1" 
-        href="type/GraublauWeb.otf" 
-        media-type="application/vnd.ms-opentype"/&gt;
+  &lt;item xmlns="http://www.idpf.org/2007/opf" 
+    id="font1" 
+    href="type/GraublauWeb.otf" 
+    media-type="application/vnd.ms-opentype"/&gt;
 &lt;/xsl:template&gt;
 &lt;/xsl:stylesheet&gt;
 </programlisting>
