@@ -1108,8 +1108,4 @@ use the XSLT ant task but xsltproc is faster --&gt;
 	</bibliomset>
 </bibliomixed>
 </bibliography>
-
-<colophon>
-<para>Draft versions of this book were produced with the Docbook XML stylesheets.</para>
-</colophon>
 </book>
