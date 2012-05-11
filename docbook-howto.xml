@@ -666,7 +666,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>We copy all the resources (CSS, JavaScript, font files and images) into the eBook directory. We need to be careful when copying the content; ePub validation will fail if either the file exists in the zipped archive but is not referenced in the manifest or if the file is referenced in the manifest but doesn't exist in the zipped archive.  </para>
 
-<para>We ended up creating a condition where we ask Ant: "If the directory (CSS, for example) exists then copy its content into the corresponding directory inside OEBPS (our eBook content directory), otherwise skip it.  Then do the same for the remaining directories (JS, video and images). EPubcheck, our EPub validator is very picky so we need to be very careful when building our ebook content.</para>
+<para>We ended up creating a condition where we ask Ant: "If the directory (CSS, for example) exists then copy its content into the corresponding directory inside OEBPS (our eBook content directory), otherwise skip it.  Then do the same for the remaining directories (JS, video and images). EPubcheck, our EPub validator, is very picky so we need to be very careful when building our ebook content.</para>
 
 <para>We are now ready to zip the file following the instructions for generating a zip file by adding the mimetype first without compression and then adding the rest of the files compressed. </para>
 
@@ -696,11 +696,11 @@ use the XSLT ant task but xsltproc is faster --&gt;
 <sect2 xml:id="ant.make.kindle">
 	<title>make-kindle</title>
 
-<para>Given a valid EPub 2 zip file this target will create and validate the mobi file for Kindle and other devices supporting the format. This is a proprietary tool and may add encryption to the file (don't have a way verify this without a Kindle device)</para>
+<para>Given a valid EPub 2 zip file this target will create and validate the mobi file for Kindle and other devices supporting the format. This is a proprietary tool andconverts the file into a binary application, making it impossible for us to view the content of the Kindle file.</para>
 
 <para>This is an Ant wrapper around the kindlegen application available from Amazon.</para>
 
-<example xml:id="task.make-kindle">
+<example xml:id="task.make.kindle">
 <title>make-kindle Ant target</title>
 <programlisting>&lt;target name="make-kindle"&gt;
 &lt;exec executable="${kindlegen_bin}"&gt;
