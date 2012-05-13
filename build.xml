@@ -95,7 +95,7 @@ Apache ant build file for Docbook based ebooks
 <!-- We call xmllint to make sure that the XML validates-->
 <target name="validate-xml">
 	<exec executable="${xmllint_bin}">
-		<arg line="-noent -noout ${src_file}.xml"/>
+		<arg line="-nonet -noout ${src_file}.xml"/>
 	</exec>
 </target>
 
