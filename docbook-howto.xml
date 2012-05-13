@@ -377,16 +377,12 @@ body { <co xml:id="css.font.use"/>
 
 <chapter xml:id="transformation">
 <title>Converting the XML into different formats</title>
-	<para>The main reason why I chose to work with Docbook is its flexibility. Starting from the same base document we can convert our files to HTML, PDF, EPub, WebHelp and many more. In this chapter we'll discuss converting our XML documents to ebook formats. Because of it's popularity we will also discuss how to generate MOBI files to be read with Kindle devices.</para>
+	<para>The main reason why I chose to work with Docbook is its flexibility. Starting from the same base xml document we can convert our files to HTML, PDF, and EPub (among others). In this chapter we'll discuss converting our XML documents to ebook formats. Because of it's popularity we will also discuss how to generate MOBI files to be read with Kindle devices.</para>
 
-<sect1 xml:id="convert.epub">
-	<title>Converting to ePub</title>
-
-
-<sect2 xml:id="making.epub">
+<sect1 xml:id="making.epub">
 <title>Making EPub</title>
 
-<para>Even though the Ant build file supports creation of EPub 2 we have decided to stay with EPub 3 as out default publication format. The conversion tools for EPub 2 have bugs that make it hard to work with the resulting HTML content for; The set of tools for EPub 3 are in active development and bugs are fixed shortly after they are reported. I've had to wait no more than 24 hours between reporting a bug and having a solution implemented.</para>
+<para>Even though the Ant build file supports creation of EPub 2 we have decided to stay with EPub 3 as out default publication format. The conversion tools for EPub 2 have bugs that make it hard to work with the resulting HTML content for; The set of tools for EPub 3 are in active development and bugs are fixed shortly after they are reported. I've never had to wait long before getting a fix or a solution for a problem I've reported.</para>
 
 <example xml:id="epub3.customization.layer">
 <title>EPub3 customization layer</title>
@@ -412,16 +408,21 @@ body { <co xml:id="css.font.use"/>
 
 &lt;!-- Additional items to add to package.opf--&gt;
 &lt;xsl:template name="user.manifest.items"&gt;
-    &lt;item xmlns="http://www.idpf.org/2007/opf" id="font1" href="type/GraublauWeb.otf" 
-            media-type="application/vnd.ms-opentype"/&gt;
-    &lt;item xmlns="http://www.idpf.org/2007/opf" id="font2" href="type/GraublauWebBold.otf" 
-            media-type="application/vnd.ms-opentype"/&gt;
-    &lt;item xmlns="http://www.idpf.org/2007/opf" id="font3" href="type/DejaVuSansMono.ttf" 
-            media-type="application/vnd.ms-opentype"/&gt;
+    &lt;item xmlns="http://www.idpf.org/2007/opf" 
+        id="font1" 
+        href="type/GraublauWeb.otf" 
+        media-type="application/vnd.ms-opentype"/&gt;
+    &lt;item xmlns="http://www.idpf.org/2007/opf" 
+        id="font2" 
+        href="type/GraublauWebBold.otf" 
+        media-type="application/vnd.ms-opentype"/&gt;
+    &lt;item xmlns="http://www.idpf.org/2007/opf" 
+        id="font3" 
+        href="type/DejaVuSansMono.ttf" 
+        media-type="application/vnd.ms-opentype"/&gt;
 &lt;/xsl:template&gt;
 &lt;/xsl:stylesheet&gt;</programlisting>    
 </example>
-</sect2>
 </sect1>
 
 <sect1 xml:id="convert.kindle">
@@ -549,8 +550,8 @@ without extension--&gt;
 --&gt;
 &lt;property name="saxon_bin" value="/usr/local/java/saxon.jar"/&gt;
 &lt;property name="fop_bin" value="/usr/local/java/fop/fop"/&gt;
-&lt;property name="epubcheck_bin" value="/usr/local/java/epubcheck/\
-    epubcheck-3.0b4.jar"/&gt;
+&lt;property name="epubcheck_bin" 
+        value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/&gt;
 &lt;property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/&gt;
 &lt;property name="xsltproc_bin" value="/usr/bin/xsltproc"/&gt;
 &lt;property name="xmllint_bin" value="/usr/bin/xmllint"/&gt;
@@ -581,7 +582,7 @@ without extension--&gt;
 
 <para>EPub 2 is the older version of the standard and, as such, has a more limited set of features than the more recent EPub 3 standard (see below). This target and the one below make extensive use of the auxiliary tasks listed under <emphasis>Secondary Targets</emphasis>. We set up the targets like this because there may be times when we want to execute the secondary targets on their own without generating the enter epub file again.</para>
 
-<para>For example: Let's say that we made a change to the CSS stylesheets for the book. We could generate the HTML files all over again by calling the epub2 task or we could just copy the CSS file using the copy-css target (called as part of copy-resources) and then epub-zip to compress it all together and epub-check to validate the resulting EPub document.</para>
+<para>For example: Let's say that we made a change to the CSS stylesheets for the book. We could generate the HTML files all over again by calling the epub2 task or we could just copy the CSS file using the copy-css target and then use epub-zip to compress it all together and epub-check to validate the resulting EPub document.</para>
 
 <example xml:id="task.epub2">
 <title>EPub 2 Ant target</title>
@@ -903,19 +904,19 @@ use the XSLT ant task but xsltproc is faster --&gt;
 <sect1 xml:id="ant.validation">
 	<title>Validation</title>
 
-<para>In addition to validating the output of the Ebook and having Ant, XSLTProc and Saxon validate our content to make sure it is correct we also validate it manually using xmllint (part of the libxml project). </para>
+<para>In addition to validating the output of the Ebook and having Ant, XSLTProc and Saxon validate our content to make sure it is correct we also validate it manually using xmllint (part of the libxml project). This will validate the structure of your XML document (making sure that all tags are properly closed) and syntax (making sure that there are no incorrectly nested tags); it will not validate the build file, Ant will take care of that.</para>
 
 <sect2 xml:id="ant.validate.xml">
 	<title>validate-xml</title>
 
-<para>We call xmllint and tell it to suppress its output if it's successful and not to go online to complete its validation of our xml file. </para>
+<para>We call xmllint and tell it to suppress its output if it's successful (-noout) and not to go online to complete its validation of our xml file (-nonet). </para>
 
 <example xml:id="task.validate-xml">
 <title>copy-resources Ant target</title>
 <programlisting>&lt;!-- We call xmllint to make sure that the XML validates--&gt;
 &lt;target name="validate-xml"&gt;
 &lt;exec executable="${xmllint_bin}"&gt;
-	&lt;arg line="-noent -noout ${src_file}.xml"/&gt;
+	&lt;arg line="-nonet -noout ${src_file}.xml"/&gt;
 &lt;/exec&gt;
 &lt;/target&gt;
 </programlisting>
@@ -1019,7 +1020,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 </sect1>
 </chapter>
 
-<chapter xml:id="pulishing">
+<chapter xml:id="publishing">
 <title>Publishing your content</title>
 
 <para>This is where we talk about publishing your content yourself, publishing to Amazon and, maybe, to the iBooks store</para>
@@ -1027,8 +1028,18 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <chapter xml:id="looking.forward">
     <title>Looking forward: What's next?</title>
-    <para>EPub 3 also opens the door to further bluring of the difference between books and web applications. Part of the EPub specification is the Fixed Layout Documents (the specification is available at <link xlink:href="http://idpf.org/epub/fxl/">http://idpf.org/epub/fxl/</link>) that allow for absolute positioning of content, 1 or 2-page spreads, text overlays and other neat publishing tricks and effect.</para>
+    <sect1>
+        <title>Pushing the boundaries of EPub</title>
+    <para>EPub 3 also opens the door to further bluring of the difference between books, web sites and web applications. Part of the EPub specification is the Fixed Layout Documents (the specification is available at <link xlink:href="http://idpf.org/epub/fxl/">http://idpf.org/epub/fxl/</link>) that allow for absolute positioning of content, 1 or 2-page spreads, text overlays and other neat publishing tricks and effect.</para>
     
+    <para>fully exploring what we can do with an epub book, specifically content switching (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch</link>) and scripting epub books (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content</link>)</para>
+    
+    <para>Media Overlays can add synchronized audio to the text. <link xlink:href="http://idpf.org/epub/30/spec/epub30-mediaoverlays.html">http://idpf.org/epub/30/spec/epub30-mediaoverlays.html</link></para>
+    </sect1>
+    <sect1>
+        <title>We can do more with Docbook itself</title>
+        <para>Modular content with Docbook</para>
+    </sect1>
 </chapter>
 <bibliography>
 <title>References</title>
