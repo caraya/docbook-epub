@@ -21,6 +21,10 @@
 <xsl:param name="callout.graphics.path">images/callouts/</xsl:param>
 <xsl:param name="callout.graphics" select="1"></xsl:param>
 
+<!-- Control Chunking Behavior -->
+<xsl:param name="chunk.section.depth" select="0"/>
+<xsl:param name="chunk.first.sections" select="0"/>
+
 <!-- Additional items to add to package.opf-->
 <xsl:template name="user.manifest.items">
     <item xmlns="http://www.idpf.org/2007/opf" id="font1" href="type/GraublauWeb.otf" media-type="application/vnd.ms-opentype"/>
