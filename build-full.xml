@@ -139,7 +139,8 @@ the way I want to
 	<antcall target="validate-xml"/>
 	<!-- Run the stylesheet conversion -->
 	<exec executable="${xsltproc_bin}">
-		<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
+		<arg value="carlos-chunk2.xsl"/>
+		<arg value="${src_file}.xml"/> 
 	</exec>
 	<!-- Copy media resources -->
 	<antcall target="copy-images"/>
@@ -169,23 +170,24 @@ the way I want to
 	<antcall target="epub-zip"/>
 	<!-- Runs epubcheck on the epub file -->
 	<antcall target="epub-check"/>
+	<!-- Make mobi/kindle book -->
 </target>
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
 <target name="make-mime">
-<!-- Creates mimetype file as required by epub spec-->
-<echo file="mimetype">application/epub+zip</echo>
+	<!-- Creates mimetype file as required by epub spec-->
+	<echo file="mimetype">application/epub+zip</echo>
 </target>
 
 <target name="make-kindle">
-<exec executable="${kindlegen_bin}">
-	<arg line="${src_file}.epub"/>
-</exec>
+	<exec executable="${kindlegen_bin}">
+		<arg line="${src_file}.epub"/>
+	</exec>
 </target>
 
 <target name="epub-zip">
-	<!-- We use exec zip because I can't figure out if the builtin zip task conforms to
-	     what ePub expects -->
+	<!-- We use exec zip because I can't figure out if the builtin zip task 
+	conforms to what ePub expects -->
 	<!-- Zip the mimetype first without compression as required-->
 	<exec executable="zip">
 		<arg line="-X0 ${src_file}.epub mimetype"/>
@@ -204,16 +206,12 @@ the way I want to
 
 <!-- We call xmllint to make sure that the XML validates-->
 <target name="validate-xml">
-	<exec executable="${xmllint_bin}" failonerror="true">
-		<arg line="-noent -noout ${src_file}.xml"/>
+	<exec executable="${xmllint_bin}">
+		<arg line="-nonet -noout ${src_file}.xml"/>
 	</exec>
 </target>
 
-<!-- Download the docbook snapshot. Ignore this target if you're working offline
-
-     Do not delete the docbook.zip file. This will be compared with the remote file
-     to determine if the file has to be downloaded or not
--->
+<!-- Download the docbook snapshot. Ignore this target if you're working offline -->
 <target name="get-xsl">
 	<mkdir dir="docbook"/>
 	<get 
@@ -233,7 +231,7 @@ the way I want to
 			<include name="**/*"/>
 		</fileset>
 	</move>
-	<delte dir="docbook"/>
+	<delete dir="docbook"/>
 </target>
 
 <target name="copy-resources">
@@ -243,18 +241,17 @@ the way I want to
 	<antcall target="copy-images"/>
 	<antcall target="copy-fonts"/>
 </target>
-
 <target name="copy-videos">
 	<if>
 		<available file="video" type="dir"/>
 		<then>
-			<copy todir="OEBPS/video">
-				<fileset dir="video/">
-					<include name="*.mp4"/>
-					<include name="*.png"/>
-					<include name="*.jpg"/>
-				</fileset>
-			</copy>
+		<copy todir="OEBPS/video">
+			<fileset dir="video/">
+				<include name="*.mp4"/>
+				<include name="*.png"/>
+				<include name="*.jpg"/>
+			</fileset>
+		</copy>
 		</then>
 		<else>
 			<echo message="No videos to copy"/>
@@ -298,23 +295,23 @@ the way I want to
 		</then>
 		<else>
 			<!-- There are no fonts... tough luck buddy -->
-			<echo message="There are no fonts available" />
+			<fail message="There are no fonts available" />
 		</else>
 	</if>	
 </target>
 
 <target name="copy-css">
 	<if>
-		<available file="css" type="dir"/>
+		<available file="css" type="dir" />
 		<then>
 			<copy todir="OEBPS">
-				<fileset dir="css" casesensitive="yes">
-				  <include name="*.css"/>
-				</fileset>
+				<fileset dir="css/">
+			      <include name="*.css"/>
+			    </fileset>
 			</copy>
 		</then>
 		<else>
-			<echo message="no style sheet to copy"/>
+			<fail message="No CSS files available!"/>
 		</else>
 	</if>
 </target>
@@ -370,15 +367,14 @@ the way I want to
 <!-- Cleans up leftover epub stuff-->
 <target name="epub-clean">
 	<!-- 
-	If OEBPS exists we assume the other files and directories 
-	do as well.
-	There is one instance where only the OEBPS directory is 
-	created and that is if we have a syntax error from xmllint. 
-	It's not frequent enough and the  solution is to delete OEBPS 
-	manually.
+	If OEBPS exists we assume the other files and directories do as well
+	since Docbook would never create only OEBPS. 
 
-	we use the if task from ant-contrib available from 
-	sourceforge.net. 
+	There is one instance where only the OEBPS directory is created and that
+	is if we have a syntax error from xmllint. It's not frequent enough and the 
+	solution is to delete OEBPS manually.
+
+	we use the if task from ant-contrib available from sourceforge.net. 
 	-->
 	<if>
 		<available file="OEBPS" type="dir" />
@@ -392,12 +388,11 @@ the way I want to
 			<delete verbose="true" dir="META-INF"/>
 			<delete verbose="true" dir="OEBPS"/>
 			<delete verbose="true" file="${src_file}.epub"/>
+			<delete verbose="true" file="${src_file}.mobi"/>
 		</then>
 		<else>
-			<echo message="Nothing to delete" />
+			<echo message="Directory DOES NOT exist... Nothing to delete" />
 		</else>
 	</if>
 </target>
-
-
 </project>
