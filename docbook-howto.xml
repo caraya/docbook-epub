@@ -1039,6 +1039,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
     <sect1>
         <title>We can do more with Docbook itself</title>
         <para>Modular content with Docbook</para>
+        
+        <para>Collaborative writing using Git</para>
     </sect1>
 </chapter>
 <bibliography>
