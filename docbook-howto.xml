@@ -383,10 +383,11 @@ body { <co xml:id="css.font.use"/>
 	<title>Converting to ePub</title>
 
 
-<sect2 xml:id="epub2">
+<sect2 xml:id="making.epub">
 <title>Making EPub</title>
 
-<para>Even though the Ant build file supports creation of EPub 2 we have decided to stay </para>
+<para>Even though the Ant build file supports creation of EPub 2 we have decided to stay with EPub 3 as out default publication format. The conversion tools for EPub 2 have bugs that make it hard to work with the resulting HTML content for; The set of tools for EPub 3 are in active development and bugs are fixed shortly after they are reported. I've had to wait no more than 24 hours between reporting a bug and having a solution implemented.</para>
+
 <example xml:id="epub3.customization.layer">
 <title>EPub3 customization layer</title>
 <programlisting>&lt;?xml version='1.0'?&gt;
@@ -1024,6 +1025,11 @@ use the XSLT ant task but xsltproc is faster --&gt;
 <para>This is where we talk about publishing your content yourself, publishing to Amazon and, maybe, to the iBooks store</para>
 </chapter>
 
+<chapter xml:id="looking.forward">
+    <title>Looking forward: What's next?</title>
+    <para>EPub 3 also opens the door to further bluring of the difference between books and web applications. Part of the EPub specification is the Fixed Layout Documents (the specification is available at <link xlink:href="http://idpf.org/epub/fxl/">http://idpf.org/epub/fxl/</link>) that allow for absolute positioning of content, 1 or 2-page spreads, text overlays and other neat publishing tricks and effect.</para>
+    
+</chapter>
 <bibliography>
 <title>References</title>
 
