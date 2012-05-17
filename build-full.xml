@@ -6,15 +6,49 @@
 
 <!-- Required for the IF and SWITCH Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+<!-- Using macrodef to simplify tasks -->
 <!-- Experimental Support for Marcodef to make init and html build targets more modular -->
-<macrodef name="fixed-layout">
-	<attribute name="" default=""/>
-	<attribute name="" default=""/>
-	<sequential>
-	    
-	</sequential>
+<macrodef name="init">
+<attribute name="dest" default="html_content"/>
+    <sequential>
+        <if>
+            <available file="@{dest}" type="dir" />
+        <then>
+            <echo message="Directory @{dest} exist... skiping" />
+        </then>
+        <else>
+            <echo>Creating directory</echo>
+            <mkdir dir="@{dest}/"/>
+            <echo>Creating CSS directory</echo>
+            <mkdir dir="@{dest}/css"/>
+            <echo>Creating JS directory</echo>
+            <mkdir dir="@{dest}/js"/>
+            <echo>Creating image directory</echo>
+            <mkdir dir="@{dest}/images"/>
+        </else>
+        </if>
+        <!--
+        Copy CSS, JS and any images into their directories
+        -->
+        <copy todir="@{dest}/css">
+            <fileset dir="css" casesensitive="yes">
+                <include name="*.css"/>
+            </fileset>
+        </copy>
+        <copy todir="@{dest}/js">
+            <fileset dir="js" casesensitive="yes">
+                <include name="*.js"/>
+            </fileset>
+        </copy>
+        <copy todir="@{dest}/images">
+            <fileset dir="images" casesensitive="yes">
+                <include name="*.jpg"/>
+                <include name="*.gif"/>
+                <include name="*.png"/>
+            </fileset>
+        </copy>
+    </sequential>
 </macrodef>
-
 <!-- Change the value of src_file to the name of your ebook file -->
 <property name="src_file" value="docbook-howto"/>
 
@@ -294,7 +328,10 @@ the way I want to
 			  </copy>
 		</then>
 		<else>
-			<!-- There are no fonts... tough luck buddy -->
+			<!--
+			    There are no fonts... We fail here to prevent validation 
+			    errors later in the build process 
+			-->
 			<fail message="There are no fonts available" />
 		</else>
 	</if>	
@@ -311,6 +348,10 @@ the way I want to
 			</copy>
 		</then>
 		<else>
+			<!--
+			    There are no stylesheets... We fail here to prevent validation 
+			    errors later in the build process 
+			-->
 			<fail message="No CSS files available!"/>
 		</else>
 	</if>
