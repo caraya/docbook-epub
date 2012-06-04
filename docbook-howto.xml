@@ -112,7 +112,7 @@
 
 	<para>In the last couple years, the Docbook community has expanded the range of formats and it now includes ePub3. It's easier than ever to create content in a document neutral format and then convert it to HTML, PDF and ePub without bigger effort than creating customizations to the stock <link xlink:href="http://docbook.sourceforge.net/">style sheets</link> which we can then reuse on future projects.</para>
 </sect1>
-</preface>
+</preface> 
 
 <chapter xml:id="create">
 <title>Why should I create an ebook? Why with Docbook?</title>
