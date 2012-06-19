@@ -31,7 +31,7 @@ Apache ant build file for Docbook based ebooks
 		<arg value="${src_file}.xml"/> 
 	</exec>
 	<!-- Copy media resources -->
-	<antcall target="copy-images"/>
+    <antcall target="copy-images"/>
 	<!-- Create mimetype file, required per epub spec -->
 	<antcall target="make-mime"/>
 	<!-- zips the fills for the epub -->
@@ -124,43 +124,72 @@ Apache ant build file for Docbook based ebooks
 
 <target name="copy-resources">
 	<!-- Macro Task to copy resouces into OEBPS-->
-	<antcall target="copy-css"/>
-	<antcall target="copy-videos"/>
-	<antcall target="copy-images"/>
-	<antcall target="copy-fonts"/>
-</target>
-<target name="copy-videos">
 	<if>
-		<available file="video" type="dir"/>
-		<then>
-		<copy todir="OEBPS/video">
-			<fileset dir="video/">
-				<include name="*.mp4"/>
-				<include name="*.png"/>
-				<include name="*.jpg"/>
-			</fileset>
-		</copy>
-		</then>
-		<else>
-			<echo message="No videos to copy"/>
-		</else>
-	</if>
+        <length length="0" when="greater">
+            <fileset dir="css" followsymlinks="false"/>
+        </length>
+        <then>
+            <!-- Dir Not Empty -->
+        	<antcall target="copy-css"/>
+         </then>
+         <else>
+            <echo message="Directory CSS is empty. Nothing to copy"/>
+         </else>
+     </if>
+ 	<if>
+         <length length="0" when="greater">
+             <fileset dir="video" followsymlinks="false"/>
+         </length>
+         <then>
+             <!-- Dir Not Empty -->
+         	<antcall target="copy-videos"/>
+          </then>
+          <else>
+             <echo message="Directory VIDEO is empty. Nothing to copy"/>
+          </else>
+      </if>
+	<if>
+        <length length="0" when="greater">
+            <fileset dir="images" followsymlinks="false"/>
+        </length>
+        <then>
+            <!-- Dir Not Empty -->
+            <antcall target="copy-images"/>
+         </then>
+         <else>
+            <echo message="Directory images is empty. Nothing to copy"/>
+         </else>
+     </if>
+ 	<if>
+         <length length="0" when="greater">
+             <fileset dir="type" followsymlinks="false"/>
+         </length>
+         <then>
+             <!-- Dir Not Empty -->
+         	<antcall target="copy-fonts"/>
+          </then>
+          <else>
+             <echo message="Directory type is empty. Nothing to copy"/>
+          </else>
+      </if>
+</target>
+
+<target name="copy-videos">
+	<copy todir="OEBPS/video">
+		<fileset dir="video/">
+			<include name="*.mp4"/>
+			<include name="*.png"/>
+			<include name="*.jpg"/>
+		</fileset>
+	</copy>
 </target>
 
 <target name="copy-images">
-	<if>
-		<available file="images" type="dir"/>
-		<then>
-			<copy todir="OEBPS/images">
-				<fileset dir="images" casesensitive="yes">
-				  <include name="**/*"/>
-				</fileset>
-			</copy>
-		</then>
-		<else>
-			<echo message="no images to copy"/>
-		</else>
-	</if>
+	<copy todir="OEBPS/images">
+		<fileset dir="images" casesensitive="yes">
+		  <include name="**/*"/>
+		</fileset>
+	</copy>
 </target>
 
 <target name="copy-fonts">
