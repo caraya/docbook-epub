@@ -195,7 +195,9 @@ Apache ant build file for Docbook based ebooks
 <target name="copy-fonts">
 	<if>
 		<!-- Check if the type directory exists-->
-		<available file="type" type="dir" />
+        <length length="0" when="greater">
+            <fileset dir="type" followsymlinks="false"/>
+        </length>
 		<then>
 			<!-- If it is then do this:
 		
@@ -219,7 +221,9 @@ Apache ant build file for Docbook based ebooks
 
 <target name="copy-css">
 	<if>
-		<available file="css" type="dir" />
+        <length length="0" when="greater">
+            <fileset dir="css" followsymlinks="false"/>
+        </length>
 		<then>
 			<copy todir="OEBPS">
 				<fileset dir="css/">
