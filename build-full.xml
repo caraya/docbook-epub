@@ -24,6 +24,8 @@
 				<mkdir dir="@{dest}/js"/>
 				<echo>Creating image directory</echo>
 				<mkdir dir="@{dest}/images"/>
+	            <echo>Creating video directory</echo>
+	            <mkdir dir="@{dest}/video"/>
 			</else>
 		</if>
 		<!-- 
@@ -46,6 +48,13 @@
 			  <include name="*.png"/>
 			</fileset>
 		</copy>
+		<copy todir="@{dest}/video">
+			<fileset dir="video" casesensitive="yes">
+            	<include name="*.mp4"/>
+                <include name="*.jpg"/>
+                <include name="*.png"/>
+            </fileset>
+        </copy>
 	</sequential>
 </macrodef>
 
@@ -194,8 +203,6 @@ task but xsltproc is faster -->
 	<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
 </exec>
 <!-- Copy media resources -->
-<antcall target="copy-resources"/>
-<!-- Copy css stylesheet -->
 <antcall target="copy-resources"/>
 <!-- zips the fils for the epub -->
 <antcall target="epub-zip"/>
