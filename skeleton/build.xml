@@ -27,10 +27,11 @@ Apache ant build file for Docbook based ebooks
 	<antcall target="validate-xml"/>
 	<!-- Run the stylesheet conversion -->
 	<exec executable="${xsltproc_bin}">
-		<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
+		<arg value="carlos-chunk2.xsl"/>
+		<arg value="${src_file}.xml"/> 
 	</exec>
-	<!-- Copy images -->
-	<antcall target="copy-images"/>
+	<!-- Copy media resources -->
+    <antcall target="copy-images"/>
 	<!-- Create mimetype file, required per epub spec -->
 	<antcall target="make-mime"/>
 	<!-- zips the fills for the epub -->
@@ -57,6 +58,7 @@ Apache ant build file for Docbook based ebooks
 	<antcall target="epub-zip"/>
 	<!-- Runs epubcheck on the epub file -->
 	<antcall target="epub-check"/>
+	<!-- Make mobi/kindle book -->
 </target>
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
@@ -93,7 +95,7 @@ Apache ant build file for Docbook based ebooks
 <!-- We call xmllint to make sure that the XML validates-->
 <target name="validate-xml">
 	<exec executable="${xmllint_bin}">
-		<arg line="-noent -noout ${src_file}.xml"/>
+		<arg line="-nonet -noout ${src_file}.xml"/>
 	</exec>
 </target>
 
@@ -122,45 +124,72 @@ Apache ant build file for Docbook based ebooks
 
 <target name="copy-resources">
 	<!-- Macro Task to copy resouces into OEBPS-->
-	<antcall target="copy-css"/>
-	<antcall target="copy-videos"/>
-	<antcall target="copy-images"/>
-	<antcall target="copy-fonts"/>
-</target>
-<target name="copy-videos">
 	<if>
-		<available file="video" type="dir"/>
-		<then>
-		<copy todir="OEBPS/video">
-			<fileset dir="video/">
-				<include name="*.mp4"/>
-				<include name="*.png"/>
-				<include name="*.jpg"/>
-			</fileset>
-		</copy>
-		</then>
-		<else>
-			<echo message="No videos to copy"/>
-		</else>
-	</if>
+        <length length="0" when="greater">
+            <fileset dir="css" followsymlinks="false"/>
+        </length>
+        <then>
+            <!-- Dir Not Empty -->
+        	<antcall target="copy-css"/>
+         </then>
+         <else>
+            <echo message="Directory CSS is empty. Nothing to copy"/>
+         </else>
+     </if>
+ 	<if>
+         <length length="0" when="greater">
+             <fileset dir="video" followsymlinks="false"/>
+         </length>
+         <then>
+             <!-- Dir Not Empty -->
+         	<antcall target="copy-videos"/>
+          </then>
+          <else>
+             <echo message="Directory VIDEO is empty. Nothing to copy"/>
+          </else>
+      </if>
+	<if>
+        <length length="0" when="greater">
+            <fileset dir="images" followsymlinks="false"/>
+        </length>
+        <then>
+            <!-- Dir Not Empty -->
+            <antcall target="copy-images"/>
+         </then>
+         <else>
+            <echo message="Directory images is empty. Nothing to copy"/>
+         </else>
+     </if>
+ 	<if>
+         <length length="0" when="greater">
+             <fileset dir="type" followsymlinks="false"/>
+         </length>
+         <then>
+             <!-- Dir Not Empty -->
+         	<antcall target="copy-fonts"/>
+          </then>
+          <else>
+             <echo message="Directory type is empty. Nothing to copy"/>
+          </else>
+      </if>
+</target>
+
+<target name="copy-videos">
+	<copy todir="OEBPS/video">
+		<fileset dir="video/">
+			<include name="*.mp4"/>
+			<include name="*.png"/>
+			<include name="*.jpg"/>
+		</fileset>
+	</copy>
 </target>
 
 <target name="copy-images">
-	<if>
-		<available file="images" type="dir"/>
-		<then>
-			<copy todir="OEBPS/images">
-				<fileset dir="images" casesensitive="yes">
-				  <include name="*.jpg"/>
-				  <include name="*.gif"/>
-				  <include name="*.png"/>
-				</fileset>
-			</copy>
-		</then>
-		<else>
-			<echo message="no images to copy"/>
-		</else>
-	</if>
+	<copy todir="OEBPS/images">
+		<fileset dir="images" casesensitive="yes">
+		  <include name="**/*"/>
+		</fileset>
+	</copy>
 </target>
 
 <target name="copy-fonts">
@@ -168,13 +197,18 @@ Apache ant build file for Docbook based ebooks
 		<!-- Check if the type directory exists-->
 		<available file="type" type="dir" />
 		<then>
+			<!-- If it is then do this:
+		
+				1. Make the OEBPS type directory
+				2. copy all fonts except those starting with Calluna 
+			       to the OEBPS/type directory -->
 			<echo message="Directory exist... copying font files" />
 			<mkdir dir="OEBPS/type"/>
-		    <copy todir="OEBPS/type">
-		        <fileset dir="type/">
-                    <exclude name="Calluna*.*"/>
-		        </fileset>
-		    </copy>
+			 <copy todir="OEBPS/type">
+			    <fileset dir="type/">
+			      <exclude name="Calluna*.*"/>
+			    </fileset>
+			  </copy>
 		</then>
 		<else>
 			<!-- There are no fonts... tough luck buddy -->
@@ -223,6 +257,7 @@ Apache ant build file for Docbook based ebooks
 			<delete verbose="true" dir="META-INF"/>
 			<delete verbose="true" dir="OEBPS"/>
 			<delete verbose="true" file="${src_file}.epub"/>
+			<delete verbose="true" file="${src_file}.mobi"/>
 		</then>
 		<else>
 			<echo message="Directory DOES NOT exist... Nothing to delete" />
