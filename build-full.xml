@@ -25,6 +25,8 @@
             <mkdir dir="@{dest}/js"/>
             <echo>Creating image directory</echo>
             <mkdir dir="@{dest}/images"/>
+            <echo>Creating video directory</echo>
+            <mkdir dir="@{dest}/video"/>
         </else>
         </if>
         <!--
@@ -47,8 +49,16 @@
                 <include name="*.png"/>
             </fileset>
         </copy>
+        <copy todir="@{dest}/video">
+            <fileset dir="video" casesensitive="yes">
+                <include name="*.mp4"/>
+                <include name="*.jpg"/>
+                <include name="*.png"/>
+            </fileset>
+        </copy>
     </sequential>
 </macrodef>
+
 <!-- Change the value of src_file to the name of your ebook file -->
 <property name="src_file" value="docbook-howto"/>
 
@@ -275,9 +285,12 @@ the way I want to
 	<antcall target="copy-images"/>
 	<antcall target="copy-fonts"/>
 </target>
+
 <target name="copy-videos">
 	<if>
-		<available file="video" type="dir"/>
+        <length length="0" when="greater">
+           <fileset dir="video" followsymlinks="false"/>
+         </length>
 		<then>
 		<copy todir="OEBPS/video">
 			<fileset dir="video/">
@@ -295,7 +308,9 @@ the way I want to
 
 <target name="copy-images">
 	<if>
-		<available file="images" type="dir"/>
+	    <length length="0" when="greater">
+           <fileset dir="images" followsymlinks="false"/>
+        </length>
 		<then>
 			<copy todir="OEBPS/images">
 				<fileset dir="images" casesensitive="yes">
@@ -312,7 +327,9 @@ the way I want to
 <target name="copy-fonts">
 	<if>
 		<!-- Check if the type directory exists-->
-		<available file="type" type="dir" />
+        <length length="0" when="greater">
+           <fileset dir="type" followsymlinks="false"/>
+         </length>
 		<then>
 			<!-- If it is then do this:
 		
@@ -339,7 +356,9 @@ the way I want to
 
 <target name="copy-css">
 	<if>
-		<available file="css" type="dir" />
+        <length length="0" when="greater">
+           <fileset dir="css" followsymlinks="false"/>
+         </length>
 		<then>
 			<copy todir="OEBPS">
 				<fileset dir="css/">
