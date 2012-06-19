@@ -1,0 +1,36 @@
+/*
+File:			carlos-new.css
+Description:	Custom styles for docbook
+Author			Carlos Araya
+*/
+
+/* @fontface declarations to locally stored fonts */
+@font-face {
+    font-family: GraublauWeb;
+    src: url(type/GraublauWeb.otf) format(truetype);
+}
+
+@font-face {
+    font-family: GraublauWebBold;
+    font-weight: bold;
+    src: url(type/GraublauWebBold.otf) format(truetype);
+}
+
+
+/* Rest of the CSS declarations */
+body { 
+	font-family:GraublauWeb, sans-serif;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+	font-family:GraublauWebBold, GraublauWeb, sans-serif;
+	color: #cc0000;
+}
+
+pre.programlisting {
+	font-family: sans-serif;
+	font-size: 11pt;
+	background-color: #FFFF99 ;
+	border: 1px solid #006600 ;
+}
