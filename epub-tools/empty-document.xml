@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<book 
+	xmlns='http://docbook.org/ns/docbook' 
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	version="5.0" xml:lang="en">
+<title>Creating Ebook content</title>
+<info>
+	<author>
+		<personname>
+			<firstname>Carlos</firstname>
+			<surname>Araya</surname>
+		</personname>
+	</author>
+	</info>
+
+
+<chapter>
+	<title>Introduction: What and Why</title>
+
+<para>This is required</para>
+</chapter>
+
+<chapter>
+    <title>How (Part 1): Using Sigil</title>
+
+<para>content</para>
+</chapter>
+
+<chapter>
+    <title>How (Part 2): Using iBook Author</title>
+
+<para>content</para>
+</chapter>
+
+<chapter>
+    <title>How (Part 3): Using Docbook</title>
+
+<para>content</para>
+</chapter>
+
+<chapter>
+    <title>How (Part 4): Using InDesign</title>
+
+<para>content</para>
+</chapter>
+
+
+</book>
