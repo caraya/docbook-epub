@@ -73,10 +73,10 @@
 	<para>Kickstarter allows content creators to setup their project with the following parameters:</para> 
 
 	<itemizedlist>
-		<listitem>A description of the project</listitem>
-		<listitem>The Fund raising steps/stages both the amount and what benefit do you derive</listitem>
-		<listitem>The amount to be raised and how long we have to do it</listitem>
-		<listitem>A discussion area for the project</listitem>
+		<listitem><para>A description of the project</para></listitem>
+		<listitem><para>The fundraising steps/stages both the amount and what benefit do you derive</para></listitem>
+		<listitem><para>The amount to be raised and how long we have to do it</para></listitem>
+		<listitem><para>A discussion area for the project</para></listitem>
 	</itemizedlist>
 
 	<para>Kickstarter acts like an escrow service. If the full amount is raised in the allocated time then each individual contributor's credit card will be charged for the amount they pledged; otherwise nothing happens. </para>
@@ -113,3 +113,4 @@
 	<para>In the last couple years, the Docbook community has expanded the range of formats and it now includes ePub3. It's easier than ever to create content in a document neutral format and then convert it to HTML, PDF and ePub without bigger effort than creating customizations to the stock <link xlink:href="http://docbook.sourceforge.net/">style sheets</link> which we can then reuse on future projects.</para>
 </sect1>
 </chapter>
+</book>

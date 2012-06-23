@@ -4,10 +4,48 @@
 </description>
 <!-- Created by Carlos Araya as part of his eBook research -->
 
+
+<!-- Change the value of src_file to the name of your ebook file -->
+<property name="src_file" value="docbook-howto"/>
+
+<!-- 
+	Change the properties below to the full path of the respective 
+	tools on your system. 
+	
+	This should work on Windows, Mac and Linux since Ant is
+	crossplatform... I hope
+-->
+<property name="saxon_bin" value="/usr/local/java/saxon.jar"/>
+<property name="fop_bin" value="/usr/local/java/fop/fop"/>
+<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b5.jar"/>
+<property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
+<property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
+<property name="jing_bin" value="/usr/local/java/jing/bin/jing.jar"/>
+
+
+<!-- Path to stylesheets -->
+<property name="xslt1_xhtml" value="/usr/local/docbook/1.0/xslt/xhtml/"/>
+<property name="xslt2_xhtml" value="/usr/local/docbook/2.0/release/2.0.3/xslt/base/html/"/>
+
+<!-- 
+As long as these match the values we setup for init we'll be fine... 
+it bugs me having to do this but I'm still waiting to hear if I can do it 
+the way I want to
+-->
+<property name="html_dest1" value="html_content"/>
+<property name="html_dest2" value="html2_content"/>
+<property name="docbook_path" value="../docbook/"/>
+<property name="ebook_custom" value="carlos-chunk.xsl"/>
+<property name="html_custom" value="html-custom.xsl"/>
+
+<!-- 
+	Docbook-single and docbook-chunks use the standard 
+	XSLT stylesheets available from Sourceforge
+-->
 <!-- Required for the IF and SWITCH Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-<!-- Using macrodef to simplify tasks -->
-<!-- Experimental Support for Marcodef to make init and html build targets more modular -->
+
+<!-- Using macrodef to simplify setup/init tasks -->
 <macrodef name="init">
 <attribute name="dest" default="html_content"/>
     <sequential>
@@ -59,44 +97,6 @@
     </sequential>
 </macrodef>
 
-<!-- Change the value of src_file to the name of your ebook file -->
-<property name="src_file" value="docbook-howto"/>
-
-<!-- 
-	Change the properties below to the full path of the respective 
-	tools on your system. 
-	
-	This should work on Windows, Mac and Linux since Ant is
-	crossplatform... I hope
--->
-<property name="saxon_bin" value="/usr/local/java/saxon.jar"/>
-<property name="fop_bin" value="/usr/local/java/fop/fop"/>
-<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b5.jar"/>
-<property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
-<property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
-<property name="xmllint_bin" value="/usr/bin/xmllint"/>
-
-
-<!-- Path to stylesheets -->
-<property name="xslt1_xhtml" value="/usr/local/docbook/1.0/xslt/xhtml/"/>
-<property name="xslt2_xhtml" value="/usr/local/docbook/2.0/release/2.0.3/xslt/base/html/"/>
-
-<!-- 
-As long as these match the values we setup for init we'll be fine... 
-it bugs me having to do this but I'm still waiting to hear if I can do it 
-the way I want to
--->
-<property name="html_dest1" value="html_content"/>
-<property name="html_dest2" value="html_content2"/>
-<property name="docbook_path" value="../docbook/"/>
-<property name="ebook_custom" value="carlos-chunk.xsl"/>
-<property name="html_custom" value="html-custom.xsl"/>
-
-<!-- 
-	Docbook-single and docbook-chunks use the standard 
-	XSLT stylesheets available from Sourceforge
--->
-
 <target name="docbook-single">
 	<init dest="html_content"/>
 	<echo>Generating HTML Chunks with XSLT 1.0 processor</echo>
@@ -126,40 +126,40 @@ the way I want to
 </target>
 
 <target name="docbook-single2">
-	<init dest="html2_content"/>
-	<echo>validate XML before converting to Docbook</echo>
-	<antcall target="validate-xml"/>
-	<echo>Generating HTML Single File using Saxon and XSLT2.0</echo>
-	<echo>Saxon 9 or another XSLT2 processor must be used</echo>
-	<java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
-		<arg value="-s:${src_file}.xml"/>
-		<arg value="-xsl:${xslt2_xhtml}docbook.xsl"/>
-		<arg value="-o:${src_file}-2.html"/>
-	</java>
-	<echo>Moving files to {dest_html2}</echo>
-	<move todir="${html_dest2}">
-		<fileset dir="." casesensitive="yes">
-		  <include name="*.html"/>
-		</fileset>
-	</move>
+        <init dest="html2_content"/>
+        <echo>validate XML before converting to Docbook</echo>
+        <antcall target="validate-xml"/>
+        <echo>Generating HTML Single File using Saxon and XSLT2.0</echo>
+        <echo>Saxon 9 or another XSLT2 processor must be used</echo>
+        <java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
+                <arg value="-s:${src_file}.xml"/>
+                <arg value="-xsl:${xslt2_xhtml}docbook.xsl"/>
+                <arg value="-o:${src_file}-2.html"/>
+        </java>
+        <echo>Moving files to {dest_html2}</echo>
+        <move todir="${html_dest1}">
+                <fileset dir="." casesensitive="yes">
+                  <include name="*.html"/>
+                </fileset>
+        </move>
 </target>
 
 <target name="docbook-chunks2">
-	<init dest="html2_content"/>
-	<echo>validate XML before converting to Docbook</echo>
-	<antcall target="validate-xml"/>
-	<echo>Generating HTML chunks using Saxon and XSLT2.0</echo>
-	<echo>Saxon 9 or another XSLT2 processor must be used</echo>
-	<java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
-		<arg value="-s:${src_file}.xml"/>
-		<arg value="-xsl:${xslt2_xhtml}chunk.xsl"/>
-	</java>
-	<echo>Moving files to ${dest_html2}</echo>
-	<copy todir="${html_dest2}">
-		<fileset dir="." casesensitive="yes">
-		  <include name="*.html"/>
-		</fileset>
-	</copy>
+        <init dest="html2_content"/>
+        <echo>validate XML before converting to Docbook</echo>
+        <antcall target="validate-xml"/>
+        <echo>Generating HTML chunks using Saxon and XSLT2.0</echo>
+        <echo>Saxon 9 or another XSLT2 processor must be used</echo>
+        <java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
+                <arg value="-s:${src_file}.xml"/>
+                <arg value="-xsl:${xslt2_xhtml}chunk.xsl"/>
+        </java>
+        <echo>Moving files to ${dest_html2}</echo>
+        <copy todir="${html_dest1}">
+                <fileset dir="." casesensitive="yes">
+                  <include name="*.html"/>
+                </fileset>
+        </copy>
 </target>
 
 <target name="docbook-fo">
@@ -248,11 +248,12 @@ the way I want to
 	</java>
 </target>
 
-<!-- We call xmllint to make sure that the XML validates-->
+<!-- We call jingto make sure that the XML validates-->
 <target name="validate-xml">
-	<exec executable="${xmllint_bin}">
-		<arg line="-nonet -noout ${src_file}.xml"/>
-	</exec>
+    <java jar="${jing_bin}" fork="true" failonerror="true" maxmemory="128m">
+            <arg value="/usr/local/java/jing/lib/docbook.rng"/>
+            <arg value="${src_file}.xml"/>
+    </java>
 </target>
 
 <!-- Download the docbook snapshot. Ignore this target if you're working offline -->

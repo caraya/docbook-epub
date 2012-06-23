@@ -73,6 +73,14 @@
 <example xml:id="basic.docbook">
 <title>Minimal Docbook document</title>
 <programlistingco>
+<areaspec>
+    <areaset xml:id="ex.plco.const">
+        <area xml:id="ex.plco.c1" coords='4'/>
+        <area xml:id="ex.plco.c2" coords='8'/>
+    </areaset>
+    <area xml:id="ex.plco.ret" coords='12'/>
+    <area xml:id="ex.plco.dest" coords='12'/>
+</areaspec>
 <programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt; <co xml:id="xml.decl"/>
 &lt;book <co xml:id="docbook.root"/>
 	xmlns='http://docbook.org/ns/docbook' <co xml:id="default.namespace"/>
@@ -88,9 +96,9 @@
 	&lt;/author&gt;
 	&lt;/info&gt;
 &lt;chapter&gt;
-&lt;title&gt;Required Title&lt;/title&gt; <co xml:id="chapter.title"/>
+&lt;title&gt;Required Title&lt;/title&gt;
 
-&lt;para&gt;Required paragraph.&lt;/para&gt; <co xml:id="chapter.para"/>
+&lt;para&gt;Required paragraph.&lt;/para&gt;
 
 &lt;/chapter&gt;
 &lt;/book&gt;
@@ -101,7 +109,6 @@
 	<callout arearefs="default.namespace"><para>The namespace declaration without a prefix will be used for all elements without an explicit prefix. This means that all elements without a prefix are, by default, in the Docbook namespace.</para></callout>
 	<callout arearefs="xlink.namespace"><para>We define xlink explicitly. Xlink is used in the &lt;link&gt; element to create hyperlinks.</para></callout>
 	<callout arearefs="docbook.author"><para>This is how Docbook expects to see an author.</para></callout>
-    <callout arearefs="chapter.title chapter.para"><para>These elements are requires inside a Docbook chapter.</para></callout>
 </calloutlist>
 </programlistingco>
 </example>
@@ -115,7 +122,7 @@
 
 <para>The Docbook syntax to create a chapter is shown below</para>
 
-<example id="ch.sample">
+<example xml:id="ch.sample">
 <title>Sample Docbook Chapter</title>
 <programlisting>
 &lt;chapter&gt;
@@ -190,7 +197,7 @@
 </sect3>
 </sect2>
 
-<sect2 xml.id="images">
+<sect2 xml:id="images">
 <title>Images</title>
 
 <para>Images take a little bit of extra work to create with Docbook. As you can see below the image is wrapped around a <tag>&lt;mediaobject&gt;tag</tag> that also contains the caption for the image we are inserting. Notice that we have to add the format in <emphasis role="bold">uppercase</emphasis> letters.</para>
@@ -293,6 +300,15 @@
 <example xml:id="css.example">
 <title>CSS Style Sheet for EPUB ebook</title>
 <programlistingco>
+    <areaspec>
+        <areaset xml:id="ex.plco.const2">
+            <area xml:id="ex.plco.c12" coords='4'/>
+            <area xml:id="ex.plco.c22" coords='8'/>
+        </areaset>
+        <area xml:id="ex.plco.ret2" coords='12'/>
+        <area xml:id="ex.plco.dest2" coords='12'/>
+    </areaspec>
+    
 <programlisting>@font-face { <co xml:id="css.font.decl"/>
     font-family: GraublauWeb; 
     src: url(type/GraublauWeb.otf) format(opentype);
@@ -316,6 +332,15 @@ body { <co xml:id="css.font.use"/>
 <example xml:id="add.items.xsl">
 <title>Adding elements to the book manifest</title>
 <programlistingco>
+    <areaspec>
+        <areaset xml:id="ex.plco.const1">
+            <area xml:id="ex.plco.c11" coords='4'/>
+            <area xml:id="ex.plco.c21" coords='8'/>
+        </areaset>
+        <area xml:id="ex.plco.ret1" coords='12'/>
+        <area xml:id="ex.plco.dest1" coords='12'/>
+    </areaspec>
+
 <programlisting>&lt;xsl:stylesheet  
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"&gt;
 
@@ -354,6 +379,15 @@ body { <co xml:id="css.font.use"/>
 <example xml:id="epub3.customization.layer">
 <title>EPub3 customization layer</title>
 <programlistingco>
+    <areaspec>
+        <areaset xml:id="ex.plco.const3">
+            <area xml:id="ex.plco.c13" coords='4'/>
+            <area xml:id="ex.plco.c23" coords='8'/>
+        </areaset>
+        <area xml:id="ex.plco.ret3" coords='12'/>
+        <area xml:id="ex.plco.dest3" coords='12'/>
+    </areaspec>
+
 <programlisting>&lt;?xml version='1.0'?&gt;
 &lt;xsl:stylesheet  <co xml:id="customization.xsl.declaration"/>
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"&gt;
@@ -422,9 +456,17 @@ body { <co xml:id="css.font.use"/>
 	   <attribution><link xlink:href="http://www.mobipocket.com/dev/article.asp?BaseFolder=prcgen&amp;File=mobiformat.htm">http://www.mobipocket.com/dev/article.asp?BaseFolder=prcgen&amp;File=mobiformat.htm</link></attribution>
 	   <para>The Mobipocket file format is a binary format for the distribution of eBooks. It is one implementation of the Open eBook Publication format with a number of proprietary extensions. The <link xlink:href="http://www.idpf.org/specs.htm">Open eBook Publication format</link> is developed and specified by the <link xlink:href="http://www.idpf.org/">IDPF (International Digital Publishing Forum)</link> an independent organization formerly known as the Open eBook Consortium. As a consequence, the Mobipocket format is based on HTML and is reflowable. Mobipocket supports most features of standard HTML to format and layout text and images.</para>
 	</blockquote>
-</sect1>
+	
+<para>Authoring for the Mobi (Kindle) format is no different than authoring a standard Epub3 book or document using Docbook. Where the difference lies is in the customization layer. In order for our Docbook document to convert successfully to Kindle we need to add the following element to the customization layer:</para>
+
+<programlisting><!-- Kindle extensions -->
+&lt;xsl:param name="kindle.extensions" select="1"/></programlisting>
+
+<para>This parameter will ensure that modifications needed for Kindle to validate are made to our content without altering the epub process or any of the content we write.</para> 
 
 <para>To create the Kindle version of our books we will use the EPub 3 version of the book as our source and then run it through the Kindlegen application. It is mostly a "black box" where the vendor has provided the tool without providing the source code or an extension mechanism.</para>
+</sect1>
+
 </chapter>
 
 <chapter xml:id="automation">
@@ -440,29 +482,18 @@ body { <co xml:id="css.font.use"/>
 	
 	<para>It is a cross-platform tool written in Java originally created to automate software development tasks it can be used for just about everything Make can and then some more. I've used Ant for a number of years and have developed a number of scripts for working with Docbook. The latest iteration of the build file will be covered in this chapter in detail. </para>
 
-	<para>The basic requirements for running this build file are:</para>
+	<para>The requirements for running this build file are:</para>
 	
 	<itemizedlist>
-		<listitem>
-		    <para>A Java Runtime Engine (JRE) or Java Development Kit (JDK) available from <link xlink:href="http://www.java.com/en/download/index.jsp">http://www.java.com/en/download/index.jsp</link>.</para></listitem>
-		<listitem>
-		    <para>Apache Ant binary distribution available from <link xlink:href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</link>. This will download the software from the closest Apache mirror to your location.</para>
-		</listitem>
-		<listitem>
-		    <para><link xlink:href="http://ant-contrib.sourceforge.net/">Ant-Contrib</link> Tasks. These additions to Ant provide with new tasks that make it easier to create conditional actions. There are more tasks but we only use if and, in a future version of the build file, switch for conditional task execution.</para>
-		</listitem>
-		<listitem>
-		    <para>XMLlint, a part of the <link xlink:href="http://xmlsoft.org">XML C toolkit and Library of Gnome</link>. Most Unix-like systems (Macintosh OS X and Linux) have this software already installed.</para>
-		    <para>Binary installations for Windows machines can be downloaded from the <link xlink:href="http://www.zlatkovic.com/libxml.en.html">maintainer's website</link>. These binary distributions don't require compilation.</para></listitem>
-		<listitem>
-		    <para><link xlink:href="http://xmlsoft.org/xslt/xsltproc2.html">XSLTProc</link>, part of the XSLT library. This library lives on top of <link xlink:hef="http://xmlsoft.org/">LibXML</link>. Install LibXML first and then LibXSLT otherwise XSLTProc will not work. You need to have LibXML installed before installing LibXSLT and XSLTProc.</para>
-		</listitem>
-		<listitem>
-		    <para><link xlink:href="http://code.google.com/p/epubcheck/">epubcheck</link> (current version is 3.0b5) used to validate the resulting epub document.</para>
-		</listitem>
-		<listitem>
-		    <para><link xlink:href="http://www.amazon.com/gp/feature.html/?docId=1000765211">Kindlegen</link>. An application from Amazon used to convert epub books into the mobi format used by the Kindle.</para>
-		</listitem>
+		<listitem><para>A Java Runtime Engine (JRE) or Java Development Kit (JDK) available from <link xlink:href="http://www.java.com/en/download/index.jsp">http://www.java.com/en/download/index.jsp</link>.</para></listitem>
+		<listitem><para>Apache Ant binary distribution available from <link  xlink:href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</link>. This will download the software from the closest Apache mirror to your location.</para></listitem>
+		<listitem><para><link xlink:href="http://ant-contrib.sourceforge.net/">Ant-Contrib</link> Tasks. These additions to Ant provide with new tasks that make it easier to create conditional actions. There are more tasks but we only use if and, in a future version of the build file, switch for conditional task execution.</para></listitem>
+		<listitem><para><link xlink:href="http://www.thaiopensource.com/download/old/relaxng/20030122/jing.html">Jing</link>. I used XMLlint but it has provd not up to the task. Jing is a lot stricter and a lot clearer in terms of the errors it produces. It is also a Java application (released as a JAR file) which makes it easier to install and run on multiple platforms.</para>
+		<para>The Jing archive can be downloaded from: <link xlink:href="http://code.google.com/p/jing-trang/downloads/detail?name=jing-20091111.zip&amp;can=2&amp;q=">http://code.google.com/p/jing-trang/downloads/detail?name=jing-20091111.zip&amp;can=2&amp;q=</link></para></listitem>
+		<listitem><para><link xlink:href="http://xmlsoft.org/xslt/xsltproc2.html">XSLTProc</link>, part of the XSLT library. This library lives on top of <link xlink:href="http://xmlsoft.org/">LibXML</link>. Install LibXML first and then LibXSLT otherwise XSLTProc will not work. You need to have LibXML installed before installing LibXSLT and XSLTProc.</para>
+		<para>Most Linux and OSX systems comes with xsltproc already installed. It may not be the latest version but it should be enough to get you started. There is a binary distribution available for Windows systems.</para></listitem>
+		<listitem><para><link xlink:href="http://code.google.com/p/epubcheck/">epubcheck</link> (current version is 3.0b5) used to validate the resulting epub document.</para></listitem>
+		<listitem><para><link xlink:href="http://www.amazon.com/gp/feature.html/?docId=1000765211">Kindlegen</link>. An application from Amazon used to convert epub books into the mobi format used by the Kindle.</para></listitem>
 	</itemizedlist>
 		
 	<para>I chose Ant because it is cross platform. As long as we have the tools listed above it won't matter if we are on a Macintosh or Windows system. The targets and tasks will run in whatever system Ant and Java are installed in.</para>
@@ -491,6 +522,15 @@ body { <co xml:id="css.font.use"/>
 <example xml:id="ant.basic.docbook">
 <title>Sample Ant Project</title>
 <programlistingco>
+    <areaspec>
+        <areaset xml:id="ex.plco.const4">
+            <area xml:id="ex.plco.c14" coords='4'/>
+            <area xml:id="ex.plco.c24" coords='8'/>
+        </areaset>
+        <area xml:id="ex.plco.ret4" coords='12'/>
+        <area xml:id="ex.plco.dest4" coords='12'/>
+    </areaspec>
+
 <programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt; <co xml:id="ant.xml.decl"/>
 &lt;project name="epub" default="make" basedir="."&gt; <co xml:id="ant.project.def"/>
 &lt;property name="src_file" value="docbook-howto"/&gt; <co xml:id="ant.property.def"/>    
@@ -550,7 +590,7 @@ without extension--&gt;
         value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/&gt;
 &lt;property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/&gt;
 &lt;property name="xsltproc_bin" value="/usr/bin/xsltproc"/&gt;
-&lt;property name="xmllint_bin" value="/usr/bin/xmllint"/&gt;
+&lt;property name="jing_bin" value="/usr/local/java/jing/bin/jin.jar"/&gt;
 
 &lt;!-- set global properties for this build --&gt;
 &lt;!-- Destination directories for the HTML targets--&gt;
@@ -608,7 +648,7 @@ based on the epub file we just created --&gt;
 
 <para>We use antcall to delete all existing files from prior eBook generation. Because we use the same directory structure for both EPub 2 and EPub 3 we have to make sure we start clean.</para> 
 
-<para>We next validate the XML document itself using a call to xmllint.</para>
+<para>We next validate the XML document itself using a call to Jing.</para>
 
 <para>The core of this target is to execute xsltproc to generate the xhtml needed for the EPub document. One file that the style sheets don't create is the mimetype text file required for EPub books to validate. </para>
 
@@ -654,7 +694,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 
 <para>The first task to delete all existing files from prior eBook generation to make sure we are working with clean sources in case we need to edit the file manually. </para>
 
-<para>We next validate the XML document itself using a call to xmllint.</para>
+<para>We next validate the XML document itself using a call to Jing.</para>
 
 <para>The core of this target is to execute xsltproc to generate the xhtml needed for the EPub document. Rather than call the stock XSL stylesheet we call a custom one (carlos-chunk.xsl) in order to customize the result of the ebook. </para>
 
@@ -714,8 +754,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
 <para>This target does a lot of the heavy lifting for the EPub generation process. We use the system's zip tool to create the EPUB file in two steps:</para>
 
 <orderedlist>
-    <listitem>We first add the mimetype file to the zip archive without compression. Per the EPub specification the mimetype file has to appear first in the EPUB archive.</listitem>
-    <listitem>We then add the rest of the files to the archive with regular compression settings.</listitem>
+    <listitem><para>We first add the mimetype file to the zip archive without compression. Per the EPub specification the mimetype file has to appear first in the EPUB archive.</para></listitem>
+    <listitem><para>We then add the rest of the files to the archive with regular compression settings.</para></listitem>
 </orderedlist>
 
 <example xml:id="task.epub-zip">
@@ -900,20 +940,20 @@ use the XSLT ant task but xsltproc is faster --&gt;
 <sect1 xml:id="ant.validation">
 	<title>Validation</title>
 
-<para>In addition to validating the output of the Ebook and having Ant, XSLTProc and Saxon validate our content to make sure it is correct we also validate it manually using xmllint (part of the libxml project). This will validate the structure of your XML document (making sure that all tags are properly closed) and syntax (making sure that there are no incorrectly nested tags); it will not validate the build file, Ant will take care of that.</para>
+<para>In addition to validating the output of the Ebook and having Ant, XSLTProc and Saxon validate our content to make sure it is correct we also validate it manually using Jing. This will validate the structure of your XML document (making sure that all tags are properly closed) and syntax (making sure that there are no incorrectly nested tags); it will not validate the build file, Ant will take care of that.</para>
 
 <sect2 xml:id="ant.validate.xml">
 	<title>validate-xml</title>
 
-<para>We call xmllint and tell it to suppress its output if it's successful (-noout) and not to go online to complete its validation of our xml file (-nonet). </para>
+<para>We call Jing and tell it to suppress its output if it's successful (-noout) and not to go online to complete its validation of our xml file (-nonet). </para>
 
 <example xml:id="task.validate-xml">
 <title>copy-resources Ant target</title>
-<programlisting>&lt;!-- We call xmllint to make sure that the XML validates--&gt;
-&lt;target name="validate-xml"&gt;
-&lt;exec executable="${xmllint_bin}"&gt;
-	&lt;arg line="-nonet -noout ${src_file}.xml"/&gt;
-&lt;/exec&gt;
+<programlisting>&lt;target name="validate-xml"&gt;
+    &lt;java jar="${jing_bin}" fork="true" failonerror="true" maxmemory="128m"&gt;
+            &lt;arg value="/usr/local/java/jing/lib/docbook.rng"/&gt;
+            &lt;arg value="${src_file}.xml"/&gt;
+    &lt;/java&gt;
 &lt;/target&gt;
 </programlisting>
 </example>
@@ -931,10 +971,10 @@ use the XSLT ant task but xsltproc is faster --&gt;
 <para>The get-docbook task will do 4 things in order</para>
 
 <orderedlist>
-	<listitem>Download the snapshot from <link xlink:href="http://snapshots.docbook.org/">http://snapshots.docbook.org/</link> as docbook.zip</listitem>
-	<listitem>Make a directory called docbook and unzips the download into that directory, creating a directory called docbook-xsl-ns-snapshot</listitem>
-	<listitem>Move all the content from the docbook-xsl-ns-snapshot up one level to docbook.</listitem>
-	<listitem>Remove the docbook-xsl-ns-snapshot directory inside docbook.</listitem>
+	<listitem><para>Download the snapshot from <link xlink:href="http://snapshots.docbook.org/">http://snapshots.docbook.org/</link> as docbook.zip</para></listitem>
+	<listitem><para>Make a directory called docbook and unzips the download into that directory, creating a directory called docbook-xsl-ns-snapshot</para></listitem>
+	<listitem><para>Move all the content from the docbook-xsl-ns-snapshot up one level to docbook.</para></listitem>
+	<listitem><para>Remove the docbook-xsl-ns-snapshot directory inside docbook.</para></listitem>
 </orderedlist>
 
 <para>The result is that we can now simplify the path to our docbook style sheets.</para>
@@ -1028,13 +1068,15 @@ use the XSLT ant task but xsltproc is faster --&gt;
         <title>Pushing the boundaries of EPub</title>
     <para>EPub 3 also opens the door to further bluring of the difference between books, web sites and web applications. Part of the EPub specification is the Fixed Layout Documents (the specification is available at <link xlink:href="http://idpf.org/epub/fxl/">http://idpf.org/epub/fxl/</link>) that allow for absolute positioning of content, 1 or 2-page spreads, text overlays and other neat publishing tricks and effect.</para>
     
-    <para>fully exploring what we can do with an epub book, specifically content switching (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch</link>) and scripting epub books (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content</link>)</para>
+    <para>fully exploring what we can do with an epub book, specifically content switching (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch</link>) and scripting epub books (See more below for scripting)</para>
     
     <para>Media Overlays can add synchronized audio to the text. <link xlink:href="http://idpf.org/epub/30/spec/epub30-mediaoverlays.html">http://idpf.org/epub/30/spec/epub30-mediaoverlays.html</link></para>
+    
+    <para>How far can we script an EPub book without limiting the readers that can access our content? Epub3 already supports scripting (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content</link>) and scripts (JavaScript) are a basae media type for EPub3. Can we use JQuery and if so how much of the JQuery featurse set can we use on our EBooks?</para>
     </sect1>
     <sect1>
         <title>We can do more with Docbook itself</title>
-        <para>Modular content with Docbook</para>
+        <para>So far we have only created one big file for our book content. </para>
         
         <para>Collaborative writing using Git</para>
     </sect1>
