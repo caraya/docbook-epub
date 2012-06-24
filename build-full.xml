@@ -97,6 +97,70 @@ the way I want to
     </sequential>
 </macrodef>
 
+<macrodef name="create-skeleton">
+<attribute name="destination" default="skeleton"/>
+<sequential>
+    <if>
+        <available file="@{destination}" type="dir" />
+    <then>
+        <fail message="Directory @{destination} exist... aborting the process" />
+    </then>
+    <else>
+        <echo>Creating directory</echo>
+        <mkdir dir="@{destination}/"/>
+        <echo>Creating CSS directory</echo>
+        <mkdir dir="@{destination}/css"/>
+        <echo>Creating JS directory</echo>
+        <mkdir dir="@{destination}/js"/>
+        <echo>Creating image directory</echo>
+        <mkdir dir="@{destination}/images"/>
+        <echo>Creating video directory</echo>
+        <mkdir dir="@{destination}/video"/>
+        <echo>Creating fonts directory</echo>
+        <mkdir dir="@{destination}/type"/>
+    </else>
+    </if>
+    <copy todir="@{destination}">
+        <fileset dir="." casesensitive="yes">
+            <include name="empty-document.xml"/>
+            <include name="build.xml"/>
+            <include name="build-full.xml"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/css">
+        <fileset dir="css" casesensitive="yes">
+            <include name="*.css"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/js">
+        <fileset dir="js" casesensitive="yes">
+            <include name="*.js"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/images">
+        <fileset dir="images" casesensitive="yes">
+            <include name="*.jpg"/>
+            <include name="*.gif"/>
+            <include name="*.png"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/video">
+        <fileset dir="video" casesensitive="yes">
+            <include name="*.mp4"/>
+            <include name="*.jpg"/>
+            <include name="*.png"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/type">
+        <fileset dir="type" casesensitive="yes">
+            <include name="*.ttf"/>
+            <include name="*.otf"/>
+            <include name="*.wof"/>
+        </fileset>
+    </copy>
+</sequential>
+</macrodef>
+
 <target name="docbook-single">
 	<init dest="html_content"/>
 	<echo>Generating HTML Chunks with XSLT 1.0 processor</echo>
@@ -223,7 +287,7 @@ the way I want to
 	<echo file="mimetype">application/epub+zip</echo>
 </target>
 
-<target name="make-kindle">
+<target name="make-kindle" depends="epub3">
 	<exec executable="${kindlegen_bin}">
 		<arg line="${src_file}.epub"/>
 	</exec>
@@ -277,6 +341,10 @@ the way I want to
 		</fileset>
 	</move>
 	<delete dir="docbook"/>
+</target>
+
+<target name="make-skeleton">
+    <create-skeleton />
 </target>
 
 <target name="copy-resources">
