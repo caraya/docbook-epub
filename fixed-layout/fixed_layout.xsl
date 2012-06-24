@@ -1,0 +1,57 @@
+<?xml version='1.0'?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:exsl="http://exslt.org/common" exclude-prefixes="exsl" version="1.0">
+
+<xsl:import href="../../docbook/epub3/chunk.xsl"/>
+
+<!-- The two additional style sheets we're adding for ebook development-->
+<xsl:param name="html.stylesheet" select="'carlos-new.css fixed-layout.css'"/> 
+<!-- Use graphics for admonitions -->
+<xsl:param name="admon.graphics" select="1"/>
+
+<!-- Element to add to the header of the individual chunks -->
+<xsl:template name="user.head.content">
+    <meta xmlns="http://www.w3.org/1999/xhtml" name="viewport" content="width=1200, height=1700"/>
+</xsl:template>
+<!-- Additional items to add to package.opf -->
+<xsl:template name="user.manifest.items">
+    <item xmlns="http://www.idpf.org/2007/opf" id="font2" href="type/GraublauWeb.otf" media-type="font/opentype"/>
+    <item xmlns="http://www.idpf.org/2007/opf" id="font3" href="type/GraublauWebBold.otf" media-type="font/opentype"/>
+</xsl:template>
+
+<!-- Work on fixed layout for epub3 books -->
+<!-- Right now it only works on Apple iBooks reader -->
+<xsl:template match="sect1[@role]" mode="class.value">
+<section> 
+    <xsl:choose>
+        <xsl:when test="@role = 'full-single'">
+            <xsl:attribute name="class">fullsingle</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="@role = 'leftside'">
+            <xsl:attribute name="class">leftside</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="@role = 'rightside'">
+            <xsl:attribute name="class">rightside</xsl:attribute>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:apply-templates/>
+</section>
+</xsl:template>
+
+<!-- 
+    This hopefully will create the com.apple.ibooks.display-options.xml file that is 
+    required for fixed layout books. Processor has to support exslt extensions, specifically
+    exsl:document
+-->
+
+<xsl:template match="/" mode = "create.options">
+<exsl:document href="com.apple.ibooks.display-options.xml" indent="yes" omit-xml-declaration="no">
+<display_options>
+<platform name="*">
+    <option name="fixed-layout">true</option>
+    <option name="orientation-lock">landscape-only</option>
+    <option name="open-to-spread">true</option>
+</platform>
+</display_options>
+</exsl:document>
+</xsl:template>
+</xsl:stylesheet>

@@ -7,19 +7,18 @@ Author			Carlos Araya
 /* @fontface declarations to locally stored fonts */
 @font-face {
     font-family: GraublauWeb;
-    src: url(GraublauWeb.otf) format(truetype);
+    src: url(type/GraublauWeb.otf) format(opentype);
 }
 
 @font-face {
     font-family: GraublauWebBold;
     font-weight: bold;
-    src: url(GraublauWebBold.otf) format(truetype);
+    src: url(type/GraublauWebBold.otf) format(opentype);
 }
 
 @font-face {
     font-family: DejaVuSansMono;
-    font-weight: normal;
-    src: url(DejaVuSansMono.ttf) format(truetype);
+    src: url(type/DejaVuSansMono.ttf) format(truetype);
 }
 
 /* Rest of the CSS declarations */
@@ -41,6 +40,7 @@ pre.programlisting {
 }
 
 div.figure {
-	margin-top: 1.2em;
+	margin: 0 auto;
 	padding: 1em;
+	width: 60;
 }

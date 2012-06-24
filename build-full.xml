@@ -4,6 +4,7 @@
 </description>
 <!-- Created by Carlos Araya as part of his eBook research -->
 
+<<<<<<< HEAD
 <!-- Required for the IF and SWITCH Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 <!-- Experimental Support for Marcodef to make init and html build targets more modular -->
@@ -57,6 +58,8 @@
         </copy>
 	</sequential>
 </macrodef>
+=======
+>>>>>>> development
 
 <!-- Change the value of src_file to the name of your ebook file -->
 <property name="src_file" value="docbook-howto"/>
@@ -70,10 +73,10 @@
 -->
 <property name="saxon_bin" value="/usr/local/java/saxon.jar"/>
 <property name="fop_bin" value="/usr/local/java/fop/fop"/>
-<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b4.jar"/>
+<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b5.jar"/>
 <property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
 <property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
-<property name="xmllint_bin" value="/usr/bin/xmllint"/>
+<property name="jing_bin" value="/usr/local/java/jing/bin/jing.jar"/>
 
 
 <!-- Path to stylesheets -->
@@ -86,18 +89,139 @@ it bugs me having to do this but I'm still waiting to hear if I can do it
 the way I want to
 -->
 <property name="html_dest1" value="html_content"/>
-<property name="html_dest2" value="html_content2"/>
-<property name="docbook_path" value="docbook/"/>
+<property name="html_dest2" value="html2_content"/>
+<property name="docbook_path" value="../docbook/"/>
+<property name="ebook_custom" value="carlos-chunk.xsl"/>
+<property name="html_custom" value="html-custom.xsl"/>
+
 <!-- 
 	Docbook-single and docbook-chunks use the standard 
 	XSLT stylesheets available from Sourceforge
 -->
+<!-- Required for the IF and SWITCH Task -->
+<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+<!-- Using macrodef to simplify setup/init tasks -->
+<macrodef name="init">
+<attribute name="dest" default="html_content"/>
+    <sequential>
+        <if>
+            <available file="@{dest}" type="dir" />
+        <then>
+            <echo message="Directory @{dest} exist... skiping" />
+        </then>
+        <else>
+            <echo>Creating directory</echo>
+            <mkdir dir="@{dest}/"/>
+            <echo>Creating CSS directory</echo>
+            <mkdir dir="@{dest}/css"/>
+            <echo>Creating JS directory</echo>
+            <mkdir dir="@{dest}/js"/>
+            <echo>Creating image directory</echo>
+            <mkdir dir="@{dest}/images"/>
+            <echo>Creating video directory</echo>
+            <mkdir dir="@{dest}/video"/>
+        </else>
+        </if>
+        <!--
+        Copy CSS, JS and any images into their directories
+        -->
+        <copy todir="@{dest}/css">
+            <fileset dir="css" casesensitive="yes">
+                <include name="*.css"/>
+            </fileset>
+        </copy>
+        <copy todir="@{dest}/js">
+            <fileset dir="js" casesensitive="yes">
+                <include name="*.js"/>
+            </fileset>
+        </copy>
+        <copy todir="@{dest}/images">
+            <fileset dir="images" casesensitive="yes">
+                <include name="*.jpg"/>
+                <include name="*.gif"/>
+                <include name="*.png"/>
+            </fileset>
+        </copy>
+        <copy todir="@{dest}/video">
+            <fileset dir="video" casesensitive="yes">
+                <include name="*.mp4"/>
+                <include name="*.jpg"/>
+                <include name="*.png"/>
+            </fileset>
+        </copy>
+    </sequential>
+</macrodef>
+
+<macrodef name="create-skeleton">
+<attribute name="destination" default="skeleton"/>
+<sequential>
+    <if>
+        <available file="@{destination}" type="dir" />
+    <then>
+        <fail message="Directory @{destination} exist... aborting the process" />
+    </then>
+    <else>
+        <echo>Creating directory</echo>
+        <mkdir dir="@{destination}/"/>
+        <echo>Creating CSS directory</echo>
+        <mkdir dir="@{destination}/css"/>
+        <echo>Creating JS directory</echo>
+        <mkdir dir="@{destination}/js"/>
+        <echo>Creating image directory</echo>
+        <mkdir dir="@{destination}/images"/>
+        <echo>Creating video directory</echo>
+        <mkdir dir="@{destination}/video"/>
+        <echo>Creating fonts directory</echo>
+        <mkdir dir="@{destination}/type"/>
+    </else>
+    </if>
+    <copy todir="@{destination}">
+        <fileset dir="." casesensitive="yes">
+            <include name="empty-document.xml"/>
+            <include name="build.xml"/>
+            <include name="build-full.xml"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/css">
+        <fileset dir="css" casesensitive="yes">
+            <include name="*.css"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/js">
+        <fileset dir="js" casesensitive="yes">
+            <include name="*.js"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/images">
+        <fileset dir="images" casesensitive="yes">
+            <include name="*.jpg"/>
+            <include name="*.gif"/>
+            <include name="*.png"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/video">
+        <fileset dir="video" casesensitive="yes">
+            <include name="*.mp4"/>
+            <include name="*.jpg"/>
+            <include name="*.png"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/type">
+        <fileset dir="type" casesensitive="yes">
+            <include name="*.ttf"/>
+            <include name="*.otf"/>
+            <include name="*.wof"/>
+        </fileset>
+    </copy>
+</sequential>
+</macrodef>
 
 <target name="docbook-single">
 	<init dest="html_content"/>
 	<echo>Generating HTML Chunks with XSLT 1.0 processor</echo>
 	<exec executable="${xsltproc_bin}">
-		<arg line="-o content.html ${xslt1_xhtml}docbook.xsl ${src_file}.xml"/>
+		<arg line="-o content.html ${docbook_path}xhtml/docbook.xsl ${src_file}.xml"/>
   	</exec>
 	<echo>Moving html files to ${html_dest1}</echo>
 	<move todir="${html_dest1}">
@@ -111,7 +235,7 @@ the way I want to
 	<init dest="html_content"/>
 	<echo>Generating HTML Chunks with xslt 1.0 processor</echo>
 	<exec executable="${xsltproc_bin}">
-		<arg line="${xslt1_xhtml}chunk.xsl ${src_file}.xml"/>
+		<arg line="${html_custom} ${src_file}.xml"/>
   	</exec>
 	<echo>Moving html files to ${html_dest1}</echo>
 	<move todir="${html_dest1}">
@@ -122,40 +246,40 @@ the way I want to
 </target>
 
 <target name="docbook-single2">
-	<init dest="html2_content"/>
-	<echo>validate XML before converting to Docbook</echo>
-	<antcall target="validate-xml"/>
-	<echo>Generating HTML Single File using Saxon and XSLT2.0</echo>
-	<echo>Saxon 9 or another XSLT2 processor must be used</echo>
-	<java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
-		<arg value="-s:${src_file}.xml"/>
-		<arg value="-xsl:${xslt2_xhtml}docbook.xsl"/>
-		<arg value="-o:${src_file}-2.html"/>
-	</java>
-	<echo>Moving files to {dest_html2}</echo>
-	<move todir="${html_dest2}">
-		<fileset dir="." casesensitive="yes">
-		  <include name="*.html"/>
-		</fileset>
-	</move>
+        <init dest="html2_content"/>
+        <echo>validate XML before converting to Docbook</echo>
+        <antcall target="validate-xml"/>
+        <echo>Generating HTML Single File using Saxon and XSLT2.0</echo>
+        <echo>Saxon 9 or another XSLT2 processor must be used</echo>
+        <java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
+                <arg value="-s:${src_file}.xml"/>
+                <arg value="-xsl:${xslt2_xhtml}docbook.xsl"/>
+                <arg value="-o:${src_file}-2.html"/>
+        </java>
+        <echo>Moving files to {dest_html2}</echo>
+        <move todir="${html_dest1}">
+                <fileset dir="." casesensitive="yes">
+                  <include name="*.html"/>
+                </fileset>
+        </move>
 </target>
 
 <target name="docbook-chunks2">
-	<init dest="html2_content"/>
-	<echo>validate XML before converting to Docbook</echo>
-	<antcall target="validate-xml"/>
-	<echo>Generating HTML chunks using Saxon and XSLT2.0</echo>
-	<echo>Saxon 9 or another XSLT2 processor must be used</echo>
-	<java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
-		<arg value="-s:${src_file}.xml"/>
-		<arg value="-xsl:${xslt2_xhtml}chunk.xsl"/>
-	</java>
-	<echo>Moving files to ${dest_html2}</echo>
-	<copy todir="${html_dest2}">
-		<fileset dir="." casesensitive="yes">
-		  <include name="*.html"/>
-		</fileset>
-	</copy>
+        <init dest="html2_content"/>
+        <echo>validate XML before converting to Docbook</echo>
+        <antcall target="validate-xml"/>
+        <echo>Generating HTML chunks using Saxon and XSLT2.0</echo>
+        <echo>Saxon 9 or another XSLT2 processor must be used</echo>
+        <java jar="${saxon_bin}" fork="true" failonerror="true" maxmemory="128m">
+                <arg value="-s:${src_file}.xml"/>
+                <arg value="-xsl:${xslt2_xhtml}chunk.xsl"/>
+        </java>
+        <echo>Moving files to ${dest_html2}</echo>
+        <copy todir="${html_dest1}">
+                <fileset dir="." casesensitive="yes">
+                  <include name="*.html"/>
+                </fileset>
+        </copy>
 </target>
 
 <target name="docbook-fo">
@@ -173,26 +297,29 @@ the way I want to
 </target>
 
 <target name="epub2">
-<!-- Remove prior versions of the content we're generating -->
-<antcall target="epub-clean"/>
-<!-- Validate XML -->
-<antcall target="validate-xml"/>
-<!-- Run the stylesheet conversion -->
-<echo message="Using docbook at ${docbook_path}epub/docbook.xsl"/>
-<exec executable="${xsltproc_bin}">
-	<arg line="${docbook_path}epub/docbook.xsl ${src_file}.xml"/>
-</exec>
-<!-- Create mimetype file, required per epub spec -->
-<antcall target="make-mime"/>
-<!-- zips the fills for the epub -->
-<antcall target="epub-zip"/>
-<!-- Runs epubcheck on the epub file -->
-<antcall target="epub-check"/>
-<!-- Creates a Kindle version of the book -->
-<antcall target="make-kindle"/>
+	<!-- Remove prior versions of the content we're generating -->
+	<antcall target="epub-clean"/>
+	<!-- Validate XML -->
+	<antcall target="validate-xml"/>
+	<!-- Run the stylesheet conversion -->
+	<exec executable="${xsltproc_bin}">
+		<arg value="carlos-chunk2.xsl"/>
+		<arg value="${src_file}.xml"/> 
+	</exec>
+	<!-- Copy media resources -->
+	<antcall target="copy-images"/>
+	<!-- Create mimetype file, required per epub spec -->
+	<antcall target="make-mime"/>
+	<!-- zips the fills for the epub -->
+	<antcall target="epub-zip"/>
+	<!-- Runs epubcheck on the epub file -->
+	<antcall target="epub-check"/>
+	<!-- Creates a Kindle version of the book -->
+	<antcall target="make-kindle"/>
 </target>
 
 <target name="epub3">
+<<<<<<< HEAD
 <!-- Remove prior versions of the content we're generating -->
 <antcall target="epub-clean"/>
 <!-- Validate XML -->
@@ -208,23 +335,41 @@ task but xsltproc is faster -->
 <antcall target="epub-zip"/>
 <!-- Runs epubcheck on the epub file -->
 <antcall target="epub-check"/>
+=======
+	<!-- Remove prior versions of the content we're generating -->
+	<antcall target="epub-clean"/>
+	<!-- Validate XML -->
+	<antcall target="validate-xml"/>
+	<!-- Run the xslt transformation... we should be able to use the XSLT ant 
+	task but xsltproc is faster -->
+	<exec executable="${xsltproc_bin}">
+		<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
+	</exec>
+	<!-- Copy css stylesheet -->
+	<antcall target="copy-resources"/>
+	<!-- zips the fils for the epub -->
+	<antcall target="epub-zip"/>
+	<!-- Runs epubcheck on the epub file -->
+	<antcall target="epub-check"/>
+	<!-- Make mobi/kindle book -->
+>>>>>>> development
 </target>
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
 <target name="make-mime">
-<!-- Creates mimetype file as required by epub spec-->
-<echo file="mimetype">application/epub+zip</echo>
+	<!-- Creates mimetype file as required by epub spec-->
+	<echo file="mimetype">application/epub+zip</echo>
 </target>
 
-<target name="make-kindle">
-<exec executable="${kindlegen_bin}">
-	<arg line="${src_file}.epub"/>
-</exec>
+<target name="make-kindle" depends="epub3">
+	<exec executable="${kindlegen_bin}">
+		<arg line="${src_file}.epub"/>
+	</exec>
 </target>
 
 <target name="epub-zip">
-	<!-- We use exec zip because I can't figure out if the builtin zip task conforms to
-	     what ePub expects -->
+	<!-- We use exec zip because I can't figure out if the builtin zip task 
+	conforms to what ePub expects -->
 	<!-- Zip the mimetype first without compression as required-->
 	<exec executable="zip">
 		<arg line="-X0 ${src_file}.epub mimetype"/>
@@ -241,15 +386,15 @@ task but xsltproc is faster -->
 	</java>
 </target>
 
-<!-- We call xmllint to make sure that the XML validates-->
+<!-- We call jingto make sure that the XML validates-->
 <target name="validate-xml">
-	<exec executable="${xmllint_bin}">
-		<arg line="-noent -noout ${src_file}.xml"/>
-	</exec>
+    <java jar="${jing_bin}" fork="true" failonerror="true" maxmemory="128m">
+            <arg value="/usr/local/java/jing/lib/docbook.rng"/>
+            <arg value="${src_file}.xml"/>
+    </java>
 </target>
 
-<!-- Download the docbook snapshot. Ignore this target 
-if you're working offline -->
+<!-- Download the docbook snapshot. Ignore this target if you're working offline -->
 <target name="get-xsl">
 	<mkdir dir="docbook"/>
 	<get 
@@ -259,10 +404,21 @@ if you're working offline -->
 		usetimestamp="true"/>
 	<unzip src="docbook.zip" dest="docbook"/>
 	<move todir="docbook">
-		<fileset dir="docbook/docbook-xsl-ns-snapshot" casesensitive="yes">
-		  <include name="**/*"/>
+		<fileset dir="docbook/docbook-xsl-ns-snapshot">
+			<include name="**/*"/>
 		</fileset>
 	</move>
+	<delete dir="docbook/docbook-xsl-ns-snapshot"/>	
+	<move todir="../docbook">
+		<fileset dir="docbook">
+			<include name="**/*"/>
+		</fileset>
+	</move>
+	<delete dir="docbook"/>
+</target>
+
+<target name="make-skeleton">
+    <create-skeleton />
 </target>
 
 <target name="copy-resources">
@@ -275,15 +431,17 @@ if you're working offline -->
 
 <target name="copy-videos">
 	<if>
-		<available file="video" type="dir"/>
+        <length length="0" when="greater">
+           <fileset dir="video" followsymlinks="false"/>
+         </length>
 		<then>
-			<copy todir="OEBPS/video">
-				<fileset dir="video/">
-					<include name="*.mp4"/>
-					<include name="*.png"/>
-					<include name="*.jpg"/>
-				</fileset>
-			</copy>
+		<copy todir="OEBPS/video">
+			<fileset dir="video/">
+				<include name="*.mp4"/>
+				<include name="*.png"/>
+				<include name="*.jpg"/>
+			</fileset>
+		</copy>
 		</then>
 		<else>
 			<echo message="No videos to copy"/>
@@ -293,13 +451,13 @@ if you're working offline -->
 
 <target name="copy-images">
 	<if>
-		<available file="images" type="dir"/>
+	    <length length="0" when="greater">
+           <fileset dir="images" followsymlinks="false"/>
+        </length>
 		<then>
 			<copy todir="OEBPS/images">
 				<fileset dir="images" casesensitive="yes">
-				  <include name="*.jpg"/>
-				  <include name="*.gif"/>
-				  <include name="*.png"/>
+				  <include name="**/*"/>
 				</fileset>
 			</copy>
 		</then>
@@ -312,7 +470,9 @@ if you're working offline -->
 <target name="copy-fonts">
 	<if>
 		<!-- Check if the type directory exists-->
-		<available file="type" type="dir" />
+        <length length="0" when="greater">
+           <fileset dir="type" followsymlinks="false"/>
+         </length>
 		<then>
 			<!-- If it is then do this:
 		
@@ -328,24 +488,33 @@ if you're working offline -->
 			  </copy>
 		</then>
 		<else>
-			<!-- There are no fonts... tough luck buddy -->
-			<echo message="There are no fonts available" />
+			<!--
+			    There are no fonts... We fail here to prevent validation 
+			    errors later in the build process 
+			-->
+			<fail message="There are no fonts available" />
 		</else>
 	</if>	
 </target>
 
 <target name="copy-css">
 	<if>
-		<available file="css" type="dir"/>
+        <length length="0" when="greater">
+           <fileset dir="css" followsymlinks="false"/>
+         </length>
 		<then>
 			<copy todir="OEBPS">
-				<fileset dir="css" casesensitive="yes">
-				  <include name="*.css"/>
-				</fileset>
+				<fileset dir="css/">
+			      <include name="*.css"/>
+			    </fileset>
 			</copy>
 		</then>
 		<else>
-			<echo message="no style sheet to copy"/>
+			<!--
+			    There are no stylesheets... We fail here to prevent validation 
+			    errors later in the build process 
+			-->
+			<fail message="No CSS files available!"/>
 		</else>
 	</if>
 </target>
@@ -354,6 +523,7 @@ if you're working offline -->
 	<antcall target="html-clean"/>
 	<antcall target="html2-clean"/>
 	<antcall target="fo-clean"/>
+	<antcall target="pdf-clean"/>
 	<antcall target="epub-clean"/>
 	<echo>Done deleting files!</echo>
 </target>
@@ -385,6 +555,14 @@ if you're working offline -->
 	-->
 	<delete verbose="true">
 		<fileset dir="." includes="*.fo"/>
+	</delete> 
+</target>
+
+<target name="pdf-clean">
+	<!-- 
+		Removes the .pdf file
+	-->
+	<delete verbose="true">
 		<fileset dir="." includes="*.pdf"/>
 	</delete> 
 </target>
@@ -392,15 +570,14 @@ if you're working offline -->
 <!-- Cleans up leftover epub stuff-->
 <target name="epub-clean">
 	<!-- 
-	If OEBPS exists we assume the other files and directories 
-	do as well.
-	There is one instance where only the OEBPS directory is 
-	created and that is if we have a syntax error from xmllint. 
-	It's not frequent enough and the  solution is to delete OEBPS 
-	manually.
+	If OEBPS exists we assume the other files and directories do as well
+	since Docbook would never create only OEBPS. 
 
-	we use the if task from ant-contrib available from 
-	sourceforge.net. 
+	There is one instance where only the OEBPS directory is created and that
+	is if we have a syntax error from xmllint. It's not frequent enough and the 
+	solution is to delete OEBPS manually.
+
+	we use the if task from ant-contrib available from sourceforge.net. 
 	-->
 	<if>
 		<available file="OEBPS" type="dir" />
@@ -414,12 +591,11 @@ if you're working offline -->
 			<delete verbose="true" dir="META-INF"/>
 			<delete verbose="true" dir="OEBPS"/>
 			<delete verbose="true" file="${src_file}.epub"/>
+			<delete verbose="true" file="${src_file}.mobi"/>
 		</then>
 		<else>
-			<echo message="Nothing to delete" />
+			<echo message="Directory DOES NOT exist... Nothing to delete" />
 		</else>
 	</if>
 </target>
-
-
 </project>

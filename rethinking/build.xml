@@ -1,0 +1,272 @@
+<project name="epub" default="epub3" basedir=".">
+<description>
+Apache ant build file for Docbook based ebooks
+</description>
+<!-- Created by Carlos Araya as part of his eBook research -->
+
+<!-- Required for the IF Task -->
+<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+<!-- Change the value of src_file to the name of your ebook file without extension-->
+<property name="src_file" value="rethinking"/>
+<!-- Change the value of css_file to the name of your stylesheet with extension-->
+<property name="css_file" value="css/carlos-new.css"/>
+
+<!-- Configure the path to the docbook stylesheets we asked ant to download-->
+<property name="docbook_path" value="../docbook/"/>
+
+<!-- Change path to the binaries we use so they match your system -->
+<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b5.jar"/>
+<property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
+<property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
+<property name="jing_bin" value="/usr/local/java/jing/bin/jing.jar"/>
+
+<target name="epub2">
+	<!-- Remove prior versions of the content we're generating -->
+	<antcall target="epub-clean"/>
+	<!-- Validate XML -->
+	<antcall target="validate-xml"/>
+	<!-- Run the stylesheet conversion -->
+	<exec executable="${xsltproc_bin}">
+		<arg value="carlos-chunk2.xsl"/>
+		<arg value="${src_file}.xml"/> 
+	</exec>
+	<!-- Copy media resources -->
+    <antcall target="copy-images"/>
+	<!-- Create mimetype file, required per epub spec -->
+	<antcall target="make-mime"/>
+	<!-- zips the fills for the epub -->
+	<antcall target="epub-zip"/>
+	<!-- Runs epubcheck on the epub file -->
+	<antcall target="epub-check"/>
+	<!-- Creates a Kindle version of the book -->
+	<antcall target="make-kindle"/>
+</target>
+
+<target name="epub3">
+	<!-- Remove prior versions of the content we're generating -->
+	<antcall target="epub-clean"/>
+	<!-- Validate XML -->
+	<antcall target="validate-xml"/>
+	<!-- Run the xslt transformation... we should be able to use the XSLT ant 
+	task but xsltproc is faster -->
+	<exec executable="${xsltproc_bin}">
+		<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
+	</exec>
+	<!-- Copy css stylesheet -->
+	<antcall target="copy-resources"/>
+	<!-- zips the fils for the epub -->
+	<antcall target="epub-zip"/>
+	<!-- Runs epubcheck on the epub file -->
+	<antcall target="epub-check"/>
+	<!-- Make mobi/kindle book -->
+</target>
+
+<!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
+<target name="make-mime">
+	<!-- Creates mimetype file as required by epub spec-->
+	<echo file="mimetype">application/epub+zip</echo>
+</target>
+
+<target name="make-kindle">
+	<exec executable="${kindlegen_bin}">
+		<arg line="${src_file}.epub"/>
+	</exec>
+</target>
+
+<target name="epub-zip">
+	<!-- We use exec zip because I can't figure out if the builtin zip task 
+	conforms to what ePub expects -->
+	<!-- Zip the mimetype first without compression as required-->
+	<exec executable="zip">
+		<arg line="-X0 ${src_file}.epub mimetype"/>
+	</exec>
+	<!-- Then zip the other files into the zip/epub archive -->
+	<exec executable="zip">
+		<arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/>
+	</exec>
+</target>
+
+<target name="epub-check">
+	<java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m">
+		<arg value="${src_file}.epub"/>
+	</java>
+</target>
+
+<!-- We call jingto make sure that the XML validates-->
+<target name="validate-xml">
+    <java jar="${jing_bin}" fork="true" failonerror="true" maxmemory="128m">
+            <arg value="/usr/local/java/jing/lib/docbook.rng"/>
+            <arg value="${src_file}.xml"/>
+    </java>
+</target>
+
+<!-- Download the docbook snapshot. Ignore this target if you're working offline -->
+<target name="get-xsl">
+	<mkdir dir="docbook"/>
+	<get 
+		src="http://snapshots.docbook.org/docbook-xsl-ns-snapshot.zip" 
+		dest="docbook.zip"  
+		verbose="true" 
+		usetimestamp="true"/>
+	<unzip src="docbook.zip" dest="docbook"/>
+	<move todir="docbook">
+		<fileset dir="docbook/docbook-xsl-ns-snapshot">
+			<include name="**/*"/>
+		</fileset>
+	</move>
+	<delete dir="docbook/docbook-xsl-ns-snapshot"/>	
+	<move todir="../docbook">
+		<fileset dir="docbook">
+			<include name="**/*"/>
+		</fileset>
+	</move>
+	<delete dir="docbook"/>
+</target>
+
+<target name="copy-resources">
+	<!-- Macro Task to copy resouces into OEBPS-->
+	<if>
+        <length length="0" when="greater">
+            <fileset dir="css" followsymlinks="false"/>
+        </length>
+        <then>
+            <!-- Dir Not Empty -->
+        	<antcall target="copy-css"/>
+         </then>
+         <else>
+            <echo message="Directory CSS is empty. Nothing to copy"/>
+         </else>
+     </if>
+ 	<if>
+         <length length="0" when="greater">
+             <fileset dir="video" followsymlinks="false"/>
+         </length>
+         <then>
+             <!-- Dir Not Empty -->
+         	<antcall target="copy-videos"/>
+          </then>
+          <else>
+             <echo message="Directory VIDEO is empty. Nothing to copy"/>
+          </else>
+      </if>
+	<if>
+        <length length="0" when="greater">
+            <fileset dir="images" followsymlinks="false"/>
+        </length>
+        <then>
+            <!-- Dir Not Empty -->
+            <antcall target="copy-images"/>
+         </then>
+         <else>
+            <echo message="Directory images is empty. Nothing to copy"/>
+         </else>
+     </if>
+ 	<if>
+         <length length="0" when="greater">
+             <fileset dir="type" followsymlinks="false"/>
+         </length>
+         <then>
+             <!-- Dir Not Empty -->
+         	<antcall target="copy-fonts"/>
+          </then>
+          <else>
+             <echo message="Directory type is empty. Nothing to copy"/>
+          </else>
+      </if>
+</target>
+
+<target name="copy-videos">
+	<copy todir="OEBPS/video">
+		<fileset dir="video/">
+			<include name="*.mp4"/>
+			<include name="*.png"/>
+			<include name="*.jpg"/>
+		</fileset>
+	</copy>
+</target>
+
+<target name="copy-images">
+	<copy todir="OEBPS/images">
+		<fileset dir="images" casesensitive="yes">
+		  <include name="**/*"/>
+		</fileset>
+	</copy>
+</target>
+
+<target name="copy-fonts">
+	<if>
+		<!-- Check if the type directory exists-->
+        <length length="0" when="greater">
+            <fileset dir="type" followsymlinks="false"/>
+        </length>
+		<then>
+			<!-- If it is then do this:
+		
+				1. Make the OEBPS type directory
+				2. copy all fonts except those starting with Calluna 
+			       to the OEBPS/type directory -->
+			<echo message="Directory exist... copying font files" />
+			<mkdir dir="OEBPS/type"/>
+			 <copy todir="OEBPS/type">
+			    <fileset dir="type/">
+			      <exclude name="Calluna*.*"/>
+			    </fileset>
+			  </copy>
+		</then>
+		<else>
+			<!-- There are no fonts... tough luck buddy -->
+			<fail message="There are no fonts available" />
+		</else>
+	</if>	
+</target>
+
+<target name="copy-css">
+	<if>
+        <length length="0" when="greater">
+            <fileset dir="css" followsymlinks="false"/>
+        </length>
+		<then>
+			<copy todir="OEBPS">
+				<fileset dir="css/">
+			      <include name="*.css"/>
+			    </fileset>
+			</copy>
+		</then>
+		<else>
+			<fail message="No CSS files available!"/>
+		</else>
+	</if>
+</target>
+
+<!-- Cleans up leftover epub stuff-->
+<target name="epub-clean">
+	<!-- 
+	If OEBPS exists we assume the other files and directories do as well
+	since Docbook would never create only OEBPS. 
+
+	There is one instance where only the OEBPS directory is created and that
+	is if we have a syntax error from xmllint. It's not frequent enough and the 
+	solution is to delete OEBPS manually.
+
+	we use the if task from ant-contrib available from sourceforge.net. 
+	-->
+	<if>
+		<available file="OEBPS" type="dir" />
+		<then>
+			<echo message="Directory exist... deleting" />
+			<delete verbose="true">
+				<fileset dir="OEBPS" includes="*"/>
+				<fileset dir="META-INF" includes="*"/>
+			</delete>
+			<delete verbose="true" file="mimetype"/>
+			<delete verbose="true" dir="META-INF"/>
+			<delete verbose="true" dir="OEBPS"/>
+			<delete verbose="true" file="${src_file}.epub"/>
+			<delete verbose="true" file="${src_file}.mobi"/>
+		</then>
+		<else>
+			<echo message="Directory DOES NOT exist... Nothing to delete" />
+		</else>
+	</if>
+</target>
+</project>
