@@ -1075,8 +1075,8 @@ use the XSLT ant task but xsltproc is faster --&gt;
     <para>How far can we script an EPub book without limiting the readers that can access our content? Epub3 already supports scripting (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content</link>) and scripts (JavaScript) are a basae media type for EPub3. Can we use JQuery and if so how much of the JQuery featurse set can we use on our EBooks?</para>
     </sect1>
     <sect1>
-        <title>We can do more with Docbook itself</title>
-        <para>So far we have only created one big file for our book content. </para>
+        <title>Modular Docbook and Collaborative writing</title>
+        <para>So far we have only created one big file for our book content. Docbook also allows the creation of modular content; the idea is that we create one main file where all out chapters or other chunks of content are </para>
         
         <para>Collaborative writing using Git</para>
     </sect1>
