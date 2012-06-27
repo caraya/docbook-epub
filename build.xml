@@ -163,7 +163,7 @@ Apache ant build file for Docbook based ebooks
 
 <!-- We call jing to make sure that the XML validates-->
 <target name="validate-xml">
-    <java jar="${jing_bin}" fork="true" failonerror="true" maxmemory="128m">
+    <java jar="${jing_bin}" fork="true" failonerror="false" maxmemory="128m">
             <arg value="/usr/local/java/jing/lib/docbook.rng"/>
             <arg value="${src_file}.xml"/>
     </java>
