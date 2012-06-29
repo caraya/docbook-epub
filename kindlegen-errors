@@ -1,0 +1,69 @@
+Buildfile: /Users/carlos/experiment/docbook-epub/build.xml
+
+make-kindle:
+     [exec] 
+     [exec] **************************************************
+     [exec] * Amazon.com kindlegen(MAC OSX) V2.4 build 69900 *
+     [exec] * A command line e-book compiler                 *
+     [exec] * Copyright Amazon.com 2012                      *
+     [exec] **************************************************
+     [exec] 
+     [exec] Info(prcgen):I1047: Added metadata dc:Title        "From Docbook to ePub and Kindle"
+     [exec] Info(prcgen):I1052: Kindle support cover images but does not support cover HTML. Hence using the cover image specified and suppressing cover HTML in content.     URL: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/cover.xhtml
+     [exec] Info(prcgen):I1002: Parsing files  0000010
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <nav epub:type="loi">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/bk01-toc.xhtml     line: 0000002
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="chapter" title="Chapter 1. Why should I create an ebook? Why with Docbook?" epub:type="chapter" id="create">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch01.xhtml     line: 0000002
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="chapter" title="Chapter 2. Creating your Docbook content" epub:type="chapter" id="docbook.creation">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch02.xhtml     line: 0000002
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="sect1" title="Getting Started" epub:type="subchapter" id="getting.started">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch02.xhtml     line: 0000023
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="sect2" title="Adding text content." epub:type="division" id="adding.text">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch02.xhtml     line: 0000036
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="chapter" title="Chapter 3. Customizations" epub:type="chapter" id="idp140336468050896">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch03.xhtml     line: 0000002
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="chapter" title="Chapter 4. Converting the XML into different formats" epub:type="chapter" id="transformation">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch04.xhtml     line: 0000002
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="chapter" title="Chapter 5. Automating the process" epub:type="chapter" id="automation">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch05.xhtml     line: 0000002
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="sect1" title="Apache Ant and making things easier on yourself" epub:type="subchapter" id="apache.ant">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch05.xhtml     line: 0000002
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="sect1" title="Basic Tasks" epub:type="subchapter" id="ant.basic.tasks">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch05.xhtml     line: 0000050
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="sect1" title="EPub support" epub:type="subchapter" id="ant.epub.support">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch05.xhtml     line: 0000088
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="sect1" title="Copying Resources" epub:type="subchapter" id="ant.copying.resources">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch05.xhtml     line: 0000115
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="sect1" title="Validation" epub:type="subchapter" id="ant.validation">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch05.xhtml     line: 0000190
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="sect1" title="File download" epub:type="subchapter" id="ant.file.download">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch05.xhtml     line: 0000196
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="sect1" title="Cleanup" epub:type="subchapter" id="ant.cleanup">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch05.xhtml     line: 0000208
+     [exec] Warning(inputpreprocessor):W29004: Forcefully closed opened Tag: <section class="chapter" title="Chapter 7. Looking forward: What's next?" epub:type="chapter" id="looking.forward">
+     [exec]       in file: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/ch07.xhtml     line: 0000002
+     [exec] Info(prcgen):I1015: Building PRC file
+     [exec] Info(prcgen):I1006: Resolving hyperlinks
+     [exec] Info(prcgen):I1049: Building table of content     URL: /var/folders/g0/y7fl8_q91n7dt6g0g39nxqqr0000gn/T/mobi-PBeYt0/OEBPS/toc.ncx
+     [exec] Info(pagemap):I8000: No Page map found in the book
+     [exec] Info(prcgen):I1045: Computing UNICODE ranges used in the book
+     [exec] Info(prcgen):I1046: Found UNICODE range: Basic Latin [20..7E]
+     [exec] Info(prcgen):I1046: Found UNICODE range: General Punctuation - Windows 1252 [2013..2014]
+     [exec] Info(prcgen):I1017: Building PRC file, record count:   0000022
+     [exec] Info(prcgen):I1039: Final stats - text compressed to (in % of original size):  46.66%
+     [exec] Info(prcgen):I1040: The document identifier is: "From_Docbook-Pub_and_Kindle"
+     [exec] Info(prcgen):I1041: The file format version is V6
+     [exec] Info(prcgen):I1031: Saving PRC file
+     [exec] Info(prcgen):I1032: PRC built successfully
+     [exec] Info(prcgen):I1016: Building enhanced PRC file
+     [exec] Info(prcgen):I1007: Resolving mediaidlinks
+     [exec] Info(prcgen):I1011: Writing mediaidlinks
+     [exec] Info(prcgen):I1009: Resolving guide items
+     [exec] Info(prcgen):I1017: Building PRC file, record count:   0000028
+     [exec] Info(prcgen):I1039: Final stats - text compressed to (in % of original size):  45.73%
+     [exec] Info(prcgen):I1041: The file format version is V8
+     [exec] Info(prcgen):I1036: Mobi file built successfully
+
+BUILD SUCCESSFUL
+Total time: 1 second
