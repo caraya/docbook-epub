@@ -28,6 +28,7 @@
 
 <para>Craig Mod in his video presentation (<link xlink:href="http://www.dolectures.com/lectures/whats-the-future-of-the-book-in-the-ipad-era/">http://www.dolectures.com/lectures/whats-the-future-of-the-book-in-the-ipad-era/</link>) mentions the economics of the 37 Signals' book and how different it is to the traditional publishing model where it is the publisher who earns most of the money and the author sees little, if any, royalty.</para>  
 
+<!--
 <mediaobject>
 	<videoobject>
 		<videodata controls="controls" fileref="video/do-lectures.mp4"/>
@@ -39,7 +40,7 @@
 		<para>Craig Mod presenting at the Do Lecture in 2010</para>
 	</textobject>
 </mediaobject>
-
+-->
 <para>We can also engage the community as co-authors of our content. With proper clearance we can edit the users' comments into the narrative that we initially wrote on our blog and weave a fuller narrative about our content. We can further refine the content by making the result of our collaboration available to the community and further edit the book thus it becoming a living document that evolves according to what the community sees as new or interesting.</para>
 
 <para>I've always dreamed of writing the great big novel. Now it's within our reach. We don't have to worry about getting it published... we can do it ourselves! and not only that, but we can do it as often as we want to. </para>
@@ -48,7 +49,7 @@
 
 <para>Even the funding may be community supported. Services like <link xlink:href="http://www.kickstarter.com/">Kickstarter</link> or <link xlink:href="http://www.indiegogo.com/">Indiegogo</link> provide "crowd funding" platforms where people who are interested in your idea can invest in it even before the product is completed.</para>
 
-<para>There are few differences between Kickstarter and Indiegogo; The biggest difference is that Indiegogo allows for partial funding. Say that we decided to raise $1000 for our book but, for whatever reason, we failed to meet the target. Kickstarter will consider the drive failed and no money will be charged to the people who did sign up. With the flexible option, Indiegogo will charge the amount raised up to that point from the people who pledged their donations.</para>
+<para>There are few differences between Kickstarter and Indiegogo; The biggest difference is that Indiegogo allows for partial funding. Say that we decided to raise $1000 for our book but, for whatever reason, we failed to meet the target. Kickstarter will consider the drive failed and no money will be charged to the people who signed up. With the flexible option, Indiegogo will charge the amount raised up to that point from the people who pledged their donations.</para>
 
 <para>Whether Indeigogo's flexible funding option is a good idea or not is debatable. People will expect quality commensurate with the fully funded project; for example: if we say we need 10,000 dollars to fully fund a project but we only raise $7,500 as part of our Indiegogo's capaign the people who contributed to our campaign will expect the fully funded project regardless of the ammount we raised. This will lead to possibly false expectations and distrust from the user base.</para>
 
@@ -57,7 +58,7 @@
 <sect1 xml:id="why.docbook">
 <title>Why Docbook?</title>
 
-<para>Over the years <link xlink:href="http://docbook.org/">Docbook</link> has proved to be a very versatile vocabulary for book authoring. I've written training manuals and converted them to PDF, HTML and even Microsoft Help. Epub (both version 2 and 3) are another tool added to the arsenal.</para>
+<para>Since I started working with XML authoring vocabularies in 2007 <link xlink:href="http://docbook.org/">Docbook</link> has proved to be a very versatile tool for content authoring. I've written training manuals and converted them to PDF, HTML and even Microsoft Help. Epub (both version 2 and 3) are another tool added to the arsenal.</para>
 
 <para>In addition to the standard itself there are a set of XSLT style sheets that power the transformation process. These stylesheets are available from the <link xlink:href="http://sourceforge.net/projects/docbook/">Docbook Sourceforge Project</link> page. You can see the variety of formats available to convert your content into.</para>
 
