@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 23
+/svn/!svn/ver/199/trunk
+END
+validate-single.sh
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/175/trunk/validate-single.sh
+END
+pack-single.bat
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/198/trunk/pack-single.bat
+END
+validate-all.bat
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/69/trunk/validate-all.bat
+END
+pack-single.sh
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/172/trunk/pack-single.sh
+END
+validate-all.sh
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/23/trunk/validate-all.sh
+END
+pack-all.bat
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/69/trunk/pack-all.bat
+END
+validate-single.bat
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/175/trunk/validate-single.bat
+END
+pack-all.sh
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/23/trunk/pack-all.sh
+END

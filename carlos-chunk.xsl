@@ -8,7 +8,7 @@
     <xsl:param name="html.stylesheet" select="'carlos-new.css'"/> 
 
     <!-- Reduce metadata duplication -->
-    <xsl:param name="epub.include.optional.metadata.dc.elements" select="0"/>
+    <xsl:param name="epub.include.optional.metadata.dc.elements" select="1"/>
 
     <!-- Kindle extensions -->
     <xsl:param name="kindle.extensions" select="1"/>
