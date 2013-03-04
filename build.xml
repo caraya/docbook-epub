@@ -122,6 +122,7 @@ Apache ant build file for Docbook based ebooks
 	<!-- Runs epubcheck on the epub file -->
 	<antcall target="epub-check"/>
 	<!-- Make mobi/kindle book -->
+	<antcall target="make-kindle"/>
 </target>
 
 <!-- Utility targets called from elsewhere epub2 and/or epub3 targets-->
