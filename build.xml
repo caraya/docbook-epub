@@ -6,6 +6,7 @@ Apache ant build file for Docbook based ebooks
 
 <!-- Required for the IF Task -->
 <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
 <!-- Change the value of src_file to the name of your ebook file without extension-->
 <property name="src_file" value="docbook-howto"/>
 <!-- Change the value of css_file to the name of your stylesheet with extension-->
@@ -15,7 +16,7 @@ Apache ant build file for Docbook based ebooks
 <property name="docbook_path" value="../docbook/"/>
 
 <!-- Change path to the binaries we use so they match your system -->
-<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b5.jar"/>
+<property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0.jar"/>
 <property name="kindlegen_bin" value="/usr/local/kindlegen/kindlegen"/>
 <property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
 <property name="jing_bin" value="/usr/local/java/jing/bin/jing.jar"/>
@@ -84,7 +85,9 @@ Apache ant build file for Docbook based ebooks
 </sequential>
 </macrodef>
 <target name="epub2">
-	<!-- Remove prior versions of the content we're generating -->
+  <description>
+    Main task to build epub2 books. Calls other tasks as needed
+  </description>	<!-- Remove prior versions of the content we're generating -->
 	<antcall target="epub-clean"/>
 	<!-- Validate XML -->
 	<antcall target="validate-xml"/>
@@ -106,6 +109,9 @@ Apache ant build file for Docbook based ebooks
 </target>
 
 <target name="epub3">
+  <description>
+    Main task to build epub3 books. Calls other tasks as needed
+  </description>
 	<!-- Remove prior versions of the content we're generating -->
 	<antcall target="epub-clean"/>
 	<!-- Validate XML -->
@@ -113,7 +119,7 @@ Apache ant build file for Docbook based ebooks
 	<!-- Run the xslt transformation... we should be able to use the XSLT ant 
 	task but xsltproc is faster -->
 	<exec executable="${xsltproc_bin}">
-		<arg line="--stringparam base.dir OEBPS/ carlos-chunk.xsl ${src_file}.xml"/>
+		<arg line="--stringparam base.dir book/ carlos-chunk.xsl ${src_file}.xml"/>
 	</exec>
 	<!-- Copy css stylesheet -->
 	<antcall target="copy-resources"/>
@@ -133,7 +139,7 @@ Apache ant build file for Docbook based ebooks
 
 <target name="make-kindle">
 	<exec executable="${kindlegen_bin}">
-		<arg line="${src_file}.epub"/>
+		<arg line="book/${src_file}.epub"/>
 	</exec>
 </target>
 
@@ -143,22 +149,39 @@ Apache ant build file for Docbook based ebooks
     <create-skeleton />
 </target>
 
+<!--
 <target name="epub-zip">
-	<!-- We use exec zip because I can't figure out if the builtin zip task 
-	conforms to what ePub expects -->
-	<!-- Zip the mimetype first without compression as required-->
+	We use exec zip because I can't figure out if the builtin zip task 
+	conforms to what ePub expects
+	Zip the mimetype first without compression as required
 	<exec executable="zip">
+		<arg line="-X0 ${src_file}.epub book/mimetype"/>
+	</exec>
+  Then zip the other files into the zip/epub archive 
+	<exec executable="zip">
+		<arg line="-r -X9 ${src_file}.epub book/META-INF/ book/OEBPS"/>
+	</exec>
+</target>-->
+
+<target name="epub-zip">
+	<!-- 
+	  We use exec zip because I can't figure out if the builtin zip task 
+	  conforms to what ePub expects 
+	
+	  Zip the files in the order given below. This is important or the file 
+	  will not pass validation
+	-->
+	<exec executable="zip" dir="book">
 		<arg line="-X0 ${src_file}.epub mimetype"/>
 	</exec>
-	<!-- Then zip the other files into the zip/epub archive -->
-	<exec executable="zip">
+	<exec executable="zip" dir="book">
 		<arg line="-r -X9 ${src_file}.epub META-INF OEBPS"/>
 	</exec>
 </target>
 
 <target name="epub-check">
-	<java jar="${epubcheck_bin}" fork="true" failonerror="true" maxmemory="128m">
-		<arg value="${src_file}.epub"/>
+	<java jar="${epubcheck_bin}" fork="true" failonerror="false" maxmemory="128m">
+		<arg value="book/${src_file}.epub"/>
 	</java>
 </target>
 
@@ -246,7 +269,7 @@ Apache ant build file for Docbook based ebooks
 </target>
 
 <target name="copy-videos">
-	<copy todir="OEBPS/video">
+	<copy todir="book/OEBPS/video">
 		<fileset dir="video/">
 			<include name="*.mp4"/>
 			<include name="*.png"/>
@@ -256,7 +279,7 @@ Apache ant build file for Docbook based ebooks
 </target>
 
 <target name="copy-images">
-	<copy todir="OEBPS/images">
+	<copy todir="book/OEBPS/images">
 		<fileset dir="images" casesensitive="yes">
 		  <include name="**/*"/>
 		</fileset>
@@ -266,9 +289,9 @@ Apache ant build file for Docbook based ebooks
 <target name="copy-fonts">
 	<if>
 		<!-- Check if the type directory exists-->
-        <length length="0" when="greater">
-            <fileset dir="type" followsymlinks="false"/>
-        </length>
+    <length length="0" when="greater">
+      <fileset dir="type" followsymlinks="false"/>
+    </length>
 		<then>
 			<!-- If it is then do this:
 		
@@ -276,8 +299,7 @@ Apache ant build file for Docbook based ebooks
 				2. copy all fonts except those starting with Calluna 
 			       to the OEBPS/type directory -->
 			<echo message="Directory exist... copying font files" />
-			<mkdir dir="OEBPS/type"/>
-			 <copy todir="OEBPS/type">
+        <copy todir="book/OEBPS/type">
 			    <fileset dir="type/">
 			      <exclude name="Calluna*.*"/>
 			    </fileset>
@@ -296,7 +318,7 @@ Apache ant build file for Docbook based ebooks
             <fileset dir="css" followsymlinks="false"/>
         </length>
 		<then>
-			<copy todir="OEBPS">
+			<copy todir="book/OEBPS">
 				<fileset dir="css/">
 			      <include name="*.css"/>
 			    </fileset>
@@ -321,18 +343,14 @@ Apache ant build file for Docbook based ebooks
 	we use the if task from ant-contrib available from sourceforge.net. 
 	-->
 	<if>
-		<available file="OEBPS" type="dir" />
+		<available file="book/OEBPS" type="dir" />
 		<then>
 			<echo message="Directory exist... deleting" />
-			<delete verbose="true">
-				<fileset dir="OEBPS" includes="*"/>
-				<fileset dir="META-INF" includes="*"/>
-			</delete>
-			<delete verbose="true" file="mimetype"/>
-			<delete verbose="true" dir="META-INF"/>
-			<delete verbose="true" dir="OEBPS"/>
-			<delete verbose="true" file="${src_file}.epub"/>
-			<delete verbose="true" file="${src_file}.mobi"/>
+			<delete verbose="true" file="book/mimetype"/>
+			<delete verbose="true" dir="book/META-INF"/>
+			<delete verbose="true" dir="book/OEBPS"/>
+			<delete verbose="true" file="book/${src_file}.epub"/>
+			<delete verbose="true" file="book/${src_file}.mobi"/>
 		</then>
 		<else>
 			<echo message="Directory DOES NOT exist... Nothing to delete" />
