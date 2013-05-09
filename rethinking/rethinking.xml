@@ -23,16 +23,12 @@
 
 	<para>With the introduction of all iPads and other tablet readers we are left with some big question: Are books still relevant? If they are still relevant, how do they need to change?</para>
 
-	<para>Craig Mod has written and spoken about the future of books and what we can do with books online with the new technologies for both creating the content and financing the production of the content. </para>
-
-<!--	<para>Craig presented the Do Lecture below in 2011 and it caught my attention for a variety of reasons. How do we leverage the new technologies for books and the new devices we use to read these new books. </para>
-
-<para>Thanks to Bob Sayton for providing this code and a fix on the XSL stylesheets' snapshot </para>
-
+	<para>Craig Mod has written and spoken about the future of books and what we can do with books online with the new technologies for both creating the content and financing the production of the content. It caught my attention for a variety of reasons. How do we leverage the new technologies for books and the new devices we use to read these new books. </para>
 
 <mediaobject>
 	<videoobject>
-		<videodata controls="controls" fileref="video/do-lectures.mp4"/>
+		<videodata fileref="video/do-lectures.mp4"/>
+		<multimediaparam name="controls" value="controls"/>
 	</videoobject>
 	<imageobject role="poster">
 		<imagedata fileref="video/do-lectures.png"/>
@@ -41,7 +37,6 @@
 		<para>Craig Mod presenting at the Do Lecture in 2010</para>
 	</textobject>
 </mediaobject>
--->
 
 <para>Some of the things that caught my attention:</para>
 
@@ -52,9 +47,16 @@
 
 	<para>We can incorporate external video or we can produce our own as part of the book creation process. Whichever way we choose this prompts a new way of thinking about books. If we can embed multimedia content directly into books, how are they now different than regular web pages? Sure, we can't embed java applets or flash video but we can easily link to pages on the web that have the content.</para>
 
-	<para>Are we requiring our users to be constantly online in order to interact with our content? If we add multimedia content to a book, does it mean that users have to be online while reading? For most tablets this is not an issue as internet connectivity is bundled with the device. As designers, however, we need to keep in mind that not all users have wireless connectivity for their devices. </para>
-
-	<para>Using <link xlink:href="http://craigmod.com/bibliotype/">Bibliotype</link> as a starting point we can explore alternatives and options for putting content into web browsers and other devices without having to author a full eBook. </para>
+<!--
+	<para>Are we requiring our users to be constantly online in order to interact with our content? If we add multimedia content to a book, does it mean that users have to be online while reading? For most tablets this is not an issue as internet connectivity is bundled with the device. As designers, however, we need to keep in mind that not all users have wireless connectivity for their devices. Using offline storage (part of the HTML5 set of APIs) may offer a solution for offline content viewing.</para>
+-->
+  <sect2>
+    <title>How does the digital change books and the way we read?</title>
+  </sect2>
+	<sect2>
+	  <title>We're all authors, designers and publishers too</title>
+	  <para>Using <link xlink:href="http://craigmod.com/bibliotype/">Bibliotype</link> as a starting point we can explore alternatives and options for putting content into web browsers and other devices without having to author a full eBook.</para>
+	</sect2>
 </sect1>
 <sect1>
 	<title>What tools do we use to create the content?</title>
@@ -65,10 +67,11 @@
 
 	<para>Whatever tools we use we need to decide if the multimedia features or access to our content by a specific device make it worthwhile to create multiple versions of our content</para>
 </sect1>
-<sect1>
-<title>Project funding as a means of engagement</title>
 
-	<para>We can use sites like <link xlink:href="http://kickstarter.com/">Kickstarter</link> as both a fund raising site and as a way to engage our community of users. </para>
+<sect1 xml:id='crowdsourcing'>
+  <title>Kickstarter, Indiegogo and crowdfunding your work</title>
+  
+  <para>Even the funding may be community supported. Services like <link xlink:href="http://www.kickstarter.com/">Kickstarter</link> or <link xlink:href="http://www.indiegogo.com/">Indiegogo</link> provide "crowd funding" platforms where people who are interested in your idea can invest in it even before the product is completed.</para>
 
 	<para>Kickstarter allows content creators to setup their project with the following parameters:</para> 
 
@@ -84,7 +87,11 @@
 	<para>More than fund raising, Kickstarter allows you to create a community around your project. It's not just the monetary support that brings the supporters together. They are interested in seeing the project funded and completed for whatever reason they have. They are your funding agency or agencies and they can be your sounding board and your reality check when needed.</para>
 
 	<para>Another interesting site is <link xlink:href="http://www.indiegogo.com/">Indiegogo</link> which provides one additional feature that I find interesting: The option of flexible funding where you get all the fund pledged by the target date regardless of whether you met your fundraising goal or not.</para>  
+
+  <para>Now you get no only the funding you need to get your book up and running but you also get a group of enthusiastic people who are as interested in the success of your book as you are, if not more<footnote><para>For a more detailed account of a successful Kickstarter story see Craig Mod's <link xlink:href="http://craigmod.com/journal/kickstartup/">Kickstartup</link> essay.</para></footnote>.</para>
 </sect1>
+
+
 <sect1>
 	<title>How do we engage with book in a digital format?</title>
 
@@ -96,6 +103,7 @@
 
 	<para>We have to start by accepting that, in this context, we are all publishers and we all have networks or hives of people who can support us in our creative endeavors. Being exposed to feedback early and often is a great way to eliminate uncertainty and provide a sounding board even before the project actually begins.<footnote xml:id="fields"><para>See chapter 5 and 6 in Jonathan Field's book <link xlink:href="http://www.theuncertaintybook.com/">Uncertainty</link> for more on creating hives and using them as support mechanisms.</para></footnote></para>
 </sect1>
+
 <sect1>
 <title>Blogs as book drafts</title>
 
@@ -112,5 +120,135 @@
 
 	<para>In the last couple years, the Docbook community has expanded the range of formats and it now includes ePub3. It's easier than ever to create content in a document neutral format and then convert it to HTML, PDF and ePub without bigger effort than creating customizations to the stock <link xlink:href="http://docbook.sourceforge.net/">style sheets</link> which we can then reuse on future projects.</para>
 </sect1>
+
+<sect1 xml:id="publishing">
+  <title>Publishing your content</title>
+
+  <para>This is where we talk about publishing your content yourself, publishing to Amazon and, maybe, to the iBooks store</para>
+  </sect1>
 </chapter>
+
+<chapter xml:id="looking.forward">
+    <title>Looking forward: What's next?</title>
+
+    <sect1 xml:id='accessibility'>
+      <title>Accessibility: The Great Frontier</title>
+
+      <para></para>
+    </sect1>
+    
+    <sect1>
+        <title>Pushing the boundaries of EPub</title>
+    <para>EPub 3 also opens the door to further bluring of the difference between books, web sites and web applications. Part of the EPub specification is the Fixed Layout Documents (the specification is available at <link xlink:href="http://idpf.org/epub/fxl/">http://idpf.org/epub/fxl/</link>) that allow for absolute positioning of content, 1 or 2-page spreads, text overlays and other neat publishing tricks and effect.</para>
+    
+    <para>fully exploring what we can do with an epub book, specifically content switching (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch</link>) and scripting epub books (See more below for scripting)</para>
+    
+    <para>Media Overlays can add synchronized audio to the text. <link xlink:href="http://idpf.org/epub/30/spec/epub30-mediaoverlays.html">http://idpf.org/epub/30/spec/epub30-mediaoverlays.html</link></para>
+    
+    <para>How far can we script an EPub book without limiting the readers that can access our content? Epub3 already supports scripting (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content</link>) and scripts (JavaScript) are a basae media type for EPub3. Can we use JQuery and if so how much of the JQuery featurse set can we use on our EBooks?</para>
+    </sect1>
+    
+    <sect1>
+        <title>Modular Docbook and Collaborative writing</title>
+        <para>So far we have only created one big file for our book content. Docbook also allows the creation of modular content; the idea is that we create one main file where all out chapters or other chunks of content are in a single monolythic file. In order to make our lives easier we have two alternatives for modularizing the content: Collaborate using Git and creating modular Docbook documents.</para>
+        
+        <sect2>
+          <title>Collaborative writing using Git.</title>
+        
+        <para>We can use tools such as <link xlink:href="https://github.com">Github</link> to maintain a wirting collaborative. With tools like this we are no longer limited to manual updates; all collaborators can stay up to date with what everything else is doing by downloading the content of the book and updating periodically. If there is disagreement it can be hammered out as the book is being written and read by everyone rather than at the end of the process when changes are costlier and people are invested in the book as is.<footnote><para>The XML source for this book along with all the ancillary files (Ant build files and others) are available on Github at <link xlink:href="https://github.com/caraya/docbook-epub">https://github.com/caraya/docbook-epub</link></para></footnote></para>
+        
+        </sect2>
+        <sect2>
+          <title>Modular Docbook</title>
+          
+          <para>Docbook offers you </para>
+        </sect2>
+    </sect1>
+    
+</chapter>
+
+<bibliography>
+<title>References</title>
+
+<bibliomixed>
+	<bibliomset relation='blog'>Godin, Seth.
+		<title role='blog'><emphasis>The Domino Project</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://sethgodin.typepad.com/seths_blog/2010/12/the-domino-project.html">http://sethgodin.typepad.com/seths_blog/2010/12/the-domino-project.html</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='blog'>Godin, Seth.
+		<title role='blog'><emphasis>Moving On</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://sethgodin.typepad.com/seths_blog/2010/08/moving-on.html">http://sethgodin.typepad.com/seths_blog/2010/08/moving-on.html</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='article'>Mod, Craig.
+		<title role='article'><emphasis>Books in the age of the iPad</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://craigmod.com/journal/ipad_and_books/">http://craigmod.com/journal/ipad_and_books/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='article'>Mod, Craig.
+		<title role='article'><emphasis>Embracing the digital book</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://craigmod.com/journal/ebooks/">http://craigmod.com/journal/ebooks/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='article'>Mod, Craig.
+		<title role="article"><emphasis>Kickstartup: Successful fundraising with Kickstarter.com &amp; (re)making Art Space Tokyo</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://craigmod.com/journal/kickstartup/">http://craigmod.com/journal/kickstartup/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='article'>Mod, Craig.
+		<title role='article'><emphasis>The shape of our future book</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://craigmod.com/satellite/our_future_book/">http://craigmod.com/satellite/our_future_book/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='blog'>Rusch, Kristine Kathryn.
+		<title role='blog'><emphasis>Quality</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://kriswrites.com/2012/03/21/the-business-rusch-quality/">http://kriswrites.com/2012/03/21/the-business-rusch-quality/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='book'>Stayton, Bob.
+ 		<title role='book'><emphasis>XSL: The Definitive Guide</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://www.sagehill.net/docbookxsl/">http://www.sagehill.net/docbookxsl/</link>.
+	</bibliomset>
+</bibliomixed>
+
+<bibliomixed>
+	<bibliomset relation='book'>Walsh, Norman.
+		<title role='book'><emphasis>DocBook 5.1: The Definitive Guide</emphasis></title>.
+	</bibliomset>
+	<bibliomset relation='website'>
+		[Available online] at <link xlink:href="http://docbook.org/tdg51/en/html/">http://docbook.org/tdg51/en/html/</link>.
+	</bibliomset>
+</bibliomixed>
+</bibliography>
 </book>

@@ -1,4 +1,4 @@
-<project name="epub" default="epub3" basedir=".">
+<project name="epub-docbok" default="epub3" basedir=".">
 <description>
 Apache ant build file for Docbook based ebooks
 </description>
@@ -12,7 +12,7 @@ Apache ant build file for Docbook based ebooks
 <property name="css_file" value="css/carlos-new.css"/>
 
 <!-- Configure the path to the docbook stylesheets we asked ant to download-->
-<property name="docbook_path" value="../docbook/"/>
+<property name="docbook_path" value="../../docbook/"/>
 
 <!-- Change path to the binaries we use so they match your system -->
 <property name="epubcheck_bin" value="/usr/local/java/epubcheck/epubcheck-3.0b5.jar"/>
@@ -20,6 +20,69 @@ Apache ant build file for Docbook based ebooks
 <property name="xsltproc_bin" value="/usr/bin/xsltproc"/>
 <property name="jing_bin" value="/usr/local/java/jing/bin/jing.jar"/>
 
+<macrodef name="create-skeleton">
+<attribute name="destination" default="skeleton"/>
+<sequential>
+    <if>
+        <available file="@{destination}" type="dir" />
+    <then>
+        <fail message="Directory @{destination} exist... aborting the process" />
+    </then>
+    <else>
+        <echo>Creating directory</echo>
+        <mkdir dir="@{destination}/"/>
+        <echo>Creating CSS directory</echo>
+        <mkdir dir="@{destination}/css"/>
+        <echo>Creating JS directory</echo>
+        <mkdir dir="@{destination}/js"/>
+        <echo>Creating image directory</echo>
+        <mkdir dir="@{destination}/images"/>
+        <echo>Creating video directory</echo>
+        <mkdir dir="@{destination}/video"/>
+        <echo>Creating fonts directory</echo>
+        <mkdir dir="@{destination}/type"/>
+    </else>
+    </if>
+    <copy todir="@{destination}">
+        <fileset dir="." casesensitive="yes">
+            <include name="empty-document.xml"/>
+            <include name="build.xml"/>
+            <include name="build-full.xml"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/css">
+        <fileset dir="css" casesensitive="yes">
+            <include name="*.css"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/js">
+        <fileset dir="js" casesensitive="yes">
+            <include name="*.js"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/images">
+        <fileset dir="images" casesensitive="yes">
+            <include name="*.jpg"/>
+            <include name="*.gif"/>
+            <include name="*.png"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/video">
+        <fileset dir="video" casesensitive="yes">
+            <include name="*.mp4"/>
+            <include name="*.jpg"/>
+            <include name="*.png"/>
+        </fileset>
+    </copy>
+    <copy todir="@{destination}/type">
+        <fileset dir="type" casesensitive="yes">
+            <include name="*.ttf"/>
+            <include name="*.otf"/>
+            <include name="*.wof"/>
+        </fileset>
+    </copy>
+</sequential>
+</macrodef>
 <target name="epub2">
 	<!-- Remove prior versions of the content we're generating -->
 	<antcall target="epub-clean"/>
@@ -31,7 +94,7 @@ Apache ant build file for Docbook based ebooks
 		<arg value="${src_file}.xml"/> 
 	</exec>
 	<!-- Copy media resources -->
-    <antcall target="copy-images"/>
+        <antcall target="copy-images"/>
 	<!-- Create mimetype file, required per epub spec -->
 	<antcall target="make-mime"/>
 	<!-- zips the fills for the epub -->
@@ -73,6 +136,12 @@ Apache ant build file for Docbook based ebooks
 	</exec>
 </target>
 
+<!-- Creates a skeleton based on our existing base directory structure
+     See create-skeleton macrodef for more details of what we're doing-->
+<target name="make-skeleton">
+    <create-skeleton />
+</target>
+
 <target name="epub-zip">
 	<!-- We use exec zip because I can't figure out if the builtin zip task 
 	conforms to what ePub expects -->
@@ -92,9 +161,9 @@ Apache ant build file for Docbook based ebooks
 	</java>
 </target>
 
-<!-- We call jingto make sure that the XML validates-->
+<!-- We call jing to make sure that the XML validates-->
 <target name="validate-xml">
-    <java jar="${jing_bin}" fork="true" failonerror="true" maxmemory="128m">
+    <java jar="${jing_bin}" fork="true" failonerror="false" maxmemory="128m">
             <arg value="/usr/local/java/jing/lib/docbook.rng"/>
             <arg value="${src_file}.xml"/>
     </java>
@@ -131,7 +200,7 @@ Apache ant build file for Docbook based ebooks
         </length>
         <then>
             <!-- Dir Not Empty -->
-        	<antcall target="copy-css"/>
+            <antcall target="copy-css"/>
          </then>
          <else>
             <echo message="Directory CSS is empty. Nothing to copy"/>
@@ -143,7 +212,7 @@ Apache ant build file for Docbook based ebooks
          </length>
          <then>
              <!-- Dir Not Empty -->
-         	<antcall target="copy-videos"/>
+             <antcall target="copy-videos"/>
           </then>
           <else>
              <echo message="Directory VIDEO is empty. Nothing to copy"/>
@@ -167,7 +236,7 @@ Apache ant build file for Docbook based ebooks
          </length>
          <then>
              <!-- Dir Not Empty -->
-         	<antcall target="copy-fonts"/>
+             <antcall target="copy-fonts"/>
           </then>
           <else>
              <echo message="Directory type is empty. Nothing to copy"/>
@@ -207,11 +276,11 @@ Apache ant build file for Docbook based ebooks
 			       to the OEBPS/type directory -->
 			<echo message="Directory exist... copying font files" />
 			<mkdir dir="OEBPS/type"/>
-			 <copy todir="OEBPS/type">
+			<copy todir="OEBPS/type">
 			    <fileset dir="type/">
-			      <exclude name="Calluna*.*"/>
+			        <exclude name="Calluna*.*"/>
 			    </fileset>
-			  </copy>
+			</copy>
 		</then>
 		<else>
 			<!-- There are no fonts... tough luck buddy -->

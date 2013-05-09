@@ -28,13 +28,6 @@
 
 <para>I don't know about you but I've always dreamed of writing the great big novel. Now it's within our reach. We don't have to worry about getting it published... we can do it ourselves! and not only that, but we can do it as often as we want to. </para>
 
-<para>We can use tools such as <link xlink:href="https://github.com">Github</link> to maintain our collaboration. With tools like this we are no longer limited to manual updates; all collaborators can stay up to date with what everything else is doing by downloading the content of the book and updating periodically. If there is disagreement it can be hammered out as the book is being written and read by everyone rather than at the end of the process when changes are costlier and people are invested in the book as is.<footnote><para>The XML source for this book along with all the ancillary files (Ant build files and others) are available on Github at <link xlink:href="https://github.com/caraya/docbook-epub">https://github.com/caraya/docbook-epub</link></para></footnote></para>
-
-<para>Even the funding may be community supported. Services like <link xlink:href="http://www.kickstarter.com/">Kickstarter</link> or <link xlink:href="http://www.indiegogo.com/">Indiegogo</link> provide "crowd funding" platforms where people who are interested in your idea can invest in it even before the product is completed.</para>
-
-<para>There are few differences between Kickstarter and Indiegogo; The biggest difference is that Indiegogo allows for partial funding. Say that we decided to raise $1000 for our book but, for whatever reason, we failed to meet the target. Kickstarter will consider the drive failed and no money will be charged to the people who did sign up. With the flexible option, Indiegogo will charge the amount raised up to that point from the people who pledged their donations.</para>
-
-<para>Now you get no only the funding you need to get your book up and running but you also get a group of enthusiastic people who are as interested in the success of your book as you are, if not more<footnote><para>For a more detailed account of a successful Kickstarter story see Craig Mod's <link xlink:href="http://craigmod.com/journal/kickstartup/">Kickstartup</link> essay.</para></footnote>.</para>
 
 <sect1 xml:id="why.docbook">
 <title>Why Docbook?</title>
@@ -274,10 +267,14 @@
 &lt;/mediaobject&gt;
 </programlisting>
 </example>
-</sect1>
 
-<sect1>
+
+<sect2>
     <title>Notes on working with video</title>
+    <note>
+      <title>Attribution Notice</title>
+        <para>The material for this section was taken and adapted from Elizabeth Castro's Audio and Video in EPUB: Straight to the Point minigude #2. The book is available from <link xlink:href="http://store.kagi.com/cgi-bin/store.cgi?storeID=6FHNX_LIVE&amp;page=AudioVideoMiniguide">the author's site</link></para>
+    </note>
 
     <para>The video has to be encoded as MPEG4 and size limitations both in terms of size scaling and overall file size for the ebook (2 GB maximum size) will constraint what size we make out video.</para>
 
@@ -290,6 +287,7 @@
     <para>IF you try to view a widescreen video in an iPhone or iPad you will get black bars filling the rest of the video space. When you toggle the video to full screen it will zoom and crop the video to fit on its proportions</para>
 
     <para>The Nook Color almost has the wide screen dimensions. There are 24 extra pixels of height, which can barely be seen when the device is held horizontally.The other important thing about the NOOK Color is that the text block where videos are displayed when the device is held vertically is 480 pixels wide—ideal for a standard portable widescreen movie (480 x 270 pixels).</para>
+</sect2>
 </sect1>
 
 <sect1>
@@ -913,7 +911,7 @@ use the XSLT ant task but xsltproc is faster --&gt;
 <sect2 xml:id="ant.copy.css">
 	<title>copy-css</title>
 
-<para>When copying style sheets to out OEBPS directory we do things slightly different than what we've done so far. We are still checking if there's a css directory in our workspace but instead of copying to an equivalent directory under OEBPS we copy them to the root of our EBook content. </para>
+<para>When copying style sheets to the OEBPS directory we do things slightly different than what we've done so far. We are still checking if there's a css directory in our workspace but instead of copying to an equivalent directory under OEBPS we copy them to the root of our EBook content. </para>
 
 <example xml:id="task.copy-css">
 <title>copy-css Ant target</title>
@@ -945,7 +943,9 @@ use the XSLT ant task but xsltproc is faster --&gt;
 <sect2 xml:id="ant.validate.xml">
 	<title>validate-xml</title>
 
-<para>We call Jing and tell it to suppress its output if it's successful (-noout) and not to go online to complete its validation of our xml file (-nonet). </para>
+<para>We call Jing and tell it to validate the content of our HTML files. Initially, we used XMLLint to validate the document but it wasn't validating some content that caused errors at later stages of the project. Jing is a lot stricter in what it validates so we switched to using it to validate the content.</para>
+
+<para>Content validated with Jin presents some challenges when working with Docbook but the results validates and works.</para>
 
 <example xml:id="task.validate-xml">
 <title>copy-resources Ant target</title>
@@ -1055,114 +1055,4 @@ use the XSLT ant task but xsltproc is faster --&gt;
 <para>The final result can be viewed and downloaded from <link xlink:href="https://github.com/caraya/docbook-epub/blob/master/build-full.xml">my Github repository</link>.</para>
 </sect1>
 </chapter>
-
-<chapter xml:id="publishing">
-<title>Publishing your content</title>
-
-<para>This is where we talk about publishing your content yourself, publishing to Amazon and, maybe, to the iBooks store</para>
-</chapter>
-
-<chapter xml:id="looking.forward">
-    <title>Looking forward: What's next?</title>
-    <sect1>
-        <title>Pushing the boundaries of EPub</title>
-    <para>EPub 3 also opens the door to further bluring of the difference between books, web sites and web applications. Part of the EPub specification is the Fixed Layout Documents (the specification is available at <link xlink:href="http://idpf.org/epub/fxl/">http://idpf.org/epub/fxl/</link>) that allow for absolute positioning of content, 1 or 2-page spreads, text overlays and other neat publishing tricks and effect.</para>
-    
-    <para>fully exploring what we can do with an epub book, specifically content switching (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-content-switch</link>) and scripting epub books (See more below for scripting)</para>
-    
-    <para>Media Overlays can add synchronized audio to the text. <link xlink:href="http://idpf.org/epub/30/spec/epub30-mediaoverlays.html">http://idpf.org/epub/30/spec/epub30-mediaoverlays.html</link></para>
-    
-    <para>How far can we script an EPub book without limiting the readers that can access our content? Epub3 already supports scripting (<link xlink:href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content">http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-scripted-content</link>) and scripts (JavaScript) are a basae media type for EPub3. Can we use JQuery and if so how much of the JQuery featurse set can we use on our EBooks?</para>
-    </sect1>
-    <sect1>
-        <title>Modular Docbook and Collaborative writing</title>
-        <para>So far we have only created one big file for our book content. Docbook also allows the creation of modular content; the idea is that we create one main file where all out chapters or other chunks of content are </para>
-        
-        <para>Collaborative writing using Git</para>
-    </sect1>
-</chapter>
-<bibliography>
-<title>References</title>
-
-<bibliomixed>
-	<bibliomset relation='blog'>Godin, Seth.
-		<title role='blog'><emphasis>The Domino Project</emphasis></title>.
-	</bibliomset>
-	<bibliomset relation='website'>
-		[Available online] at <link xlink:href="http://sethgodin.typepad.com/seths_blog/2010/12/the-domino-project.html">http://sethgodin.typepad.com/seths_blog/2010/12/the-domino-project.html</link>.
-	</bibliomset>
-</bibliomixed>
-
-<bibliomixed>
-	<bibliomset relation='blog'>Godin, Seth.
-		<title role='blog'><emphasis>Moving On</emphasis></title>.
-	</bibliomset>
-	<bibliomset relation='website'>
-		[Available online] at <link xlink:href="http://sethgodin.typepad.com/seths_blog/2010/08/moving-on.html">http://sethgodin.typepad.com/seths_blog/2010/08/moving-on.html</link>.
-	</bibliomset>
-</bibliomixed>
-
-<bibliomixed>
-	<bibliomset relation='article'>Mod, Craig.
-		<title role='article'><emphasis>Books in the age of the iPad</emphasis></title>.
-	</bibliomset>
-	<bibliomset relation='website'>
-		[Available online] at <link xlink:href="http://craigmod.com/journal/ipad_and_books/">http://craigmod.com/journal/ipad_and_books/</link>.
-	</bibliomset>
-</bibliomixed>
-
-<bibliomixed>
-	<bibliomset relation='article'>Mod, Craig.
-		<title role='article'><emphasis>Embracing the digital book</emphasis></title>.
-	</bibliomset>
-	<bibliomset relation='website'>
-		[Available online] at <link xlink:href="http://craigmod.com/journal/ebooks/">http://craigmod.com/journal/ebooks/</link>.
-	</bibliomset>
-</bibliomixed>
-
-<bibliomixed>
-	<bibliomset relation='article'>Mod, Craig.
-		<title role="article"><emphasis>Kickstartup: Successful fundraising with Kickstarter.com &amp; (re)making Art Space Tokyo</emphasis></title>.
-	</bibliomset>
-	<bibliomset relation='website'>
-		[Available online] at <link xlink:href="http://craigmod.com/journal/kickstartup/">http://craigmod.com/journal/kickstartup/</link>.
-	</bibliomset>
-</bibliomixed>
-
-<bibliomixed>
-	<bibliomset relation='article'>Mod, Craig.
-		<title role='article'><emphasis>The shape of our future book</emphasis></title>.
-	</bibliomset>
-	<bibliomset relation='website'>
-		[Available online] at <link xlink:href="http://craigmod.com/satellite/our_future_book/">http://craigmod.com/satellite/our_future_book/</link>.
-	</bibliomset>
-</bibliomixed>
-
-<bibliomixed>
-	<bibliomset relation='blog'>Rusch, Kristine Kathryn.
-		<title role='blog'><emphasis>Quality</emphasis></title>.
-	</bibliomset>
-	<bibliomset relation='website'>
-		[Available online] at <link xlink:href="http://kriswrites.com/2012/03/21/the-business-rusch-quality/">http://kriswrites.com/2012/03/21/the-business-rusch-quality/</link>.
-	</bibliomset>
-</bibliomixed>
-
-<bibliomixed>
-	<bibliomset relation='book'>Stayton, Bob.
- 		<title role='book'><emphasis>XSL: The Definitive Guide</emphasis></title>.
-	</bibliomset>
-	<bibliomset relation='website'>
-		[Available online] at <link xlink:href="http://www.sagehill.net/docbookxsl/">http://www.sagehill.net/docbookxsl/</link>.
-	</bibliomset>
-</bibliomixed>
-
-<bibliomixed>
-	<bibliomset relation='book'>Walsh, Norman.
-		<title role='book'><emphasis>DocBook 5.1: The Definitive Guide</emphasis></title>.
-	</bibliomset>
-	<bibliomset relation='website'>
-		[Available online] at <link xlink:href="http://docbook.org/tdg51/en/html/">http://docbook.org/tdg51/en/html/</link>.
-	</bibliomset>
-</bibliomixed>
-</bibliography>
 </book>
